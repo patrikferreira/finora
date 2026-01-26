@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -9,6 +8,6 @@ export default function App() {
   useEffect(() => {
     router.push("/signup");
   }, []);
-  
+
   return <div>App Finora</div>;
 }

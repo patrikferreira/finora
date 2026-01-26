@@ -1,10 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Copyright from "../components/Copyright";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import LoadingSpin from "../components/LoadingSpin";
 import Logo from "../components/Logo";
+import AppContext from "../AppContext";
 
 export default function Signup() {
   const router = useRouter();
@@ -16,7 +17,13 @@ export default function Signup() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Remove when context is implemented
+
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("AppContext is not provided");
+  }
+
+  const { setToast, isLoading, setIsLoading } = context;
 
   function formatName(raw: string) {
     return raw
