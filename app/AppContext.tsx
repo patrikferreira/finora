@@ -35,8 +35,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserAuthenticated | undefined>(undefined);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUser = async () => {
-      setIsLoading(true);
       try {
         const data = await getUserFromToken();
         if (data.user) {
