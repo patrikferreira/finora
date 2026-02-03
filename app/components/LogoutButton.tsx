@@ -12,7 +12,7 @@ export default function LogoutButton() {
     throw new Error("AppContext is not provided");
   }
 
-  const { setIsLoading, setToast, isLoading } = context;
+  const { setIsLoading, setToast, isLoading, setIsSidebarOpen } = context;
 
   async function handleLogout() {
     setIsLoading(true);
@@ -27,6 +27,7 @@ export default function LogoutButton() {
         });
       } else {
         router.push("/login");
+        setIsSidebarOpen?.(false);
       }
     } catch (error) {
       console.error("Logout failed:", error);
@@ -38,7 +39,7 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={isLoading}
-      className={`bg-(--color-primary) h-10 w-full rounded-xl cursor-pointer shadow-lg transition duration-200 hover:brightness-115 flex items-center gap-3 justify-center ${
+      className={`bg-(--color-primary) h-10 w-full rounded-xl cursor-pointer shadow-lg transition duration-200 hover:brightness-115 flex items-center gap-3 justify-center text-sm ${
         isLoading ? "cursor-default opacity-60" : "cursor-pointer"
       }`}
     >

@@ -14,7 +14,7 @@ export default function Navbar() {
     throw new Error("AppContext is not provided");
   }
 
-  const { user } = context;
+  const { user, setIsSidebarOpen, isSidebarOpen } = context;
 
   const links = [
     { name: "Dashboard", href: "/dashboard", icon: <GoHome size={18} /> },
@@ -42,7 +42,7 @@ export default function Navbar() {
   return (
     <div className="sm:ml-60 h-16 bg-(--background)  fixed top-0 left-0 right-0 flex justify-between items-center px-6 z-30 animate-fadeIn">
       <div className="flex items-center gap-4">
-        <div className="sm:hidden">
+        <div className="sm:hidden cursor-pointer" onClick={() => setIsSidebarOpen?.(!isSidebarOpen)}>
           <Logo logoOnly={true} />
         </div>
 

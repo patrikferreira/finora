@@ -85,26 +85,26 @@ export default function Login() {
 
         <form className="flex flex-col gap-4" onSubmit={submit}>
           <label className="block">
-            <span className="block font-medium mb-2">Email</span>
+            <span className="block font-medium text-sm mb-2">Email</span>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10 bg-(--background)"
+              className="text-sm w-full rounded-xl border border-(--color-border) outline-none px-4 h-10 bg-(--background)"
             />
           </label>
 
           <label className="block relative">
-            <span className="block font-medium mb-2">Password</span>
+            <span className="block font-medium text-sm mb-2">Password</span>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="text-sm w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -119,7 +119,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
+            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
               isLoading ? "cursor-default opacity-60" : "cursor-pointer"
             }`}
           >

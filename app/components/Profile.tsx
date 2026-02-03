@@ -14,11 +14,13 @@ export default function Profile() {
     throw new Error("AppContext is not provided");
   }
 
+  const { user, setIsSidebarOpen } = context;
+
   function handleMenu() {
     setMenuOpen((prev) => !prev);
+    setIsSidebarOpen?.(false);
   }
 
-  const { user } = context;
   return (
     <div
       onClick={handleMenu}

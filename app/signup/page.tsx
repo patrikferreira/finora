@@ -90,7 +90,7 @@ export default function Signup() {
         <h1 className="text-xl font-semibold text-center">Sign up</h1>
         <form className="flex flex-col gap-4" onSubmit={submit}>
           <label className="block">
-            <span className="block font-medium mb-2">Full name</span>
+            <span className="block font-medium text-sm mb-2">Full name</span>
             <input
               type="text"
               name="name"
@@ -98,12 +98,12 @@ export default function Signup() {
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
             />
           </label>
 
           <label className="block">
-            <span className="block font-medium mb-2">Email</span>
+            <span className="block font-medium text-sm mb-2">Email</span>
             <input
               type="email"
               name="email"
@@ -111,12 +111,12 @@ export default function Signup() {
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
             />
           </label>
 
           <label className="block relative">
-            <span className="block font-medium mb-2">Password</span>
+            <span className="block font-medium text-sm mb-2">Password</span>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -124,7 +124,7 @@ export default function Signup() {
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -137,7 +137,7 @@ export default function Signup() {
           </label>
 
           <label className="block relative">
-            <span className="block font-medium mb-2">Confirm password</span>
+            <span className="block font-medium text-sm mb-2">Confirm password</span>
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
@@ -145,7 +145,7 @@ export default function Signup() {
               placeholder="********"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -164,7 +164,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
+            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
               isLoading ? "cursor-default opacity-70" : "cursor-pointer"
             }`}
           >
@@ -178,7 +178,7 @@ export default function Signup() {
             onClick={() => {
               router.push("/login");
             }}
-            className="font-semibold text-(--color-primary) hover:underline cursor-pointer"
+            className="font-semibold text text-(--color-primary) hover:underline cursor-pointer"
           >
             Login here
           </button>

@@ -11,7 +11,7 @@ export default function Incomes() {
 
   const { user, isLoading } = context;
 
-  if (!isLoading)
+  if (isLoading)
     return (
       <div className="h-[calc(100svh-4rem)] sm:ml-60">
         <LoadingView />

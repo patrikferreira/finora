@@ -38,7 +38,7 @@ export default function Logo({ logoOnly }: Props) {
       </div>
 
       {!logoOnly && (
-        <span className="text-(--color-primary) font-semibold text-2xl">
+        <span className="text-(--color-primary) font-semibold text-xl">
           Finora
         </span>
       )}

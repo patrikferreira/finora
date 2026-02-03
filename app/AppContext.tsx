@@ -11,6 +11,8 @@ type AppContextType = {
   setIsLoading: (value: boolean) => void;
   user: UserAuthenticated | undefined;
   setUser: (user: UserAuthenticated | undefined) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen?: (value: boolean) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -20,6 +22,8 @@ const AppContext = createContext<AppContextType>({
   setIsLoading: () => {},
   user: undefined,
   setUser: () => {},
+  isSidebarOpen: false,
+  setIsSidebarOpen: () => {},
 });
 
 export default AppContext;
@@ -33,6 +37,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<UserAuthenticated | undefined>(undefined);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -56,7 +61,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppContext.Provider
-      value={{ toast, setToast, isLoading, setIsLoading, user, setUser }}
+      value={{ toast, setToast, isLoading, setIsLoading, user, setUser, isSidebarOpen, setIsSidebarOpen }}
     >
       {children}
     </AppContext.Provider>
