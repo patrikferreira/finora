@@ -1,4 +1,8 @@
-export default function Logo() {
+type Props = {
+  logoOnly?: boolean;
+};
+
+export default function Logo({ logoOnly }: Props) {
   return (
     <div className="flex items-baseline gap-3">
       <div className="flex items-baseline gap-0.5">
@@ -32,9 +36,12 @@ export default function Logo() {
           <rect width="100%" height="100%" rx="2" fill="var(--color-primary)" />
         </svg>
       </div>
-      <span className="text-(--color-primary) font-semibold text-2xl">
-        Finora
-      </span>
+
+      {!logoOnly && (
+        <span className="text-(--color-primary) font-semibold text-2xl">
+          Finora
+        </span>
+      )}
     </div>
   );
 }
