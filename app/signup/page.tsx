@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import Copyright from "../components/Copyright";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import LoadingSpin from "../components/LoadingSpin";
 import Logo from "../components/Logo";
 import AppContext from "../AppContext";
 import { validateRegisterForm } from "../utiils/formValidators";
@@ -67,17 +66,19 @@ export default function Signup() {
         setToast({ message: error, status: "error", show: true });
         return;
       }
-
       setToast({
         message: "Account created successfully",
         status: "success",
         show: true,
       });
-
-      setIsLoading(false);
       router.push("/login");
     } catch (err) {
       console.error("Registration error:", err);
+      setToast({
+        message: err instanceof Error ? err.message : "An error occurred",
+        status: "error",
+        show: true,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -86,8 +87,7 @@ export default function Signup() {
   return (
     <div className="bg-(--background) h-svh p-4 flex flex-col justify-between items-center animate-fadeIn">
       <Logo />
-      <div className="flex flex-col gap-4 w-full max-w-sm">
-        <h1 className="text-xl font-semibold text-center">Sign up</h1>
+      <div className="flex flex-col gap-4 w-full max-w-xs">
         <form className="flex flex-col gap-4" onSubmit={submit}>
           <label className="block">
             <span className="block font-medium text-sm mb-2">Full name</span>
@@ -98,7 +98,7 @@ export default function Signup() {
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
             />
           </label>
 
@@ -111,7 +111,7 @@ export default function Signup() {
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
             />
           </label>
 
@@ -124,12 +124,12 @@ export default function Signup() {
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute top-[43px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
+              className="absolute top-[39px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
               tabIndex={-1}
             >
               {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
@@ -137,7 +137,9 @@ export default function Signup() {
           </label>
 
           <label className="block relative">
-            <span className="block font-medium text-sm mb-2">Confirm password</span>
+            <span className="block font-medium text-sm mb-2">
+              Confirm password
+            </span>
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
@@ -145,12 +147,12 @@ export default function Signup() {
               placeholder="********"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full text-sm rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((prev) => !prev)}
-              className="absolute top-[43px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
+              className="absolute top-[39px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
               tabIndex={-1}
             >
               {showConfirmPassword ? (
@@ -164,11 +166,11 @@ export default function Signup() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
+            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
               isLoading ? "cursor-default opacity-70" : "cursor-pointer"
             }`}
           >
-            {isLoading ? <LoadingSpin /> : "Sign up"}
+            Sign up
           </button>
         </form>
 

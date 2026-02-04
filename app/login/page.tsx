@@ -5,7 +5,6 @@ import Logo from "../components/Logo";
 import Copyright from "../components/Copyright";
 import { useRouter } from "next/navigation";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import LoadingSpin from "../components/LoadingSpin";
 import { validateAuth } from "../utiils/formValidators";
 import { UserAuthenticated } from "../AppTypes";
 import { authUser } from "../AppServices";
@@ -63,15 +62,14 @@ export default function Login() {
         }
         setUser(user as UserAuthenticated);
         router.push("/dashboard");
-        setIsLoading(false);
       }
     } catch (err) {
+      console.error("Login error:", err);
       setToast({
-        message: "An unexpected error occurred",
+        message: err instanceof Error ? err.message : "An error occurred",
         status: "error",
         show: true,
       });
-      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -80,9 +78,7 @@ export default function Login() {
   return (
     <div className="bg-(--background) h-svh p-4 flex flex-col justify-between items-center animate-fadeIn">
       <Logo />
-      <div className="flex flex-col gap-4 w-full max-w-sm">
-        <h1 className="text-xl font-semibold text-center">Login</h1>
-
+      <div className="flex flex-col gap-4 w-full max-w-xs">
         <form className="flex flex-col gap-4" onSubmit={submit}>
           <label className="block">
             <span className="block font-medium text-sm mb-2">Email</span>
@@ -92,7 +88,7 @@ export default function Login() {
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="text-sm w-full rounded-xl border border-(--color-border) outline-none px-4 h-10 bg-(--background)"
+              className="text-sm w-full rounded-full border border-(--color-border) outline-none px-4 h-10 bg-(--background)"
             />
           </label>
 
@@ -104,12 +100,12 @@ export default function Login() {
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="text-sm w-full rounded-xl border border-(--color-border) outline-none px-4 h-10"
+              className="text-sm w-full rounded-full border border-(--color-border) outline-none px-4 h-10"
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute top-[43px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
+              className="absolute top-[39px] right-3 text-(--foreground) hover:text-(--foreground) focus:outline-none"
               tabIndex={-1}
             >
               {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
@@ -119,11 +115,11 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-xl font-semibold ${
+            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
               isLoading ? "cursor-default opacity-60" : "cursor-pointer"
             }`}
           >
-            {isLoading ? <LoadingSpin /> : "Login"}
+            Login
           </button>
         </form>
 

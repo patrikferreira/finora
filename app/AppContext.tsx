@@ -37,7 +37,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<UserAuthenticated | undefined>(undefined);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   useEffect(() => {
     setIsLoading(true);
@@ -51,6 +51,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
           router.push("/login");
         }
       } catch (error) {
+        console.error("Error fetching user:", error);
         setUser(undefined);
       } finally {
         setIsLoading(false);
@@ -59,9 +60,30 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, [router]);
 
+  useEffect(() => {
+    if (user) {
+      /* get data here */
+      console.log(`user updated: ${user.email}`);
+      setIsLoading(true);
+      setTimeout(() => {
+        /* simulate call */
+        setIsLoading(false);
+      }, 5000);
+    }
+  }, [user]);
+
   return (
     <AppContext.Provider
-      value={{ toast, setToast, isLoading, setIsLoading, user, setUser, isSidebarOpen, setIsSidebarOpen }}
+      value={{
+        toast,
+        setToast,
+        isLoading,
+        setIsLoading,
+        user,
+        setUser,
+        isSidebarOpen,
+        setIsSidebarOpen,
+      }}
     >
       {children}
     </AppContext.Provider>
