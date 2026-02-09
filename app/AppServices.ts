@@ -1,5 +1,6 @@
 import { ApiResponse, User, UserAuth } from "./AppTypes";
 
+/* USERS */
 export async function createUser(payload: User): Promise<ApiResponse> {
   try {
     const res = await fetch("/api/users", {
@@ -88,6 +89,28 @@ export async function logoutUser(): Promise<ApiResponse> {
     return {
       error:
         error instanceof Error ? error.message : "An unknown error occurred.",
+    };
+  }
+}
+
+/* INCOMES */
+export async function getIncomes(userId: string): Promise<ApiResponse> {
+  try {
+    const res = await fetch(`/api/incomes?userId=${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to fetch incomes");
+    }
+    return data as ApiResponse;
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Internal Server Error",
     };
   }
 }
