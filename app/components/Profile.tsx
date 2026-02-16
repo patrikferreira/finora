@@ -8,11 +8,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { logoutUser } from "../AppServices";
 import { useRouter } from "next/navigation";
 
-type Props = {
-  iconOnly?: boolean;
-};
-
-export default function Profile({ iconOnly }: Props) {
+export default function Profile() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const context = useContext(AppContext);
@@ -20,7 +16,7 @@ export default function Profile({ iconOnly }: Props) {
     throw new Error("AppContext is not provided");
   }
 
-  const { user, setIsSidebarOpen, setIsLoading, setToast } = context;
+  const { user, setIsLoading, setToast } = context;
 
   function handleMenu() {
     setMenuOpen((prev) => !prev);
@@ -50,15 +46,15 @@ export default function Profile({ iconOnly }: Props) {
   return (
     <div
       onClick={handleMenu}
-      className="flex items-center gap-3 cursor-pointer relative w-full hover:bg-(--color-alt-2) transition duration-200 p-2 rounded-2xl"
+      className="flex items-center gap-3 cursor-pointer relative w-full hover:bg-(--alt-color-2) transition duration-200 p-2 rounded-xl"
     >
-      <div className="h-9 w-9 bg-(--color-primary) rounded-full flex items-center justify-center">
-        <LuUserRound size={20} />
+      <div className="h-9 w-9 bg-(--primary-color) rounded-full flex items-center justify-center">
+        <LuUserRound className="text-(--background)" size={20} />
       </div>
 
       <div className="flex flex-col leading-tight">
         <span className="font-medium">{user?.name}</span>
-        <span className="text-xs opacity-60">{user?.email}</span>
+        <span className="text-xs ">{user?.email}</span>
       </div>
 
       {menuOpen && (
@@ -66,26 +62,26 @@ export default function Profile({ iconOnly }: Props) {
           onClose={() => setMenuOpen(false)}
           className="bottom-14 left-0"
         >
-          <div className="text-xs flex flex-col">
+          <div className="text-sm flex flex-col">
             <div className="flex flex-col p-3">
               <p className="text-sm">{user?.name}</p>
-              <span className="text-xs opacity-60">{user?.email}</span>
+              <span className="text-sm ">{user?.email}</span>
             </div>
 
-            <hr className="border-(--color-border)" />
+            <hr className="border-(--border-color)" />
             <div className="flex flex-col p-1.5">
-              <button className="opacity-60 p-2 w-full hover:bg-(--color-alt) hover:opacity-100 transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
+              <button className="text-(--alt-color-3) p-2 w-full hover:bg-(--alt-color) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
                 <AiOutlineUser size={14} /> View profile
               </button>
-              <button className="opacity-60 p-2 w-full hover:bg-(--color-alt) hover:opacity-100 transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
+              <button className="text-(--alt-color-3) p-2 w-full hover:bg-(--alt-color) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
                 <IoSettingsOutline size={14} /> Account preferences
               </button>
             </div>
 
-            <hr className="border-(--color-border)" />
+            <hr className="border-(--border-color)" />
             <div className="p-1.5">
               <button
-                className="flex items-center gap-2 p-2 w-full hover:bg-(--color-alt) cursor-pointer opacity-60 rounded-xl hover:opacity-100 transition duration-200"
+                className="flex items-center gap-2 p-2 w-full text-(--alt-color-3) hover:bg-(--alt-color) hover:text-(--foreground) cursor-pointer  rounded-xl transition duration-200"
                 onClick={handleLogout}
               >
                 <IoLogOutOutline size={18} /> Logout

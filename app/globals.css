@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #121212;
-  --foreground: #ffffff;
-  --primary-color: #3cc087;
-  --light-color: #ffffff;
-  --border-color: #2a2a2a;
-  --alt-color: #181818;
-  --alt-color-2: #222222;
-  --alt-color-3: #9a9a9a;
+  --background: #f2f3f4;
+  --foreground: #1a1a1a;
+  --primary-color: #6366f1;
+  --border-color: #e5e7eb;
+  --border-color-2: #d1d5db;
+  --alt-color: #ffffff;
+  --alt-color-2: #f2f2f2;
+  --alt-color-hover: #d1d5db;
+  --alt-color-3: #6b7280;
 }
 
 html {
@@ -41,41 +42,26 @@ body {
 }
 
 input {
-  background-color: #181818;
-  border: 1px solid #2a2a2a;
-  color: #ffffff;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #1a1a1a;
   border-radius: 100px;
+}
+
+input:hover {
+  border: 1px solid #d1d5db;
+  transition: all;
+  transition-duration: 0.3;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill::first-line {
-  -webkit-box-shadow: 0 0 0px 1000px #181818 inset;
-  box-shadow: 0 0 0px 1000px #181818 inset;
-  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  -webkit-text-fill-color: #1a1a1a !important;
   -webkit-background-clip: padding-box;
   border-radius: 9999px !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  background: transparent;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--border-color);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-::-webkit-scrollbar-corner {
-  background: transparent;
-}

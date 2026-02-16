@@ -3,7 +3,7 @@ import { useContext } from "react";
 import AppContext from "../AppContext";
 import LoadingSpin from "../components/LoadingSpin";
 
-export default function Dashboard() {
+export default function Overview() {
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -13,7 +13,7 @@ export default function Dashboard() {
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-svh">
+      <div className="flex justify-center items-center h-svh w-full">
         <LoadingSpin className="" />
       </div>
     );
@@ -22,9 +22,7 @@ export default function Dashboard() {
 
   return (
     <div
-      className={`p-4 ${
-        isSidebarOpen ? "sm:ml-64" : ""
-      } transition-all duration-300`}
+      className={`p-4 w-full`}
     >
       Dashboard view
     </div>

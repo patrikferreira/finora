@@ -4,44 +4,33 @@ type Props = {
 
 export default function Logo({ logoOnly }: Props) {
   return (
-    <div className="flex items-baseline gap-3">
-      <div className="flex items-baseline gap-0.5">
-        <svg
-          className="h-2.5 w-1.5 rounded-sm bg-(--color-primary)"
-          viewBox="0 0 6 24"
-          xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-hidden="true"
-        >
-          <rect width="100%" height="100%" rx="2" fill="var(--color-primary)" />
-        </svg>
+    <div className="flex items-baseline gap-2">
+      <svg
+        width="22"
+        height="24"
+        viewBox="0 0 22 24"
+        className="flex-shrink-0"
+        aria-hidden
+      >
+        <rect
+          x="0"
+          y="8"
+          width="10"
+          height="16"
+          rx="2"
+          fill="var(--primary-color)"
+        />
+        <rect
+          x="12"
+          y="0"
+          width="10"
+          height="24"
+          rx="2"
+          fill="var(--primary-color)"
+        />
+      </svg>
 
-        <svg
-          className="h-4 w-1.5 rounded-sm bg-(--color-primary)"
-          viewBox="0 0 6 24"
-          xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-hidden="true"
-        >
-          <rect width="100%" height="100%" rx="2" fill="var(--color-primary)" />
-        </svg>
-
-        <svg
-          className="h-5.5 w-1.5 rounded-sm bg-(--color-primary)"
-          viewBox="0 0 6 24"
-          xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-hidden="true"
-        >
-          <rect width="100%" height="100%" rx="2" fill="var(--color-primary)" />
-        </svg>
-      </div>
-
-      {!logoOnly && (
-        <span className="text-(--color-primary) font-semibold text-2xl">
-          Finora
-        </span>
-      )}
+      {!logoOnly && <span className="font-semibold text-2xl">Finora</span>}
     </div>
   );
 }

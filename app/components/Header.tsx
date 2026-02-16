@@ -12,11 +12,11 @@ export default function Header() {
     throw new Error("AppContext is not provided");
   }
 
-  const { user, setIsSidebarOpen, isLoading } = context;
+  const { user, initialFetching, setIsSidebarOpen } = context;
 
   if (
     !user ||
-    isLoading ||
+    initialFetching ||
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/"
@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <div
-      className={`bg-(--background) flex lg:hidden  items-center px-4 pt-4 animate-fadeIn`}
+      className={`bg-(--background) flex md:hidden  items-center px-4 pt-4 animate-fadeIn`}
     >
       <div className={`flex items-center gap-4 animate-fadeIn`}>
         <button>
@@ -34,7 +34,7 @@ export default function Header() {
         </button>
         <button
           onClick={() => setIsSidebarOpen?.(true)}
-          className="cursor-pointer p-2 rounded-xl hover:bg-(--color-alt-2) transition duration-200 opacity-60 hover:opacity-100 "
+          className="cursor-pointer p-2 rounded-xl hover:bg-(--alt-color) transition duration-200"
         >
           <FiSidebar size={18} />
         </button>

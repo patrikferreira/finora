@@ -18,6 +18,10 @@ type AppContextType = {
   setIsSidebarOpen?: (value: boolean) => void;
   localIncomes: Income[];
   setLocalIncomes: (incomes: Income[]) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -33,6 +37,10 @@ const AppContext = createContext<AppContextType>({
   setLocalIncomes: () => {},
   initialFetching: false,
   setInitialFetching: () => {},
+  searchQuery: "",
+  setSearchQuery: () => {},
+  currentPage: 1,
+  setCurrentPage: () => {},
 });
 
 export default AppContext;
@@ -49,6 +57,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserAuthenticated | undefined>(undefined);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [localIncomes, setLocalIncomes] = useState<Income[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     setInitialFetching(true);
@@ -79,7 +89,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       try {
         const data = await getIncomes(user.id);
         setLocalIncomes(data.incomes ?? []);
-        console.log(`allData:`, data);
       } catch (error) {
         console.error("Error fetching incomes:", error);
       } finally {
@@ -105,6 +114,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setLocalIncomes,
         initialFetching,
         setInitialFetching,
+        searchQuery,
+        setSearchQuery,
+        currentPage,
+        setCurrentPage,
       }}
     >
       {children}

@@ -65,7 +65,7 @@ export default function Sidebar() {
   return (
     <div
       ref={sidebarRef}
-      className={`bg-(--alt-color) h-full min-w-64 border-r border-(--border-color) p-2 flex-col justify-between gap-4 z-20 shadow  transition-all duration-200 ease-in-out animate-fadeIn ${
+      className={`bg-(--alt-color) h-full min-w-64 border-r border-(--border-color) p-2 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 fixed md:relative top-0 left-0 flex`}
     >
@@ -92,7 +92,7 @@ export default function Sidebar() {
                   }
                 }}
                 className={`flex items-center gap-2 rounded-full hover:bg-(--alt-color-2) transition duration-200 p-2 cursor-pointer ${
-                  active ? "bg-(--alt-color-2)" : "text-(--alt-color-3)"
+                  active ? "bg-(--alt-color-2) text-(--foreground)" : "text-(--alt-color-3)"
                 }`}
               >
                 <div className="p-1">{link.icon}</div>

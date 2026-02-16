@@ -28,7 +28,7 @@ export default function Popover({ children, onClose, className }: Props) {
   return (
     <div
       ref={popoverRef}
-      className={`origin-top absolute z-50 bg-(--color-alt-2) rounded-xl border border-(--color-border) max-h-60 overflow-y-auto w-50 shadow cursor-auto ${className}`}
+      className={`origin-top absolute z-50 bg-(--alt-color-2) rounded-xl border border-(--border-color) max-h-60 overflow-y-auto w-50 shadow cursor-auto ${className}`}
     >
       {children}
     </div>

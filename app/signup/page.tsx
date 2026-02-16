@@ -1,13 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import Copyright from "../components/Copyright";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import Logo from "../components/Logo";
 import AppContext from "../AppContext";
 import { validateRegisterForm } from "../utiils/formValidators";
 import { createUser } from "../AppServices";
 import bcrypt from "bcryptjs";
+import Spin from "../components/Spin";
+import BuiltInfo from "../components/BuiltInfo";
 
 export default function Signup() {
   const router = useRouter();
@@ -85,7 +86,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="bg-(--background) h-svh p-4 flex flex-col justify-between items-center animate-fadeIn">
+    <div className="bg-(--background) h-svh w-full p-4 flex flex-col justify-between items-center animate-fadeIn">
       <Logo />
       <div className="flex flex-col gap-4 w-full max-w-xs">
         <form className="flex flex-col gap-4" onSubmit={submit}>
@@ -98,7 +99,7 @@ export default function Signup() {
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--border-color) outline-none px-4 h-10"
             />
           </label>
 
@@ -111,7 +112,7 @@ export default function Signup() {
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--border-color) outline-none px-4 h-10"
             />
           </label>
 
@@ -124,7 +125,7 @@ export default function Signup() {
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--border-color) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -147,7 +148,7 @@ export default function Signup() {
               placeholder="********"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full text-sm rounded-full border border-(--color-border) outline-none px-4 h-10"
+              className="w-full text-sm rounded-full border border-(--border-color) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -166,11 +167,11 @@ export default function Signup() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
-              isLoading ? "cursor-default opacity-70" : "cursor-pointer"
+            className={`h-10 text-sm bg-(--primary-color) text-white flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
+              isLoading ? "cursor-default" : "cursor-pointer"
             }`}
           >
-            Sign up
+            {isLoading ? <Spin /> : "Sign up"}
           </button>
         </form>
 
@@ -180,13 +181,13 @@ export default function Signup() {
             onClick={() => {
               router.push("/login");
             }}
-            className="font-semibold text text-(--color-primary) hover:underline cursor-pointer"
+            className="font-semibold text text-(--primary-color) hover:underline cursor-pointer"
           >
             Login here
           </button>
         </p>
       </div>
-      <Copyright />
+      <BuiltInfo />
     </div>
   );
 }

@@ -2,12 +2,13 @@
 import React, { useContext, useState } from "react";
 import AppContext from "../AppContext";
 import Logo from "../components/Logo";
-import Copyright from "../components/Copyright";
 import { useRouter } from "next/navigation";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { validateAuth } from "../utiils/formValidators";
 import { UserAuthenticated } from "../AppTypes";
 import { authUser } from "../AppServices";
+import Spin from "../components/Spin";
+import BuiltInfo from "../components/BuiltInfo";
 
 export default function Login() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function Login() {
           return;
         }
         setUser(user as UserAuthenticated);
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -76,7 +77,7 @@ export default function Login() {
   }
 
   return (
-    <div className="bg-(--background) h-svh p-4 flex flex-col justify-between items-center animate-fadeIn">
+    <div className="bg-(--background) h-svh w-full p-4 flex flex-col justify-between items-center animate-fadeIn">
       <Logo />
       <div className="flex flex-col gap-4 w-full max-w-xs">
         <form className="flex flex-col gap-4" onSubmit={submit}>
@@ -88,7 +89,7 @@ export default function Login() {
               value={form.email}
               onChange={handleChange}
               placeholder="johndoe@mail.com"
-              className="text-sm w-full rounded-full border border-(--color-border) outline-none px-4 h-10 bg-(--background)"
+              className="text-sm w-full rounded-full border border-(--border-color) outline-none px-4 h-10 bg-(--background)"
             />
           </label>
 
@@ -100,7 +101,7 @@ export default function Login() {
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="text-sm w-full rounded-full border border-(--color-border) outline-none px-4 h-10"
+              className="text-sm w-full rounded-full border border-(--border-color) outline-none px-4 h-10"
             />
             <button
               type="button"
@@ -115,11 +116,11 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`h-10 text-sm bg-(--color-primary) text-(--color-light) flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
-              isLoading ? "cursor-default opacity-60" : "cursor-pointer"
+            className={`h-10 text-sm bg-(--primary-color) text-white flex items-center justify-center shadow-lg transition duration-200 hover:brightness-115 rounded-full font-semibold ${
+              isLoading ? "cursor-default" : "cursor-pointer"
             }`}
           >
-            Login
+            {isLoading ? <Spin /> : "Login"}
           </button>
         </form>
 
@@ -127,13 +128,13 @@ export default function Login() {
           Don’t have an account?
           <button
             onClick={() => router.push("/signup")}
-            className="font-semibold text-(--color-primary) hover:underline cursor-pointer"
+            className="font-semibold text-(--primary-color) hover:underline cursor-pointer"
           >
             Click here
           </button>
         </p>
       </div>
-      <Copyright />
+      <BuiltInfo />
     </div>
   );
 }
