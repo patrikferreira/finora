@@ -14,7 +14,13 @@ export type ApiResponse = {
   token?: string;
   status?: number;
   incomes?: Income[];
-  
+};
+
+export type ConfirmAction = {
+  show: boolean;
+  title: string;
+  message: string;
+  onConfirm: () => void;
 };
 
 /* USER */
@@ -41,7 +47,7 @@ export type UserAuthenticated = {
   id: string;
   name: string;
   email: string;
-}
+};
 
 /* INCOMES */
 export type Income = {
@@ -51,5 +57,4 @@ export type Income = {
   amount: number;
   category?: string;
   cycle?: string;
-}
-
+};

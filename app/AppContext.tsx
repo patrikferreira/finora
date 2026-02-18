@@ -1,6 +1,6 @@
 "use client";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Income, Toast, UserAuthenticated } from "./AppTypes";
+import { ConfirmAction, Income, Toast, UserAuthenticated } from "./AppTypes";
 import { useRouter } from "next/navigation";
 import { getUserFromToken } from "./AppServices";
 import { getIncomes } from "./AppServices";
@@ -22,6 +22,8 @@ type AppContextType = {
   setSearchQuery: (query: string) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
+  confirmAction: ConfirmAction;
+  setConfirmAction: (action: ConfirmAction) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -41,6 +43,13 @@ const AppContext = createContext<AppContextType>({
   setSearchQuery: () => {},
   currentPage: 1,
   setCurrentPage: () => {},
+  confirmAction: {
+    show: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  },
+  setConfirmAction: () => {},
 });
 
 export default AppContext;
@@ -59,6 +68,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [localIncomes, setLocalIncomes] = useState<Income[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [confirmAction, setConfirmAction] = useState<ConfirmAction>({
+    show: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
 
   useEffect(() => {
     setInitialFetching(true);
@@ -118,6 +133,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setSearchQuery,
         currentPage,
         setCurrentPage,
+        confirmAction,
+        setConfirmAction,
       }}
     >
       {children}
