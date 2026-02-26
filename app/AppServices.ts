@@ -114,3 +114,35 @@ export async function getIncomes(userId: string): Promise<ApiResponse> {
     };
   }
 }
+
+export async function deleteIncome(id: string): Promise<ApiResponse> {
+  try {
+    const res = await fetch(`/api/incomes/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.status === 204) {
+      return { status: 204 };
+    }
+
+    const json = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      return {
+        error:
+          json?.error ?? json?.message ?? res.statusText ?? "Request failed",
+        status: res.status,
+      };
+    }
+
+    return json as ApiResponse;
+  } catch (error) {
+    return {
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    };
+  }
+}

@@ -6,6 +6,7 @@ import Toast from "./components/Toast";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import IncomeDetail from "./components/IncomeDetail";
+import ConfirmModal from "./components/ConfirmModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           {children}
           <Toast />
           <IncomeDetail />
+          <ConfirmModal />
         </AppContextProvider>
       </body>
     </html>

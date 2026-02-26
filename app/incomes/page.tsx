@@ -9,6 +9,7 @@ import SortIcon from "../components/SortIcon";
 import Popover from "../components/Popover";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { deleteIncome } from "../AppServices";
 
 type SortField = "description" | "amount" | "category" | "cycle";
 type SortOrder = "asc" | "desc" | null;
@@ -30,6 +31,8 @@ export default function Incomes() {
     currentPage,
     setCurrentPage,
     setIncomeDetail,
+    setConfirmAction,
+    setToast,
   } = context;
 
   function handleMenu(id?: string) {
@@ -50,6 +53,37 @@ export default function Incomes() {
       setSortOrder("asc");
     }
   };
+
+  async function handleDelete(id: string) {
+    const res = await deleteIncome(id);
+
+    if (res.error) {
+      setToast({
+        message: res.error || "Failed to delete income",
+        status: "error",
+        show: true,
+      });
+      return;
+    }
+
+    setToast({
+      message: "Income deleted successfully",
+      status: "success",
+      show: true,
+    });
+  }
+
+  async function handleDeleteClick(id: string) {
+    setConfirmAction({
+      show: true,
+      title: "Delete Income",
+      message:
+        "Are you sure you want to delete this income? this action cannot be undone.",
+      onConfirm: () => handleDelete(id),
+    });
+
+    setMenuOpen(null);
+  }
 
   const sortedIncomes = useMemo(() => {
     let filtered = localIncomes;
@@ -240,7 +274,12 @@ export default function Incomes() {
                         >
                           <FaRegEdit /> Edit
                         </button>
-                        <button className=" p-2 w-full hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
+                        <button
+                          onClick={() => {
+                            handleDeleteClick(income.id);
+                          }}
+                          className=" p-2 w-full hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center"
+                        >
                           <FaRegTrashCan /> Delete
                         </button>
                       </div>
