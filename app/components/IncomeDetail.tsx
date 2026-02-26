@@ -1,25 +1,39 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../AppContext";
 import { IoCloseOutline } from "react-icons/io5";
-import { Income } from "../AppTypes";
+import { BillingCycle, Income, IncomeCategory } from "../AppTypes";
 import Spin from "./Spin";
+import Select from "./Select";
 
 export default function IncomeDetail() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [formData, setFormData] = useState<Income>({
     description: "",
-    amount: 0,
-    category: "",
-    cycle: "",
+    amount: null,
+    category: "salary",
+    cycle: "monthly",
   });
+
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
   }
 
-  const { incomeDetail, setIncomeDetail, setIsLoading, isLoading } = context;
+  const { incomeDetail, setIncomeDetail } = context;
+
+  function resetData() {
+    setFormData({
+      description: "",
+      amount: null,
+      category: "salary",
+      cycle: "monthly",
+    });
+  }
 
   function onClose() {
+    resetData();
     setIncomeDetail({ ...incomeDetail, show: false });
   }
 
@@ -39,6 +53,23 @@ export default function IncomeDetail() {
     }, 2000);
   }
 
+  useEffect(() => {
+    if (!incomeDetail.show) return;
+
+    if (incomeDetail.currentIncome) {
+      setFormData({
+        description: incomeDetail.currentIncome.description,
+        amount: incomeDetail.currentIncome.amount ?? null,
+        category: incomeDetail.currentIncome.category,
+        cycle: incomeDetail.currentIncome.cycle,
+      });
+    }
+
+    return () => {
+      resetData();
+    };
+  }, [incomeDetail]);
+
   if (!incomeDetail.show) return null;
 
   return (
@@ -48,9 +79,9 @@ export default function IncomeDetail() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-sm border border-(--border-color) sm:rounded-xl bg-(--alt-color) animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md border border-(--border-primary) sm:rounded-xl bg-(--bg-primary) animate-modalGrow"
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-color)">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-primary)">
           <h3 className="text-base">
             {incomeDetail.newIncome ? "New income" : "Edit income"}
           </h3>
@@ -63,6 +94,45 @@ export default function IncomeDetail() {
         </div>
 
         <div className="flex flex-col flex-1 gap-4 px-4 py-3 text-sm overflow-y-auto">
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex-1">
+              <label className="block text-sm mb-2" htmlFor="category">
+                Category *
+              </label>
+
+              <Select<IncomeCategory>
+                value={formData.category as IncomeCategory}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, category: val }))
+                }
+                options={[
+                  { value: "salary", label: "Salary" },
+                  { value: "benefit", label: "Benefit" },
+                  { value: "investment", label: "Investment" },
+                  { value: "freelancer", label: "Freelancer" },
+                  { value: "business", label: "Business" },
+                  { value: "other", label: "Other" },
+                ]}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label className="block text-sm mb-2" htmlFor="category">
+                Cycle *
+              </label>
+
+              <Select<BillingCycle>
+                value={formData.cycle as BillingCycle}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, cycle: val }))
+                }
+                options={[
+                  { value: "monthly", label: "Monthly" },
+                  { value: "yearly", label: "Yearly" },
+                ]}
+              />
+            </div>
+          </div>
           <div>
             <label className="block text-sm mb-2" htmlFor="description">
               Description *
@@ -71,10 +141,11 @@ export default function IncomeDetail() {
               type="text"
               id="description"
               name="description"
+              placeholder="Income"
               value={formData.description}
               onChange={handleChange}
               autoFocus
-              className="w-full border border-(--border-color) rounded-xl px-4 py-2.5 outline-none"
+              className="w-full bg-(--bg-secondary) border border-(--border-primary) rounded-xl px-4 py-2.5 outline-none"
             />
           </div>
           <div>
@@ -85,49 +156,19 @@ export default function IncomeDetail() {
               type="number"
               id="amount"
               name="amount"
-              value={formData.amount}
+              placeholder="$"
+              value={formData.amount ?? ""}
               onChange={handleChange}
-              autoFocus
-              className="w-full border border-(--border-color) rounded-xl px-4 py-2.5 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-2" htmlFor="category">
-              Category *
-            </label>
-            <input
-              type="text"
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              autoFocus
-              className="w-full border border-(--border-color) rounded-xl px-4 py-2.5 outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-2" htmlFor="cycle">
-              Cycle *
-            </label>
-            <input
-              type="text"
-              id="cycle"
-              name="cycle"
-              value={formData.cycle}
-              onChange={handleChange}
-              autoFocus
-              className="w-full border border-(--border-color) rounded-xl px-4 py-2.5 outline-none"
+              className="w-full bg-(--bg-secondary) border border-(--border-primary) rounded-xl px-4 py-2.5 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-(--border-color) px-4 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-(--border-primary) px-4 py-3">
           <button
             onClick={submit}
             disabled={isLoading}
-            className={`h-9 px-3 w-15 text-sm rounded-xl flex items-center justify-center bg-(--primary-color) transition duration-200 hover:brightness-115 ${
+            className={`h-9 px-3 w-15 text-sm rounded-xl flex items-center justify-center bg-(--primary) transition duration-200 hover:brightness-115 ${
               isLoading ? "cursor-default" : "cursor-pointer"
             }`}
           >
@@ -135,7 +176,7 @@ export default function IncomeDetail() {
           </button>
           <button
             onClick={onClose}
-            className="text-sm h-9 px-3 2-15 rounded-xl bg-(--alt-color-2) cursor-pointer transition duration-200 hover:brightness-115"
+            className="text-sm h-9 px-3 2-15 rounded-xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
           >
             Cancel
           </button>

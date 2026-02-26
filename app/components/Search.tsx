@@ -22,7 +22,7 @@ export default function Search({ placeholder }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-2 bg-(--alt-color) h-10 w-3xs py-1 px-3 rounded-full group border border-(--border-color) transition-all duration-200`}
+      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-3xs py-1 px-3 rounded-full group border border-(--border-primary) transition-all duration-200`}
     >
       <LuSearch
         size={18}
@@ -39,7 +39,7 @@ export default function Search({ placeholder }: Props) {
     !ring-0
     focus:!border-0
     focus:!ring-0
-    bg-(--alt-color)
+    bg-(--bg-secondary)
     px-2
     py-1
     text-sm

@@ -66,7 +66,7 @@ export default function Sidebar() {
   return (
     <div
       ref={sidebarRef}
-      className={`bg-(--alt-color) h-full min-w-64 border-r border-(--border-color)/70 p-2 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
+      className={`bg-(--bg-secondary) h-full min-w-64 border-r border-(--border-primary)/70 p-2 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 fixed md:relative top-0 left-0 flex`}
     >
@@ -75,7 +75,7 @@ export default function Sidebar() {
           <Logo />
           <button
             onClick={() => setIsSidebarOpen?.(false)}
-            className="cursor-pointer md:hidden p-2 rounded-xl hover:bg-(--alt-color-2) transition duration-200"
+            className="cursor-pointer md:hidden p-2 rounded-xl hover:bg-(--bg-tertiary) transition duration-200"
           >
             <FiSidebar size={18} />
           </button>
@@ -92,8 +92,10 @@ export default function Sidebar() {
                     closeSidebar();
                   }
                 }}
-                className={`flex items-center gap-2 rounded-full hover:bg-(--alt-color-2) transition duration-200 p-2 cursor-pointer ${
-                  active ? "bg-(--alt-color-2) text-(--foreground) font-semibold" : "opacity-50"
+                className={`flex items-center gap-2 rounded-xl hover:bg-(--bg-tertiary) transition duration-200 p-2 cursor-pointer ${
+                  active
+                    ? "bg-(--bg-tertiary) text-(--foreground) font-semibold"
+                    : ""
                 }`}
               >
                 <div className="p-1">{link.icon}</div>

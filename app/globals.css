@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #181818;
+  --bg-primary: #181818;
+  --bg-secondary: #212121;
+  --bg-tertiary: #2e2e2e;
   --foreground: #ffffff;
-  --primary-color: #3cc087;
-  --border-color: #2d2d2d;
-  --alt-color: #1e1e1e;
-  --alt-color-2: #2a2a2a;
+  --border-primary: #303030;
+  --border-secondary: #393939;
+  --primary: #3cc087;
 }
 
 html {
@@ -15,11 +16,11 @@ html {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--alt-color) transparent;
+  scrollbar-color: var(--bg-secondary) transparent;
 }
 
 body {
-  background: var(--background);
+  background: var(--bg-primary);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   z-index: 0;
@@ -57,7 +58,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px var(--alt-color) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
   -webkit-text-fill-color: var(--foreground) !important;
   transition: background-color 9999s ease-in-out 0s;
   caret-color: var(--foreground);

@@ -29,6 +29,7 @@ export default function Incomes() {
     searchQuery,
     currentPage,
     setCurrentPage,
+    setIncomeDetail,
   } = context;
 
   function handleMenu(id?: string) {
@@ -105,7 +106,7 @@ export default function Incomes() {
 
   return (
     <div
-      className={`p-4  flex flex-col overflow-auto gap-4  w-full animate-fadeIn`}
+      className={`p-4 flex flex-col overflow-auto gap-4  w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
@@ -121,16 +122,16 @@ export default function Incomes() {
       />
 
       {/* TABLE */}
-      <div className="w-full rounded-xl border border-(--border-color) hover:border-(--border-color) overflow-hidden">
+      <div className="w-full rounded-xl border border-(--border-primary) hover:border-(--border-primary) overflow-hidden">
         <table className="w-full table-fixed">
           <thead>
             <tr>
               <th
                 onClick={() => handleSort("description")}
-                className={`w-1/5 text-left bg-(--alt-color) tracking-wider border-(--border-color) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
+                className={`w-1/5 text-left bg-(--bg-secondary) tracking-wider border-(--border-primary) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
                   visibleIncomes.length === 0
                     ? "border-none"
-                    : "border-b border-(--border-color)"
+                    : "border-b border-(--border-primary)"
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -144,10 +145,10 @@ export default function Incomes() {
               </th>
               <th
                 onClick={() => handleSort("amount")}
-                className={`w-1/5 text-left bg-(--alt-color)  tracking-wider font-semibold border-(--border-color) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
+                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border-primary) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
                   visibleIncomes.length === 0
                     ? "border-none"
-                    : "border-b border-(--border-color)"
+                    : "border-b border-(--border-primary)"
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -160,28 +161,28 @@ export default function Incomes() {
                 </div>
               </th>
               <th
-                className={`w-1/5 text-left bg-(--alt-color)  tracking-wider font-semibold border-(--border-color) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
+                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border-primary) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
                   visibleIncomes.length === 0
                     ? "border-none"
-                    : "border-b border-(--border-color)"
+                    : "border-b border-(--border-primary)"
                 }`}
               >
                 <div className="flex items-center gap-2">Category</div>
               </th>
               <th
-                className={`w-1/5 text-left bg-(--alt-color)  tracking-wider font-semibold border-(--border-color) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
+                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border-primary) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
                   visibleIncomes.length === 0
                     ? "border-none"
-                    : "border-b border-(--border-color)"
+                    : "border-b border-(--border-primary)"
                 }`}
               >
                 <div className="flex items-center gap-2">Cycle</div>
               </th>
               <th
-                className={`w-1/10 text-left bg-(--alt-color) px-4 text-xs border-(--border-color)  uppercase py-3 ${
+                className={`w-1/10 text-left bg-(--bg-secondary) px-4 text-xs border-(--border-primary)  uppercase py-3 ${
                   visibleIncomes.length === 0
                     ? "border-none"
-                    : "border-b border-(--border-color)"
+                    : "border-b border-(--border-primary)"
                 }`}
               ></th>
             </tr>
@@ -191,13 +192,13 @@ export default function Incomes() {
             {visibleIncomes.map((income, index) => (
               <tr
                 key={income.id}
-                className={`border-b border-(--border-color) last:border-0 transition-all duration-300 bg-(--alt-color)`}
+                className={`border-b border-(--border-primary) last:border-0 transition-all duration-300 bg-(--bg-secondary)`}
               >
                 <td className="w-1/5 px-4 py-3 text-sm truncate">
                   {income.description}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm">
-                  €{income.amount.toLocaleString()}
+                  €{(income.amount ?? "").toLocaleString()}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell">
                   {income?.category
@@ -214,7 +215,7 @@ export default function Incomes() {
                 <td className="w-1/10 px-4 text-sm">
                   <button
                     onClick={() => handleMenu(income.id)}
-                    className="border border-transparent opacity-50 hover:opacity-100 hover:border-(--border-color) group transition-all duration-300 cursor-pointer rounded-xl p-2"
+                    className="border border-transparent opacity-50 hover:opacity-100 hover:border-(--border-primary) group transition-all duration-300 cursor-pointer rounded-xl p-2"
                   >
                     <HiMiniEllipsisVertical className=" group-hover:text-(--foreground) transition-all duration-300" />
                   </button>
@@ -225,10 +226,21 @@ export default function Incomes() {
                       className="right-17 lg:right-29 !w-40"
                     >
                       <div className="flex flex-col p-1.5 text-sm">
-                        <button className=" p-2 w-full opacity-50 hover:opacity-100 hover:bg-(--alt-color) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
+                        <button
+                          onClick={() => {
+                            setIncomeDetail({
+                              show: true,
+                              newIncome: false,
+                              currentIncome: income,
+                            });
+
+                            setMenuOpen(null);
+                          }}
+                          className=" p-2 w-full hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center"
+                        >
                           <FaRegEdit /> Edit
                         </button>
-                        <button className=" p-2 w-full opacity-50 hover:opacity-100 hover:bg-(--alt-color) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
+                        <button className=" p-2 w-full hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-200 rounded-xl text-left cursor-pointer flex gap-2 items-center">
                           <FaRegTrashCan /> Delete
                         </button>
                       </div>

@@ -54,7 +54,7 @@ export type Income = {
   id?: string;
   userId?: string;
   description: string;
-  amount: number;
+  amount: number | null;
   category?: string;
   cycle?: string;
 };
@@ -63,4 +63,14 @@ export type IncomeDetail = {
   show: boolean;
   newIncome: boolean;
   currentIncome: Income | null;
-}
+};
+
+export type IncomeCategory =
+  | "salary"
+  | "benefit"
+  | "investment"
+  | "freelancer"
+  | "business"
+  | "other";
+
+export type BillingCycle = "monthly" | "yearly";
