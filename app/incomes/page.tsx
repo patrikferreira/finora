@@ -33,6 +33,7 @@ export default function Incomes() {
     setIncomeDetail,
     setConfirmAction,
     setToast,
+    setRefreshData,
   } = context;
 
   function handleMenu(id?: string) {
@@ -71,6 +72,8 @@ export default function Incomes() {
       status: "success",
       show: true,
     });
+
+    setRefreshData(true);
   }
 
   async function handleDeleteClick(id: string) {

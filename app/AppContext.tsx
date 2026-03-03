@@ -30,6 +30,8 @@ type AppContextType = {
   setConfirmAction: (action: ConfirmAction) => void;
   incomeDetail: IncomeDetail;
   setIncomeDetail: (IncomeDetail: IncomeDetail) => void;
+  refreshData: boolean;
+  setRefreshData: (value: boolean) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -60,6 +62,8 @@ const AppContext = createContext<AppContextType>({
     currentIncome: null,
   },
   setIncomeDetail: () => {},
+  refreshData: false,
+  setRefreshData: () => {},
 });
 
 export default AppContext;
@@ -88,6 +92,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     newIncome: true,
     currentIncome: null,
   });
+  const [refreshData, setRefreshData] = useState<boolean>(false);
 
   useEffect(() => {
     setInitialFetching(true);
@@ -149,6 +154,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setConfirmAction,
         incomeDetail,
         setIncomeDetail,
+        refreshData,
+        setRefreshData,
       }}
     >
       {children}

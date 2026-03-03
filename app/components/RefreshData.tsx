@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LuRefreshCcw } from "react-icons/lu";
 import AppContext from "../AppContext";
 import Spin from "./Spin";
@@ -15,9 +15,9 @@ export default function RefreshData({ view }: Props) {
     throw new Error("AppContext is not provided");
   }
 
-  const { user, setLocalIncomes } = context;
+  const { user, setLocalIncomes, refreshData, setRefreshData } = context;
 
-  async function refreshData() {
+  async function refresh() {
     if (!user?.id) return;
     try {
       setIsLoading(true);
@@ -33,12 +33,20 @@ export default function RefreshData({ view }: Props) {
       console.error("Error refreshing data:", error);
     } finally {
       setIsLoading(false);
+      setRefreshData(false);
     }
   }
+
+  useEffect(() => {
+    if (refreshData) {
+      refresh();
+    }
+  }, [refreshData]);
+
   return (
     <button
       disabled={isLoading}
-      onClick={refreshData}
+      onClick={refresh}
       className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border-primary) group text-sm bg-(--bg-secondary) group transition duration-200 cursor-pointer`}
     >
       {isLoading ? (

@@ -23,8 +23,14 @@ export default function IncomeDetail() {
     throw new Error("AppContext is not provided");
   }
 
-  const { incomeDetail, setIncomeDetail, setConfirmAction, setToast, user } =
-    context;
+  const {
+    incomeDetail,
+    setIncomeDetail,
+    setConfirmAction,
+    setToast,
+    user,
+    setRefreshData,
+  } = context;
 
   function resetData() {
     setFormData({
@@ -89,6 +95,7 @@ export default function IncomeDetail() {
         show: true,
       });
 
+      setRefreshData(true);
       onClose();
     } catch (error) {
       setToast({
@@ -114,13 +121,13 @@ export default function IncomeDetail() {
       return;
     }
 
-    onClose();
-
     setToast({
       message: "Income deleted successfully",
       status: "success",
       show: true,
     });
+    setRefreshData(true);
+    onClose();
   }
 
   async function handleDeleteClick() {
