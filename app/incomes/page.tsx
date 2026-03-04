@@ -40,8 +40,8 @@ export default function Incomes() {
     setMenuOpen((prev) => (prev === id ? null : id ?? null));
   }
 
-  const [sortField, setSortField] = useState<SortField | null>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>(null);
+  const [sortField, setSortField] = useState<SortField | null>("description");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -102,20 +102,21 @@ export default function Incomes() {
       );
     }
 
-    if (!sortField || !sortOrder) return filtered;
+    const activeSortField = sortField || "description";
+    const activeSortOrder = sortOrder || "asc";
 
     return [...filtered].sort((a, b) => {
-      let aValue = a[sortField];
-      let bValue = b[sortField];
+      let aValue = a[activeSortField];
+      let bValue = b[activeSortField];
 
-      if (aValue == null) aValue = sortField === "amount" ? 0 : "";
-      if (bValue == null) bValue = sortField === "amount" ? 0 : "";
+      if (aValue == null) aValue = activeSortField === "amount" ? 0 : "";
+      if (bValue == null) bValue = activeSortField === "amount" ? 0 : "";
 
       if (typeof aValue === "string") aValue = aValue.toLowerCase();
       if (typeof bValue === "string") bValue = bValue.toLowerCase();
 
-      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      if (aValue < bValue) return activeSortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return activeSortOrder === "asc" ? 1 : -1;
       return 0;
     });
   }, [localIncomes, sortField, sortOrder, searchQuery]);
@@ -253,7 +254,7 @@ export default function Incomes() {
                 <td className="w-1/10 px-4 text-sm">
                   <button
                     onClick={() => handleMenu(income.id)}
-                    className="opacity-50 group-hover:opacity-100 cursor-pointer p-2"
+                    className="opacity-50 group-hover:opacity-100 cursor-pointer p-2 rounded-xl border border-(--border-primary) hover:border-(--border-secondary) transition duration-200 flex items-center justify-center"
                   >
                     <HiMiniEllipsisVertical />
                   </button>

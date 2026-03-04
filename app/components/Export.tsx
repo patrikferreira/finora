@@ -2,13 +2,14 @@ import { useContext, useState } from "react";
 import { CiExport } from "react-icons/ci";
 import AppContext from "../AppContext";
 import Spin from "./Spin";
+import { exportToExcel } from "../utils/exportExcel";
 
 type Props = {
   view: string;
 };
 
 export default function Export({ view }: Props) {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -19,18 +20,33 @@ export default function Export({ view }: Props) {
   function exportData() {
     setIsLoading(true);
     try {
-    } catch {
+      const columns = [
+        { key: "description", label: "Description" },
+        { key: "amount", label: "Amount" },
+        { key: "category", label: "Category" },
+        { key: "cycle", label: "Cycle" },
+      ];
+
+      exportToExcel({
+        data: localIncomes,
+        columns,
+        filename: `incomes-${new Date().toISOString().split("T")[0]}.xlsx`,
+      });
+    } catch (error) {
+      console.error("Error exporting data:", error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => setIsLoading(false), 1000);
     }
   }
 
   return (
     <button
-      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border-primary) group text-sm bg-(--bg-secondary) group transition duration-200 cursor-pointer`}
+      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border-primary) group text-sm bg-(--bg-secondary) group transition duration-200 ${
+        isLoading ? "cursor-default" : "cursor-pointer"
+      }`}
       onClick={exportData}
       aria-label="Export local incomes to Excel"
-      disabled={!localIncomes || localIncomes.length === 0}
+      disabled={!localIncomes || isLoading}
     >
       {isLoading ? (
         <Spin className="border-t-black/70" />

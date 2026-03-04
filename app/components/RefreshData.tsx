@@ -47,7 +47,9 @@ export default function RefreshData({ view }: Props) {
     <button
       disabled={isLoading}
       onClick={refresh}
-      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border-primary) group text-sm bg-(--bg-secondary) group transition duration-200 cursor-pointer`}
+      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border-primary) group text-sm bg-(--bg-secondary) group transition duration-200 ${
+        isLoading ? "cursor-default" : "cursor-pointer"
+      }`}
     >
       {isLoading ? (
         <Spin className="border-t-black/70" />
