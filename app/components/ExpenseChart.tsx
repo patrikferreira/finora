@@ -25,7 +25,6 @@ ChartJS.register(
 type Props = {
   data?: Expense[];
   className?: string;
-  currency?: string;
 };
 
 export default function ExpenseChart({ data, className }: Props) {
@@ -115,7 +114,7 @@ export default function ExpenseChart({ data, className }: Props) {
         label: "Expenses",
         data: sortedAmounts,
         backgroundColor: backgroundColors,
-        borderRadius: 6,
+        borderRadius: 8,
       },
     ],
   };
@@ -172,6 +171,7 @@ export default function ExpenseChart({ data, className }: Props) {
     <div
       className={`flex flex-col gap-4 p-4 border border-(--border-primary) bg-(--bg-secondary) rounded-xl shaodw-xl ${className}`}
     >
+      {/* HEADER */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-col">
           <h2 className="text-md lg:text-lg">Expense overview</h2>
@@ -184,19 +184,28 @@ export default function ExpenseChart({ data, className }: Props) {
             spending by category
           </p>
         </div>
-        <div className="flex flex-col items-end">
-          <h2 className="text-md lg:text-lg">{`$ ${totalExpense.toFixed(
-            2
-          )}`}</h2>
-          <p className="text-sm opacity-50">
-            Total {billingCycle === "totaly" ? "yearly" : billingCycle}
-          </p>
-        </div>
+        {!data || data.length === 0 ? null : (
+          <div className="flex flex-col items-end">
+            <h2 className="text-md lg:text-lg">{`$ ${totalExpense.toFixed(
+              2
+            )}`}</h2>
+            <p className="text-sm opacity-50">
+              Total {billingCycle === "totaly" ? "yearly" : billingCycle}
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="flex-1 flex min-h-[200px] max-h-[300px]">
-        <Bar data={chartData} options={chartOptions} />
-      </div>
+      {/* CHART */}
+      {!data || data.length === 0 ? (
+        <div className="flex items-center justify-center flex-1 text-sm opacity-50">
+          No data yet
+        </div>
+      ) : (
+        <div className="flex-1 flex min-h-[200px] max-h-[300px]">
+          <Bar data={chartData} options={chartOptions} />
+        </div>
+      )}
     </div>
   );
 }

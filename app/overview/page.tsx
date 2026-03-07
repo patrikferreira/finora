@@ -3,6 +3,8 @@ import { useContext } from "react";
 import AppContext from "../AppContext";
 import LoadingSpin from "../components/LoadingSpin";
 import ExpenseChart from "../components/ExpenseChart";
+import TotalBalance from "../components/TotalBalance";
+import ExpenseViewTable from "../components/ExpenseViewTable";
 
 export default function Overview() {
   const context = useContext(AppContext);
@@ -10,7 +12,7 @@ export default function Overview() {
     throw new Error("AppContext is not provided");
   }
 
-  const { user, initialFetching, localExpenses } = context;
+  const { user, initialFetching, localExpenses, localIncomes } = context;
 
   if (initialFetching)
     return (
@@ -23,7 +25,7 @@ export default function Overview() {
 
   return (
     <div
-      className={`p-4 flex flex-col overflow-auto gap-4  w-full animate-fadeIn`}
+      className={`min-h-svh lg:h-screen p-4 flex flex-col gap-4 overflow-auto w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
@@ -32,11 +34,17 @@ export default function Overview() {
       </div>
 
       {/* DASHBOARD */}
-      <div className="flex-1 flex-col lg:grid lg:grid-cols-4 lg:grid-rows-2 gap-4 lg:overflow-hidden">
-        <ExpenseChart
-          data={localExpenses}
-          className="lg:col-span-2 lg:row-span-1"
-        />
+      <div className="flex flex-col lg:flex-row gap-4 w-full h-full">
+        <div className="lg:w-1/2 h-full  flex flex-col gap-4">
+          <ExpenseChart data={localExpenses} className="flex-1" />
+          <TotalBalance
+            incomes={localIncomes}
+            expenses={localExpenses}
+            className="flex-1"
+          />
+        </div>
+
+        <ExpenseViewTable expenses={localExpenses} className="flex-1" />
       </div>
     </div>
   );
