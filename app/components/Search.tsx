@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { IoIosClose } from "react-icons/io";
 import { LuSearch } from "react-icons/lu";
 import AppContext from "../AppContext";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   placeholder?: string;
 };
 
 export default function Search({ placeholder }: Props) {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -24,7 +26,9 @@ export default function Search({ placeholder }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-3xs py-1 px-3 rounded-full group border ${hasQuery ? "border-2 border-(--primary)" : "border-(--border)"} transition-all duration-200`}
+      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-3xs py-1 px-3 rounded-full group border ${
+        hasQuery ? "border-2 border-(--primary)" : "border-(--border)"
+      } transition-all duration-200`}
     >
       <LuSearch
         size={18}
@@ -47,7 +51,7 @@ export default function Search({ placeholder }: Props) {
     text-sm
     w-full
   "
-        placeholder={placeholder || "Search..."}
+        placeholder={placeholder || t("search...")}
       />
       <button onClick={() => setSearchQuery("")}>
         <IoIosClose

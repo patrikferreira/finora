@@ -6,6 +6,7 @@ import Pagination from "./Pagination";
 import { useContext } from "react";
 import AppContext from "../AppContext";
 import Export from "./Export";
+import { useTranslation } from "react-i18next";
 
 interface ControlsProps {
   currentPage?: number;
@@ -18,6 +19,7 @@ export default function Controls({
   totalPages = 1,
   onPageChange = () => {},
 }: ControlsProps) {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -63,7 +65,7 @@ export default function Controls({
           onClick={handleAdd}
         >
           <IoAddOutline />
-          <span className="hidden md:flex">Add</span>
+          <span className="hidden md:flex">{t("Add")}</span>
         </button>
       </div>
     </div>

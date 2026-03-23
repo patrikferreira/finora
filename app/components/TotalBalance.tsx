@@ -10,6 +10,7 @@ import {
   TooltipItem,
 } from "chart.js";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function TotalBalance({ incomes, expenses, className }: Props) {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -115,14 +117,13 @@ export default function TotalBalance({ incomes, expenses, className }: Props) {
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h2 className="text-md lg:text-lg font-medium">Balance overview</h2>
+          <h2 className="text-md lg:text-lg font-medium">{t("Balance overview")}</h2>
           <p className="text-sm opacity-50">
             {billingCycle === "monthly"
-              ? "Monthly"
+              ? t("Monthly balance summary")
               : billingCycle === "yearly"
-              ? "Yearly"
-              : "Total yearly"}{" "}
-            summary
+              ? t("Yearly balance summary")
+              : t("Total balance summary")}
           </p>
         </div>
       </div>
@@ -140,7 +141,7 @@ export default function TotalBalance({ incomes, expenses, className }: Props) {
           <div className="w-full max-w-[180px] lg:max-w-[180px] relative z-0">
             <Doughnut data={chartData} options={chartOptions} />
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none -z-10">
-              <p className="text-xs opacity-50">Total balance</p>
+              <p className="text-xs opacity-50">{t("Total balance")}</p>
               <p className="text-lg font-bold">
                 {balance < 0 ? "-" : ""}{formatAmount(Math.abs(balance))}
               </p>
@@ -150,7 +151,7 @@ export default function TotalBalance({ incomes, expenses, className }: Props) {
           <div className="flex items-center flex-col justify-center gap-6">
             <div className="flex flex-col items-center">
               <p className="font-semibold ">{formatAmount(totalIncome)}</p>
-              <span className="text-xs opacity-50">Total incomes</span>
+              <span className="text-xs opacity-50">{t("Total incomes")}</span>
             </div>
             <div className="flex items-center">
               {balance >= 0 ? (
@@ -161,7 +162,7 @@ export default function TotalBalance({ incomes, expenses, className }: Props) {
             </div>
             <div className="flex flex-col items-center">
               <p className="font-semibold">{formatAmount(totalExpense)}</p>
-              <span className="text-xs opacity-50">Total expenses</span>
+              <span className="text-xs opacity-50">{t("Total expenses")}</span>
             </div>
           </div>
         </div>

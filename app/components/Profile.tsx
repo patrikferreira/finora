@@ -7,8 +7,10 @@ import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
 import { logoutUser } from "../AppServices";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -86,7 +88,7 @@ export default function Profile() {
                 }}
                 className=" p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
               >
-                <AiOutlineUser size={14} /> View profile
+                <AiOutlineUser size={14} /> {t("View profile")}
               </button>
               <button
                 onClick={() => {
@@ -94,7 +96,7 @@ export default function Profile() {
                 }}
                 className=" p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
               >
-                <IoSettingsOutline size={14} /> Account preferences
+                <IoSettingsOutline size={14} /> {t("Account preferences")}
               </button>
             </div>
 
@@ -105,7 +107,7 @@ export default function Profile() {
                 onClick={handleLogout}
                 disabled={isLoading}
               >
-                <IoLogOutOutline size={18} /> Logout
+                <IoLogOutOutline size={18} /> {t("Logout")}
               </button>
             </div>
           </div>

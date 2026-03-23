@@ -7,8 +7,10 @@ import Spin from "./Spin";
 import Select from "./Select";
 import { createExpense, deleteExpense, updateExpense } from "../AppServices";
 import { validateExpenseForm } from "../utils/formValidators";
+import { useTranslation } from "react-i18next";
 
 export default function ExpenseDetail() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<Expense>({
@@ -33,14 +35,14 @@ export default function ExpenseDetail() {
   } = context;
 
   const currencySymbols: Record<string, string> = {
-      USD: "$",
-      EUR: "€",
-      BRL: "R$",
-    };
-  
-    const currencySymbol = useMemo(() => {
-      return user?.currency ? currencySymbols[user.currency] || "$" : "$";
-    }, [user?.currency]);
+    USD: "$",
+    EUR: "€",
+    BRL: "R$",
+  };
+
+  const currencySymbol = useMemo(() => {
+    return user?.currency ? currencySymbols[user.currency] || "$" : "$";
+  }, [user?.currency]);
 
   function resetData() {
     setFormData({
@@ -89,7 +91,10 @@ export default function ExpenseDetail() {
       let res;
       if (expenseDetail.newExpense) {
         res = await createExpense(payload);
-      } else if (expenseDetail.currentExpense && expenseDetail.currentExpense.id) {
+      } else if (
+        expenseDetail.currentExpense &&
+        expenseDetail.currentExpense.id
+      ) {
         res = await updateExpense(expenseDetail.currentExpense.id, payload);
       } else {
         throw new Error("Expense id is missing for update");
@@ -191,7 +196,7 @@ export default function ExpenseDetail() {
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-(--border)">
           <h3 className="text-base">
-            {expenseDetail.newExpense ? "New expense" : "Edit expense"}
+            {expenseDetail.newExpense ? t("New expense") : t("Edit expense")}
           </h3>
           <button
             onClick={onClose}
@@ -205,7 +210,7 @@ export default function ExpenseDetail() {
           <div className="flex items-center gap-2 w-full">
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="category">
-                Category *
+                {t("Category")} *
               </label>
 
               <Select<ExpenseCategory>
@@ -214,23 +219,23 @@ export default function ExpenseDetail() {
                   setFormData((prev) => ({ ...prev, category: val }))
                 }
                 options={[
-                  { value: "house", label: "House" },
-                  { value: "transport", label: "Transport" },
-                  { value: "food", label: "Food" },
-                  { value: "entertainment", label: "Entertainment" },
-                  { value: "health", label: "Health" },
-                  { value: "education", label: "Education" },
-                  { value: "investment", label: "Investment" },
-                  { value: "subscription", label: "Subscription" },
-                  { value: "saving", label: "Saving" },
-                  { value: "other", label: "Other" },
+                  { value: "house", label: t("house") },
+                  { value: "transport", label: t("transport") },
+                  { value: "food", label: t("food") },
+                  { value: "entertainment", label: t("entertainment") },
+                  { value: "health", label: t("health") },
+                  { value: "education", label: t("education") },
+                  { value: "investment", label: t("investment") },
+                  { value: "subscription", label: t("subscription") },
+                  { value: "saving", label: t("saving") },
+                  { value: "other", label: t("other") },
                 ]}
               />
             </div>
 
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="cycle">
-                Cycle *
+                {t("Cycle")} *
               </label>
 
               <Select<Cycle>
@@ -239,15 +244,15 @@ export default function ExpenseDetail() {
                   setFormData((prev) => ({ ...prev, cycle: val }))
                 }
                 options={[
-                  { value: "monthly", label: "Monthly" },
-                  { value: "yearly", label: "Yearly" },
+                  { value: "monthly", label: t("Monthly") },
+                  { value: "yearly", label: t("Yearly") },
                 ]}
               />
             </div>
           </div>
           <div>
             <label className="block text-sm mb-2" htmlFor="description">
-              Description *
+              {t("Description")} *
             </label>
             <input
               type="text"
@@ -263,7 +268,7 @@ export default function ExpenseDetail() {
           </div>
           <div>
             <label className="block text-sm mb-2" htmlFor="amount">
-              Amount *
+              {t("Amount")} *
             </label>
             <input
               type="number"
@@ -287,7 +292,7 @@ export default function ExpenseDetail() {
               onClick={handleDeleteClick}
               className="h-9 px-3 text-sm rounded-2xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
             >
-              Delete
+              {t("Delete")}
             </button>
           )}
           <div className="flex items-center gap-2">
@@ -298,13 +303,13 @@ export default function ExpenseDetail() {
                 isLoading ? "cursor-default" : "cursor-pointer"
               }`}
             >
-              {isLoading ? <Spin /> : "Save"}
+              {isLoading ? <Spin /> : t("Save")}
             </button>
             <button
               onClick={onClose}
               className="text-sm h-9 px-3 2-15 rounded-2xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
             >
-              Cancel
+              {t("Cancel")}
             </button>
           </div>
         </div>

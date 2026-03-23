@@ -73,8 +73,8 @@ export function validateExpenseForm(data: Expense): string | null {
   if (!data.description || data.description.trim() === "") {
     return "Description is required";
   }
-  if (data.amount === null || data.amount === undefined || data.amount <= 0) {
-    return "Amount must be greater than 0";
+  if (data.amount === null || data.amount === undefined) {
+    return "Amount is required";
   }
   if (!data.category) {
     return "Category is required";

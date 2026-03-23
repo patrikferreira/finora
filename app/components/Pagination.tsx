@@ -48,8 +48,8 @@ export default function Pagination({
         </svg>
       </button>
 
-      <span className="hidden md:flex px-2 opacity-50 group-hover:opacity-100 transition-all duration-200 min-w-[60px] text-center font-medium">
-        {currentPage} of {totalPages}
+      <span className="hidden md:flex items-center justify-center  px-2 opacity-50 group-hover:opacity-100 transition-all duration-200 min-w-[60px] font-medium">
+        {currentPage} / {totalPages}
       </span>
 
       <button

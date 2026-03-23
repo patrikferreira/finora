@@ -7,8 +7,10 @@ import Spin from "./Spin";
 import Select from "./Select";
 import { createIncome, deleteIncome, updateIncome } from "../AppServices";
 import { validateIncomeForm } from "../utils/formValidators";
+import { useTranslation } from "react-i18next";
 
 export default function IncomeDetail() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<Income>({
@@ -191,7 +193,7 @@ export default function IncomeDetail() {
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-(--border)">
           <h3 className="text-base">
-            {incomeDetail.newIncome ? "New income" : "Edit income"}
+            {incomeDetail.newIncome ? t("New income") : t("Edit income")}
           </h3>
           <button
             onClick={onClose}
@@ -205,7 +207,7 @@ export default function IncomeDetail() {
           <div className="flex items-center gap-2 w-full">
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="category">
-                Category *
+                {t("Category")} *
               </label>
 
               <Select<IncomeCategory>
@@ -214,19 +216,19 @@ export default function IncomeDetail() {
                   setFormData((prev) => ({ ...prev, category: val }))
                 }
                 options={[
-                  { value: "salary", label: "Salary" },
-                  { value: "benefit", label: "Benefit" },
-                  { value: "investment", label: "Investment" },
-                  { value: "freelancer", label: "Freelancer" },
-                  { value: "business", label: "Business" },
-                  { value: "other", label: "Other" },
+                  { value: "salary", label: t("salary") },
+                  { value: "benefit", label: t("benefit") },
+                  { value: "investment", label: t("investment") },
+                  { value: "freelancer", label: t("freelancer") },
+                  { value: "business", label: t("business") },
+                  { value: "other", label: t("other") },
                 ]}
               />
             </div>
 
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="category">
-                Cycle *
+                {t("Cycle")} *
               </label>
 
               <Select<Cycle>
@@ -235,15 +237,15 @@ export default function IncomeDetail() {
                   setFormData((prev) => ({ ...prev, cycle: val }))
                 }
                 options={[
-                  { value: "monthly", label: "Monthly" },
-                  { value: "yearly", label: "Yearly" },
+                  { value: "monthly", label: t("Monthly") },
+                  { value: "yearly", label: t("Yearly") },
                 ]}
               />
             </div>
           </div>
           <div>
             <label className="block text-sm mb-2" htmlFor="description">
-              Description *
+              {t("Description")} *
             </label>
             <input
               type="text"
@@ -259,7 +261,7 @@ export default function IncomeDetail() {
           </div>
           <div>
             <label className="block text-sm mb-2" htmlFor="amount">
-              Amount *
+              {t("Amount")} *
             </label>
             <input
               type="number"
@@ -283,7 +285,7 @@ export default function IncomeDetail() {
               onClick={handleDeleteClick}
               className="h-9 px-3 text-sm rounded-2xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
             >
-              Delete
+              {t("Delete")}
             </button>
           )}
           <div className="flex items-center gap-2">
@@ -294,13 +296,13 @@ export default function IncomeDetail() {
                 isLoading ? "cursor-default" : "cursor-pointer"
               }`}
             >
-              {isLoading ? <Spin /> : "Save"}
+              {isLoading ? <Spin /> : t("Save")}
             </button>
             <button
               onClick={onClose}
               className="text-sm h-9 px-3 2-15 rounded-2xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
             >
-              Cancel
+              {t("Cancel")}
             </button>
           </div>
         </div>

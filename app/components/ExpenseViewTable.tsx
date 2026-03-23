@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef, useContext } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import SortIcon from "./SortIcon";
 import AppContext from "../AppContext";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   className?: string;
@@ -14,6 +15,7 @@ type SortField = "description" | "amount";
 type SortOrder = "asc" | "desc" | null;
 
 export default function ExpenseViewTable({ expenses = [], className }: Props) {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -147,9 +149,9 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
         {/* HEADER */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex flex-col">
-            <h2 className="text-md lg:text-lg">Expense list</h2>
+            <h2 className="text-md lg:text-lg">{t("Expense list")}</h2>
             <p className="text-sm opacity-50">
-              Analyze the percentage metric by expense
+              {t("Analyze the percentage metric by expense")}
             </p>
           </div>
 
@@ -180,7 +182,7 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
         <div ref={contentRef} className="flex-1 flex flex-col min-h-80">
           {filteredExpenses.length === 0 ? (
             <div className="flex items-center justify-center flex-1 text-sm opacity-50">
-              No expenses yet
+              {t("No expenses yet")}
             </div>
           ) : (
             <div className="max-h-full flex flex-col overflow-hidden rounded-2xl border border-(--border)">
@@ -192,7 +194,7 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
                       className="w-2/5 text-left bg-(--bg-secondary) tracking-wider border-b border-(--border) px-4 text-xs uppercase py-3 cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
-                        Description
+                        {t("Description")}
                         <SortIcon
                           field="description"
                           sortField={sortField}
@@ -205,7 +207,7 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
                       className="w-1/5 text-left bg-(--bg-secondary) tracking-wider border-b border-(--border) px-4 text-xs uppercase py-3 cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
-                        Amount
+                        {t("Amount")}
                         <SortIcon
                           field="amount"
                           sortField={sortField}
@@ -214,7 +216,7 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
                       </div>
                     </th>
                     <th className="w-1/5 text-left bg-(--bg-secondary) tracking-wider border-b border-(--border) px-4 text-xs uppercase py-3 hidden md:table-cell">
-                      Category
+                      {t("Category")}
                     </th>
                     <th className="w-1/5 text-left bg-(--bg-secondary) tracking-wider border-b border-(--border) px-4 text-xs uppercase py-3 table-cell">
                       %
@@ -268,7 +270,7 @@ export default function ExpenseViewTable({ expenses = [], className }: Props) {
             href="/expenses"
             className="text-sm opacity-50 hover:opacity-100 transition duration-200"
           >
-            View expenses
+            {t("View expenses list")}
           </Link>
         </div>
       )}

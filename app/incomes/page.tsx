@@ -10,6 +10,7 @@ import Popover from "../components/Popover";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { deleteIncome } from "../AppServices";
+import { useTranslation } from "react-i18next";
 
 type SortField = "description" | "amount" | "category" | "cycle";
 type SortOrder = "asc" | "desc" | null;
@@ -17,6 +18,7 @@ type SortOrder = "asc" | "desc" | null;
 const PAGE_SIZE = 10;
 
 export default function Incomes() {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const context = useContext(AppContext);
   if (!context) {
@@ -165,8 +167,10 @@ export default function Incomes() {
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
-        <h1 className="text-2xl font-semibold">Incomes</h1>
-        <span className="opacity-50 text-sm">Track & manage your earnings</span>
+        <h1 className="text-2xl font-semibold">{t("Incomes")}</h1>
+        <span className="opacity-50 text-sm">
+          {t("Track & manage your earnings")}
+        </span>
       </div>
 
       {/* CONTROLS */}
@@ -190,7 +194,7 @@ export default function Incomes() {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  Description
+                  {t("description")}
                   <SortIcon
                     field="description"
                     sortField={sortField}
@@ -207,7 +211,7 @@ export default function Incomes() {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  Amount
+                  {t("amount")}
                   <SortIcon
                     field="amount"
                     sortField={sortField}
@@ -222,7 +226,7 @@ export default function Incomes() {
                     : "border-b border-(--border)"
                 }`}
               >
-                <div className="flex items-center gap-2">Category</div>
+                <div className="flex items-center gap-2">{t("category")}</div>
               </th>
               <th
                 className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
@@ -231,7 +235,7 @@ export default function Incomes() {
                     : "border-b border-(--border)"
                 }`}
               >
-                <div className="flex items-center gap-2">Cycle</div>
+                <div className="flex items-center gap-2">{t("cycle")}</div>
               </th>
               <th
                 className={`w-1/10 text-left bg-(--bg-secondary) px-4 text-xs border-(--border)  uppercase py-3 ${
@@ -258,16 +262,10 @@ export default function Incomes() {
                   {formatAmount(income.amount)}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
-                  {income?.category
-                    ? income.category.charAt(0).toUpperCase() +
-                      income.category.slice(1)
-                    : ""}
+                {income?.category ? t(`${income.category}`) : ""}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
-                  {income?.cycle
-                    ? income.cycle.charAt(0).toUpperCase() +
-                      income.cycle.slice(1)
-                    : ""}
+                  {income?.cycle ? t(`${income.cycle}`) : ""}
                 </td>
                 <td className="w-1/10 px-4 text-sm">
                   <button
@@ -295,7 +293,7 @@ export default function Incomes() {
                           }}
                           className=" p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
                         >
-                          <FaRegEdit /> Edit
+                          <FaRegEdit /> {t("Edit")}
                         </button>
                         <button
                           onClick={() => {
@@ -303,7 +301,7 @@ export default function Incomes() {
                           }}
                           className="p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
                         >
-                          <FaRegTrashCan /> Delete
+                          <FaRegTrashCan /> {t("Delete")}
                         </button>
                       </div>
                     </Popover>
@@ -317,14 +315,14 @@ export default function Incomes() {
       {sortedIncomes.length > 0 ? (
         <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
           <IoInformationCircleOutline />
-          <span>{`Showing ${visibleIncomes.length} of ${sortedIncomes.length}`}</span>
+          <span>{`${t("Showing")} ${visibleIncomes.length} / ${sortedIncomes.length}`}</span>
         </div>
       ) : (
         <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
           <IoInformationCircleOutline />
           {searchQuery.trim()
-            ? "No incomes found matching your search"
-            : "You haven't added any incomes yet"}
+            ? t("No incomes found matching your search")
+            : t("You haven't added any incomes yet")}
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, use, useEffect, useState } from "react";
 import {
   AccountSettingsDetail,
   billingCycle,
@@ -8,6 +8,7 @@ import {
   ExpenseDetail,
   Income,
   IncomeDetail,
+  Language,
   ProfileDetail,
   Toast,
   UserAuthenticated,
@@ -15,6 +16,8 @@ import {
 import { useRouter } from "next/navigation";
 import { getUserFromToken } from "./AppServices";
 import { getIncomes, getExpenses } from "./AppServices";
+import { Languages } from "next/dist/lib/metadata/types/alternative-urls-types";
+import i18n from "./i18n";
 
 type AppContextType = {
   toast: Toast;
@@ -50,6 +53,8 @@ type AppContextType = {
   accountSettingsDetail: AccountSettingsDetail;
   setAccountSettingsDetail?: (AccountSettingsDetail: ProfileDetail) => void;
   refreshUser?: (user: UserAuthenticated) => void;
+  language: Language;
+  setLanguage: (language: Language) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -97,6 +102,8 @@ const AppContext = createContext<AppContextType>({
   accountSettingsDetail: { show: false },
   setAccountSettingsDetail: () => {},
   refreshUser: () => {},
+  language: "en",
+  setLanguage: () => {},
 });
 
 export default AppContext;
@@ -142,10 +149,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       show: false,
     });
 
+  const [language, setLanguage] = useState<Language>("en");
+
   function refreshUser(user: UserAuthenticated) {
     setUser(user);
+    setLanguage(user.language as Language);
   }
-
 
   useEffect(() => {
     setInitialFetching(true);
@@ -180,6 +189,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         ]);
         setLocalIncomes(incomesData.incomes ?? []);
         setLocalExpenses(expensesData.expenses ?? []);
+        setLanguage(user.language as Language);
         if (user.email !== "patrik@mail.com") {
           setTrialPeriodAlert(true);
         }
@@ -213,6 +223,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
     fetchData();
   }, [refreshData, user?.id]);
+
+  useEffect(() => {
+    const newLang = user?.language;
+    i18n.changeLanguage(newLang);
+  }, [language]);
 
   return (
     <AppContext.Provider
@@ -250,6 +265,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         accountSettingsDetail,
         setAccountSettingsDetail,
         refreshUser,
+        language,
+        setLanguage,
       }}
     >
       {children}

@@ -34,6 +34,7 @@ export type AccountSettingsDetail = {
 
 export type Language = "en" | "es" | "pt";
 
+
 export type Currency = "USD" | "EUR" | "BRL";
 
 /* USER */

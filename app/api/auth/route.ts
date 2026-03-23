@@ -19,16 +19,24 @@ export async function GET(req: NextRequest) {
         sub: string;
         email: string;
         name: string;
-        currency?: string;
-        language?: string;
       };
 
+      const { data: user, error } = await supabaseAdmin
+        .from("users")
+        .select("id, email, name, currency, language")
+        .eq("id", decoded.sub)
+        .maybeSingle();
+
+      if (error || !user) {
+        return NextResponse.json({ user: null }, { status: 200 });
+      }
+
       const safeUser = {
-        id: decoded.sub,
-        name: decoded.name,
-        email: decoded.email,
-        currency: decoded.currency || "USD",
-        language: decoded.language || "en",
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        currency: user.currency,
+        language: user.language,
       };
 
       return NextResponse.json({ user: safeUser }, { status: 200 });

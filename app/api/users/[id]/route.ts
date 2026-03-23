@@ -68,7 +68,7 @@ export async function PATCH(
     }
 
     return NextResponse.json(
-      { message: "User updated successfully.", user: updatedUser },
+      { message: "User updated successfully", user: updatedUser },
       { status: 200 }
     );
   } catch (error) {

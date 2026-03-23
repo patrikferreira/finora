@@ -12,6 +12,7 @@ import {
 import type { TooltipItem } from "chart.js";
 import { useContext } from "react";
 import AppContext from "../AppContext";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -28,6 +29,7 @@ type Props = {
 };
 
 export default function ExpenseChart({ data, className }: Props) {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -89,8 +91,8 @@ export default function ExpenseChart({ data, className }: Props) {
     (cat) => categoryTotals?.[cat] || 0
   );
 
-  const labels = sortedCategories.map(
-    (cat) => cat.charAt(0).toUpperCase() + cat.slice(1)
+  const labels = sortedCategories.map((cat) =>
+    t(`${cat}`)
   );
 
   const primaryHex = "#F46847";
@@ -165,7 +167,7 @@ export default function ExpenseChart({ data, className }: Props) {
         },
         ticks: {
           color: foregroundWithOpacity,
-          callback: (value: number | string) => `$${value}`,
+          callback: (value: number | string) => `${formatAmount(value as number)}`,
         },
       },
       x: {
@@ -186,21 +188,16 @@ export default function ExpenseChart({ data, className }: Props) {
       {/* HEADER */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-col">
-          <h2 className="text-md lg:text-lg">Expense overview</h2>
+          <h2 className="text-md lg:text-lg">{t("Expense overview")}</h2>
           <p className="text-sm opacity-50">
-            {billingCycle === "monthly"
-              ? "Monthly"
-              : billingCycle === "yearly"
-              ? "Yearly"
-              : "Total yearly"}{" "}
-            spending by category
+            {t("Expenses by category")}
           </p>
         </div>
         {!data || data.length === 0 ? null : (
           <div className="flex flex-col items-end">
             <h2 className="text-md lg:text-lg">{`${formatAmount(totalExpense)}`}</h2>
             <p className="text-sm opacity-50">
-              Total {billingCycle === "totaly" ? "yearly" : billingCycle}
+              {billingCycle === "monthly" ? t("monthly") : billingCycle === "yearly" ? t("yearly") : t("totaly")}
             </p>
           </div>
         )}
@@ -209,7 +206,7 @@ export default function ExpenseChart({ data, className }: Props) {
       {/* CHART */}
       {!data || data.length === 0 ? (
         <div className="flex items-center justify-center flex-1 text-sm opacity-50">
-          No expenses yet
+          {t("No expenses yet")}
         </div>
       ) : (
         <div className="flex-1 flex min-h-[200px] max-h-[300px]">

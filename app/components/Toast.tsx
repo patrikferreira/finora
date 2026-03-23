@@ -1,6 +1,7 @@
 "use client";
 import { useContext, useEffect } from "react";
 import AppContext from "../AppContext";
+import { useTranslation } from "react-i18next";
 
 export type ToastStatus = "success" | "error" | "info";
 
@@ -11,6 +12,7 @@ const toastStatusColors: Record<ToastStatus, string> = {
 };
 
 export default function Toast() {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) throw new Error("AppContext is not provided");
 
@@ -35,7 +37,7 @@ export default function Toast() {
     <div
       className={`fixed bottom-6 right-6 ${statusClasses} px-4 py-2 rounded-full shadow-md z-50`}
     >
-      {toast.message}
+      {t(toast.message)}
     </div>
   );
 }

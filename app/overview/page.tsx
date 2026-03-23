@@ -7,8 +7,10 @@ import TotalBalance from "../components/TotalBalance";
 import ExpenseViewTable from "../components/ExpenseViewTable";
 import Select from "../components/Select";
 import { billingCycle } from "../AppTypes";
+import { useTranslation } from "react-i18next";
 
 export default function Overview() {
+  const { t } = useTranslation();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -39,18 +41,18 @@ export default function Overview() {
       {/* TITLE VIEW */}
       <div className="flex items-center justify-between">
         <div className="hidden md:flex flex-col">
-          <h1 className="text-2xl font-semibold">Overview</h1>
-          <span className="opacity-50 text-sm">Summary overview</span>
+          <h1 className="text-2xl font-semibold">{t("overview")}</h1>
+          <span className="opacity-50 text-sm">{t("summary overview")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <p className="hidden lg:flex opacity-50 text-sm">Select the cyle</p>
+          <p className="hidden lg:flex opacity-50 text-sm">{t("Select the cycle")}</p>
           <Select
             value={billingCycle}
             onChange={(value) => setBillingCycle(value as billingCycle)}
             options={[
-              { value: "monthly", label: "Monthly" },
-              { value: "yearly", label: "Yearly" },
-              { value: "totaly", label: "Totaly" },
+              { value: "monthly", label: t("Monthly") },
+              { value: "yearly", label: t("Yearly") },
+              { value: "totaly", label: t("Totaly") },
             ]}
             btnClassName="!h-10 !w-30"
           />

@@ -10,6 +10,7 @@ import Popover from "../components/Popover";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { deleteExpense } from "../AppServices";
+import { useTranslation } from "react-i18next";
 
 type SortField = "description" | "amount" | "category" | "cycle";
 type SortOrder = "asc" | "desc" | null;
@@ -17,6 +18,7 @@ type SortOrder = "asc" | "desc" | null;
 const PAGE_SIZE = 10;
 
 export default function Expenses() {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const context = useContext(AppContext);
   if (!context) {
@@ -165,8 +167,10 @@ export default function Expenses() {
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
-        <h1 className="text-2xl font-semibold">Expenses</h1>
-        <span className="opacity-50 text-sm">Track & manage your spending</span>
+        <h1 className="text-2xl font-semibold">{t("Expenses")}</h1>
+        <span className="opacity-50 text-sm">
+          {t("Track & manage your spending")}
+        </span>
       </div>
 
       {/* CONTROLS */}
@@ -190,7 +194,7 @@ export default function Expenses() {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  Description
+                  {t("description")}
                   <SortIcon
                     field="description"
                     sortField={sortField}
@@ -207,7 +211,7 @@ export default function Expenses() {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  Amount
+                  {t("amount")}
                   <SortIcon
                     field="amount"
                     sortField={sortField}
@@ -222,7 +226,7 @@ export default function Expenses() {
                     : "border-b border-(--border)"
                 }`}
               >
-                <div className="flex items-center gap-2">Category</div>
+                <div className="flex items-center gap-2">{t("category")}</div>
               </th>
               <th
                 className={`w-1/5 text-left bg-(--bg-secondary) tracking-wider font-semibold border-(--border) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
@@ -231,7 +235,7 @@ export default function Expenses() {
                     : "border-b border-(--border)"
                 }`}
               >
-                <div className="flex items-center gap-2">Cycle</div>
+                <div className="flex items-center gap-2">{t("cycle")}</div>
               </th>
               <th
                 className={`w-1/10 text-left bg-(--bg-secondary) px-4 text-xs border-(--border) uppercase py-3 ${
@@ -255,19 +259,13 @@ export default function Expenses() {
                     expense.description.slice(1)}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm opacity-50 group-hover:opacity-100">
-                {formatAmount(expense.amount)}
+                  {formatAmount(expense.amount)}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
-                  {expense?.category
-                    ? expense.category.charAt(0).toUpperCase() +
-                      expense.category.slice(1)
-                    : ""}
+                  {expense?.category ? t(`${expense.category}`) : ""}
                 </td>
                 <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
-                  {expense?.cycle
-                    ? expense.cycle.charAt(0).toUpperCase() +
-                      expense.cycle.slice(1)
-                    : ""}
+                  {expense?.cycle ? t(`${expense.cycle}`) : ""}
                 </td>
                 <td className="w-1/10 px-4 text-sm">
                   <button
@@ -295,7 +293,7 @@ export default function Expenses() {
                           }}
                           className="p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
                         >
-                          <FaRegEdit /> Edit
+                          <FaRegEdit /> {t("Edit")}
                         </button>
                         <button
                           onClick={() => {
@@ -303,7 +301,7 @@ export default function Expenses() {
                           }}
                           className="p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
                         >
-                          <FaRegTrashCan /> Delete
+                          <FaRegTrashCan /> {t("Delete")}
                         </button>
                       </div>
                     </Popover>
@@ -317,14 +315,16 @@ export default function Expenses() {
       {sortedExpenses.length > 0 ? (
         <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
           <IoInformationCircleOutline />
-          <span>{`Showing ${visibleExpenses.length} of ${sortedExpenses.length}`}</span>
+          <span>{`${t("Showing")} ${visibleExpenses.length} / ${
+            sortedExpenses.length
+          }`}</span>
         </div>
       ) : (
         <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
           <IoInformationCircleOutline />
           {searchQuery.trim()
-            ? "No expenses found matching your search"
-            : "You haven't added any expenses yet"}
+            ? t("No expenses found matching your search")
+            : t("You haven't added any expenses yet")}
         </div>
       )}
     </div>

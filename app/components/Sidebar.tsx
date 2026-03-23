@@ -9,8 +9,10 @@ import { FiSidebar } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { HiOutlineDownload } from "react-icons/hi";
 import { TbMoneybag } from "react-icons/tb";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const context = useContext(AppContext);
   if (!context) {
@@ -44,10 +46,10 @@ export default function Sidebar() {
   }, [isSidebarOpen, setIsSidebarOpen]);
 
   const links = [
-    { name: "Overview", href: "/overview", icon: <RxDashboard size={18} /> },
-    { name: "Incomes", href: "/incomes", icon: <TbMoneybag size={18} /> },
+    { name: "overview", href: "/overview", icon: <RxDashboard size={18} /> },
+    { name: "incomes", href: "/incomes", icon: <TbMoneybag size={18} /> },
     {
-      name: "Expenses",
+      name: "expenses",
       href: "/expenses",
       icon: <HiOutlineDownload size={18} />,
     },
@@ -93,13 +95,13 @@ export default function Sidebar() {
                   }
                 }}
                 className={`flex items-center gap-2 rounded-full hover:bg-(--bg-primary) transition duration-200 p-2 cursor-pointer ${
-                  active
-                    ? "bg-(--bg-primary) shadow-xl text-(--primary)"
-                    : ""
+                  active ? "bg-(--bg-primary) shadow-xl text-(--primary)" : ""
                 }`}
               >
-                <div className={`p-1 ${active && "text-(--primary)"}`}>{link.icon}</div>
-                <span className="text-sm">{link.name}</span>
+                <div className={`p-1 ${active && "text-(--primary)"}`}>
+                  {link.icon}
+                </div>
+                <span className="text-sm">{t(link.name)}</span>
               </Link>
             );
           })}

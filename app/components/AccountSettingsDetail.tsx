@@ -11,8 +11,10 @@ import {
 } from "../AppTypes";
 import Spin from "./Spin";
 import { updateUser } from "../AppServices";
+import { useTranslation } from "react-i18next";
 
 export default function AccountSettingsDetail() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const context = useContext(AppContext);
@@ -59,7 +61,7 @@ export default function AccountSettingsDetail() {
       if (res.user) {
         refreshUser?.(res.user as UserAuthenticated);
         setToast?.({
-          message: res.message || "User updated successfully.",
+          message: res.message || "User updated successfully",
           status: "success",
           show: true,
         });
@@ -100,7 +102,7 @@ export default function AccountSettingsDetail() {
         className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md border border-(--border) sm:rounded-2xl bg-(--bg-primary) animate-modalGrow"
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-(--border)">
-          <h3 className="text-base">Account preferences</h3>
+          <h3 className="text-base">{t("Account preferences")}</h3>
           <button
             onClick={onClose}
             className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-200"
@@ -113,7 +115,7 @@ export default function AccountSettingsDetail() {
           <div className="flex items-center gap-2 w-full">
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="category">
-                Currency *
+                {t("Currency")} *
               </label>
 
               <Select<Currency>
@@ -131,7 +133,7 @@ export default function AccountSettingsDetail() {
 
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="language">
-                Language *
+                {t("Language")} *
               </label>
               <Select
                 value={formData.language}
@@ -150,7 +152,7 @@ export default function AccountSettingsDetail() {
           <div className="flex items-center gap-2 w-full">
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="name">
-                Name
+                {t("Name")}
               </label>
               <p className="opacity-50">{user?.name}</p>
             </div>
@@ -159,7 +161,7 @@ export default function AccountSettingsDetail() {
           <div className="flex items-center gap-2 w-full">
             <div className="flex-1">
               <label className="block text-sm mb-2" htmlFor="email">
-                Email
+                {t("Email")}
               </label>
               <p className="opacity-50">{user?.email}</p>
             </div>
@@ -175,13 +177,13 @@ export default function AccountSettingsDetail() {
                 isLoading ? "cursor-default" : "cursor-pointer"
               }`}
             >
-              {isLoading ? <Spin /> : "Save"}
+              {isLoading ? <Spin /> : t("Save")}
             </button>
             <button
               onClick={onClose}
               className="text-sm h-9 px-3 2-15 rounded-2xl bg-(--bg-tertiary) cursor-pointer transition duration-200 hover:brightness-115"
             >
-              Cancel
+              {t("Cancel")}
             </button>
           </div>
         </div>
