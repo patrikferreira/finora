@@ -65,7 +65,8 @@ export default function Controls({
           action={handleAdd}
           text="Add"
           icon={<IoAddOutline />}
-          className="bg-(--primary) h-10 rounded-full"
+          hiddenTextOnMobile={true}
+          className="bg-(--primary) !min-w-0 h-10 rounded-full"
         />
       </div>
     </div>

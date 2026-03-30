@@ -8,6 +8,7 @@ type Props = {
   isLoading?: boolean;
   text?: string;
   icon?: ReactNode;
+  hiddenTextOnMobile?: boolean;
   className?: string;
 };
 
@@ -17,6 +18,7 @@ export default function Button({
   isLoading,
   text,
   icon,
+  hiddenTextOnMobile = false,
   className,
 }: Props) {
   const { t } = useTranslation();
@@ -30,7 +32,15 @@ export default function Button({
       } ${className}`}
     >
       {icon}
-      {isLoading ? <Spin /> : t(text ?? "")}
+      {isLoading ? (
+        <Spin />
+      ) : (
+        text && (
+          <span className={hiddenTextOnMobile ? "hidden md:inline" : ""}>
+            {t(text)}
+          </span>
+        )
+      )}
     </button>
   );
 }

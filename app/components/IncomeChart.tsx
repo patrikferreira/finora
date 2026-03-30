@@ -54,14 +54,13 @@ export default function IncomeChart({ data, className }: Props) {
     "other",
   ];
 
-  // ✅ Colors matching the screenshot palette
   const categoryColors: Record<string, string> = {
-    salary:     "#4CCE7A", // green  — cor principal income
-    freelancer: "#F4923A", // orange
-    investment: "#F5C842", // yellow — cor top source
-    business:   "#F87171", // red    — cor principal expense
-    benefit:    "#42C8E0", // cyan
-    other:      "#94A3B8", // slate
+    salary: "#4CCE7A",
+    freelancer: "#F4923A",
+    investment: "#F5C842",
+    business: "#F87171",
+    benefit: "#42C8E0",
+    other: "#94A3B8",
   };
 
   const categoryTotals = filteredData.reduce((acc, income) => {
@@ -85,7 +84,7 @@ export default function IncomeChart({ data, className }: Props) {
 
   const backgroundColors = allCategories.map((cat, i) => {
     const color = categoryColors[cat] || "#cecece";
-    return realValues[i] === 0 ? color + "1A" : color; // 10% opacity if zero
+    return realValues[i] === 0 ? color + "1A" : color;
   });
 
   const doughnutData = {
@@ -148,21 +147,18 @@ export default function IncomeChart({ data, className }: Props) {
         )}
       </div>
 
-      {/* CONTENT */}
       {!data || data.length === 0 ? (
         <div className="flex items-center flex-1 justify-center text-sm opacity-50">
           {t("No incomes yet")}
         </div>
       ) : (
         <div className="flex flex-col gap-4 justify-between flex-1 min-h-[260px]">
-          {/* CHART */}
           <div className="flex-1 flex items-center justify-center ">
             <div className="w-full flex justify-center items-center h-full">
               <Doughnut data={doughnutData} options={doughnutOptions} />
             </div>
           </div>
 
-          {/* LEGENDS */}
           <div className="flex flex-col gap-2 mt-2">
             {labels.map((label, i) => (
               <div

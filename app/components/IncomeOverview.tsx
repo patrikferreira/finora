@@ -74,21 +74,23 @@ export default function IncomeOverview({ data, className }: Props) {
         </span>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-xs opacity-30">{t("incomes")}</span>
-          <span className="text-sm font-medium">
-            {count} {count === 1 ? t("entry") : t("incomes")}
-          </span>
-        </div>
+      {count > 0 && (
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs opacity-30">{t("incomes")}</span>
+            <span className="text-sm font-medium">
+              {count} {count === 1 ? t("entry") : t("incomes")}
+            </span>
+          </div>
 
-        <div className="flex flex-col gap-0.5 items-end">
-          <span className="text-xs opacity-30">{t("Top entrie")}</span>
-          <span className="text-sm font-medium truncate max-w-[120px]">
-            {topIncome ? topIncome.description || "other" : "—"}
-          </span>
+          <div className="flex flex-col gap-0.5 items-end">
+            <span className="text-xs opacity-30">{t("Top entrie")}</span>
+            <span className="text-sm font-medium truncate max-w-[120px]">
+              {(topIncome && topIncome.description) || "other"}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
