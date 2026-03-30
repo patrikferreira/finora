@@ -201,7 +201,7 @@ export default function IncomeDetail() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md border border-(--border) sm:rounded-2xl bg-(--bg-primary) animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) animate-modalGrow"
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-(--border)">
           <h3 className="text-base">

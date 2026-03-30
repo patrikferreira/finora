@@ -169,7 +169,7 @@ export default function Signup() {
           <Button
             type="submit"
             isLoading={isLoading}
-            text="Login"
+            text="Register"
             className="bg-(--primary) h-10 rounded-full font-semibold"
           />
         </form>
