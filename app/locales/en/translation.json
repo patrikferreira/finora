@@ -20,9 +20,11 @@
   "no expenses found matching your search": "No expenses found matching your search",
   "you haven't added any expenses yet": "You haven't added any expenses yet",
   "expenses by category": "Expenses by category",
+  "incomes by category": "Incomes by category",
   "overview": "Overview",
   "summary overview": "Summary overview",
   "expense overview": "Expense overview",
+  "income overview": "Income overview",
   "monthly spending by category": "Monthly spending by category",
   "totaly": "Totaly",
   "total monthly": "Total monthly",
@@ -82,5 +84,11 @@
   "currency": "Currency",
   "language": "Language",
   "user": "User",
-  "user updated successfully": "User updated successfully"
+  "user updated successfully": "User updated successfully",
+  "no data to display": "No data to display",
+  "no expenses yet": "No expenses yet",
+  "trial period": "Trial period",
+  "you are currently using a trial period, and your account will be deleted the following day": "You are currently using a trial period, and your account will be deleted the following day",
+  "top entrie": "Top entry",
+  "top expense": "Top expense"
 }

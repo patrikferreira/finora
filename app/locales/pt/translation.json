@@ -20,9 +20,11 @@
   "no expenses found matching your search": "Nenhuma despesa encontrada correspondendo à sua pesquisa",
   "you haven't added any expenses yet": "Você ainda não adicionou nenhuma despesa",
   "expenses by category": "Despesas por categoria",
+  "incomes by category": "Rendimentos por categoria",
   "overview": "Visão geral",
   "summary overview": "Resumo geral",
   "expense overview": "Resumo das despesas",
+  "income overview": "Resumo dos rendimentos",
   "monthly spending by category": "Despesas mensais por categoria",
   "totaly": "Total",
   "total monthly": "Total mensal",
@@ -82,5 +84,11 @@
   "currency": "Moeda",
   "language": "Idioma",
   "user": "Usuário",
-  "user updated successfully": "Usuário atualizado com sucesso"
+  "user updated successfully": "Usuário atualizado com sucesso",
+  "no data to display": "Nenhum dado para exibir",
+  "no expenses yet": "Ainda não há despesas",
+  "trial period": "Período de teste",
+  "you are currently using a trial period, and your account will be deleted the following day": "Você está atualmente usando um período de teste, e sua conta será excluída no dia seguinte",
+  "top entrie": "Principal entrada",
+  "top expense": "Principal despesa"
 }

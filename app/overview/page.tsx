@@ -3,11 +3,13 @@ import { useContext } from "react";
 import AppContext from "../AppContext";
 import LoadingSpin from "../components/LoadingSpin";
 import ExpenseChart from "../components/ExpenseChart";
-import TotalBalance from "../components/TotalBalance";
-import ExpenseViewTable from "../components/ExpenseViewTable";
 import Select from "../components/Select";
 import { billingCycle } from "../AppTypes";
 import { useTranslation } from "react-i18next";
+import IncomeOverview from "../components/IncomeOverview";
+import ExpenseOverview from "../components/ExpenseOverview";
+import BalanceOverview from "../components/BalanceOverview";
+import IncomeChart from "../components/IncomeChart";
 
 export default function Overview() {
   const { t } = useTranslation();
@@ -45,7 +47,9 @@ export default function Overview() {
           <span className="opacity-50 text-sm">{t("summary overview")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <p className="hidden lg:flex opacity-50 text-sm">{t("Select the cycle")}</p>
+          <p className="hidden lg:flex opacity-50 text-sm">
+            {t("Select the cycle")}
+          </p>
           <Select
             value={billingCycle}
             onChange={(value) => setBillingCycle(value as billingCycle)}
@@ -60,17 +64,27 @@ export default function Overview() {
       </div>
 
       {/* DASHBOARD */}
-      <div className="flex flex-col lg:flex-row gap-4 w-full h-full">
-        <div className="lg:w-1/2 w-full flex flex-col gap-4">
-          <ExpenseChart data={localExpenses} className="flex-1" />
-          <TotalBalance
-            incomes={localIncomes}
-            expenses={localExpenses}
-            className="flex-1"
-          />
+      <div className="grid gap-4 w-full flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <IncomeOverview data={localIncomes} />
+          <ExpenseOverview data={localExpenses} />
+          <BalanceOverview incomes={localIncomes} expenses={localExpenses} />
         </div>
 
-        <ExpenseViewTable expenses={localExpenses} className="flex-1 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="min-h-[300px] lg:col-span-2">
+            <ExpenseChart
+              data={localExpenses}
+              className="h-full w-full max-h-[500px]"
+            />
+          </div>
+          <div className="min-h-[300px] lg:col-span-1">
+            <IncomeChart
+              data={localIncomes}
+              className="h-full w-full max-h-[500px]"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
