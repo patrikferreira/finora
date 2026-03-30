@@ -61,9 +61,20 @@ export default function ExpenseDetail() {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
+
+    let newValue: string | boolean = value;
+
+    if (type === "checkbox") {
+      newValue = checked;
+    }
+
+    if (name === "amount" && typeof newValue === "string") {
+      newValue = newValue.slice(0, 13);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
   }
 

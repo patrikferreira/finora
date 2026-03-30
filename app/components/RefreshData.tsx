@@ -60,7 +60,7 @@ export default function RefreshData({ view }: Props) {
       aria-label={`Refresh ${view} data`}
     >
       {isLoading ? (
-        <Spin className="border-t-black/70" />
+        <Spin className="border-white/70 border-t-(--primary)" />
       ) : (
         <LuRefreshCcw
           className="opacity-50 group-hover:opacity-100 transition-all duration-200"

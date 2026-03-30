@@ -66,7 +66,7 @@ export default function Export({ view }: Props) {
       disabled={!currentData || isLoading}
     >
       {isLoading ? (
-        <Spin className="border-t-black/70" />
+        <Spin className="border-white/70 border-t-(--primary)" />
       ) : (
         <CiExport
           className="opacity-50 group-hover:opacity-100 transition-all duration-200"

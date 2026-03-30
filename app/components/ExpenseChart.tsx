@@ -95,7 +95,7 @@ export default function ExpenseChart({ data, className }: Props) {
     t(`${cat}`)
   );
 
-  const primaryHex = "#F46847";
+  const primaryHex = "#cecece";
   const hexToRgba = (hex: string, alpha = 1) => {
     const cleaned = hex.replace("#", "");
     const bigint = parseInt(
@@ -128,7 +128,7 @@ export default function ExpenseChart({ data, className }: Props) {
         label: "Expenses",
         data: sortedAmounts,
         backgroundColor: backgroundColors,
-        borderRadius: 8,
+        borderRadius: 0,
       },
     ],
   };
@@ -162,12 +162,18 @@ export default function ExpenseChart({ data, className }: Props) {
     scales: {
       y: {
         beginAtZero: true,
+        border: {
+          display: false,
+        },
         grid: {
-          color: getComputedStyle(document.documentElement).getPropertyValue('--border').trim(),
+          color: getComputedStyle(document.documentElement)
+            .getPropertyValue("--border")
+            .trim(),
         },
         ticks: {
           color: foregroundWithOpacity,
-          callback: (value: number | string) => `${formatAmount(value as number)}`,
+          callback: (value: number | string) =>
+            `${formatAmount(value as number)}`,
         },
       },
       x: {
@@ -183,7 +189,7 @@ export default function ExpenseChart({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col gap-4 p-4 z-0 border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
+      className={`flex flex-col justify-between gap-4 p-4 z-0 border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
     >
       {/* HEADER */}
       <div className="flex items-center justify-between gap-2">
@@ -209,7 +215,7 @@ export default function ExpenseChart({ data, className }: Props) {
           {t("No expenses yet")}
         </div>
       ) : (
-        <div className="flex-1 flex min-h-[200px] max-h-[300px]">
+        <div className="flex-1 flex min-h-[200px]">
           <Bar data={chartData} options={chartOptions} />
         </div>
       )}

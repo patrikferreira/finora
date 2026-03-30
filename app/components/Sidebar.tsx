@@ -94,11 +94,11 @@ export default function Sidebar() {
                     closeSidebar();
                   }
                 }}
-                className={`flex items-center gap-2 rounded-full hover:bg-(--bg-primary) transition duration-200 p-2 cursor-pointer ${
-                  active ? "bg-(--bg-primary) shadow-xl text-(--primary)" : ""
+                className={`flex items-center gap-2 rounded-full hover:bg-(--bg-tertiary) transition duration-200 p-2 cursor-pointer ${
+                  active ? "bg-(--bg-tertiary) " : ""
                 }`}
               >
-                <div className={`p-1 ${active && "text-(--primary)"}`}>
+                <div className={`p-1 ${active && ""}`}>
                   {link.icon}
                 </div>
                 <span className="text-sm">{t(link.name)}</span>

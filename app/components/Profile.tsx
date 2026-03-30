@@ -60,7 +60,7 @@ export default function Profile() {
       onClick={handleMenu}
       className="flex items-center gap-3 cursor-pointer relative w-full hover:bg-(--bg-tertiary) transition duration-200 p-2 rounded-2xl"
     >
-      <div className="h-9 w-9 bg-(--primary) text-white rounded-full flex items-center justify-center">
+      <div className="h-9 w-9 bg-(--primary) rounded-full flex items-center justify-center">
         <LuUserRound className="text-(--background)" size={20} />
       </div>
 
