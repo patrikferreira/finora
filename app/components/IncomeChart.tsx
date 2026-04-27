@@ -147,42 +147,36 @@ export default function IncomeChart({ data, className }: Props) {
         )}
       </div>
 
-      {!data || data.length === 0 ? (
-        <div className="flex items-center flex-1 justify-center text-sm opacity-50">
-          {t("No incomes yet")}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4 justify-between flex-1 min-h-[260px]">
-          <div className="flex-1 flex items-center justify-center ">
-            <div className="w-full flex justify-center items-center h-full">
-              <Doughnut data={doughnutData} options={doughnutOptions} />
-            </div>
+      <div className="flex flex-col gap-4 justify-between flex-1 min-h-[260px]">
+        <div className="flex-1 flex items-center justify-center ">
+          <div className="w-full flex justify-center items-center h-full">
+            <Doughnut data={doughnutData} options={doughnutOptions} />
           </div>
+        </div>
 
-          <div className="flex flex-col gap-2 mt-2">
-            {labels.map((label, i) => (
-              <div
-                key={label}
-                className="flex items-center justify-between gap-2"
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{
-                      backgroundColor:
-                        categoryColors[allCategories[i]] || "#cecece",
-                    }}
-                  />
-                  <span className="text-sm opacity-80">{label}</span>
-                </div>
-                <span className="text-sm font-medium">
-                  {formatAmount(realValues[i])}
-                </span>
+        <div className="flex flex-col gap-2 mt-2">
+          {labels.map((label, i) => (
+            <div
+              key={label}
+              className="flex items-center justify-between gap-2"
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-3 h-3 rounded-full flex-shrink-0"
+                  style={{
+                    backgroundColor:
+                      categoryColors[allCategories[i]] || "#cecece",
+                  }}
+                />
+                <span className="text-sm opacity-80">{label}</span>
               </div>
-            ))}
-          </div>
+              <span className="text-sm font-medium">
+                {formatAmount(realValues[i])}
+              </span>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }

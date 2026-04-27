@@ -31,11 +31,14 @@ type Props = {
 export default function ExpenseChart({ data, className }: Props) {
   const { t } = useTranslation();
   const context = useContext(AppContext);
+
   if (!context) {
     throw new Error("AppContext is not provided");
   }
 
   const { user, billingCycle } = context;
+
+  const hasData = data && data.length > 0;
 
   function formatAmount(amount: number | null | undefined) {
     const value = amount ?? 0;
@@ -58,15 +61,14 @@ export default function ExpenseChart({ data, className }: Props) {
   const totalExpense = useMemo(() => {
     if (billingCycle === "totaly") {
       return (
-        filteredData?.reduce((sum, expense) => {
+        filteredData.reduce((sum, expense) => {
           const amount = expense.amount ?? 0;
           return sum + (expense.cycle === "monthly" ? amount * 12 : amount);
         }, 0) || 0
       );
     }
     return (
-      filteredData?.reduce((sum, expense) => sum + (expense.amount ?? 0), 0) ||
-      0
+      filteredData.reduce((sum, expense) => sum + (expense.amount ?? 0), 0) || 0
     );
   }, [filteredData, billingCycle]);
 
@@ -84,24 +86,32 @@ export default function ExpenseChart({ data, className }: Props) {
   ];
 
   const categoryTotals = useMemo(() => {
-    return filteredData?.reduce((acc, expense) => {
+    return filteredData.reduce((acc, expense) => {
       const category = expense.category || "other";
       const amount = expense.amount ?? 0;
+
       const adjustedAmount =
         billingCycle === "totaly" && expense.cycle === "monthly"
           ? amount * 12
           : amount;
+
       acc[category] = (acc[category] || 0) + adjustedAmount;
       return acc;
     }, {} as Record<ExpenseCategory, number>);
   }, [filteredData, billingCycle]);
 
-  const sortedAmounts = allCategories.map((cat) => categoryTotals?.[cat] || 0);
-  const maxAmount = Math.max(...sortedAmounts);
+  const realValues = allCategories.map((cat) => categoryTotals?.[cat] || 0);
+
+  const chartValues = realValues.map((val) => (val === 0 ? 0.0001 : val));
+
+  const maxAmount = Math.max(...realValues);
+  const safeMax = maxAmount || 100;
 
   const primaryColor = "#36bd81";
 
   const getBarColor = (amount: number) => {
+    if (!hasData) return "rgba(203, 213, 225, 0.15)";
+
     if (amount === 0) return "rgba(203, 213, 225, 0.08)";
 
     const intensity = amount / maxAmount;
@@ -119,12 +129,12 @@ export default function ExpenseChart({ data, className }: Props) {
   };
 
   const chartData = {
-    labels: allCategories.map((cat) => t(`${cat}`)),
+    labels: allCategories.map((cat) => t(cat)),
     datasets: [
       {
         label: t("Expenses"),
-        data: sortedAmounts,
-        backgroundColor: sortedAmounts.map((amt) => getBarColor(amt)),
+        data: chartValues,
+        backgroundColor: realValues.map((amt) => getBarColor(amt)),
         borderRadius: 8,
         borderSkipped: false,
         barPercentage: 0.7,
@@ -147,6 +157,7 @@ export default function ExpenseChart({ data, className }: Props) {
         display: false,
       },
       tooltip: {
+        enabled: hasData,
         backgroundColor: "rgba(0, 0, 0, 0.85)",
         padding: 12,
         titleColor: "#f3f4f6",
@@ -174,7 +185,7 @@ export default function ExpenseChart({ data, className }: Props) {
     scales: {
       y: {
         beginAtZero: true,
-        suggestedMax: Math.ceil(maxAmount / 100) * 100,
+        suggestedMax: Math.ceil(safeMax / 100) * 100,
         border: {
           display: false,
         },
@@ -182,7 +193,7 @@ export default function ExpenseChart({ data, className }: Props) {
           color: "rgba(203, 213, 225, 0.08)",
         },
         ticks: {
-          stepSize: Math.ceil(maxAmount / 5) || 1,
+          stepSize: Math.ceil(safeMax / 5),
           callback: (value) => {
             const numValue =
               typeof value === "number" ? value : parseFloat(value);
@@ -206,22 +217,22 @@ export default function ExpenseChart({ data, className }: Props) {
       intersect: true,
     },
     animation: {
-      duration: 800,
+      duration: hasData ? 800 : 0,
       easing: "easeOutQuart",
     },
   };
-
-  const hasData = data && data.length > 0;
 
   return (
     <div
       className={`flex flex-col justify-between gap-4 p-4 z-0 border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-300 min-h-60 rounded-2xl ${className}`}
     >
+      {/* HEADER */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-col">
           <h2 className="text-md lg:text-lg">{t("Expense overview")}</h2>
           <p className="text-sm opacity-50">{t("Expenses by category")}</p>
         </div>
+
         {hasData && (
           <div className="flex flex-col items-end">
             <h2 className="text-md lg:text-lg">{formatAmount(totalExpense)}</h2>
@@ -236,15 +247,10 @@ export default function ExpenseChart({ data, className }: Props) {
         )}
       </div>
 
-      {!data || data.length === 0 ? (
-        <div className="flex items-center justify-center flex-1 text-sm opacity-50">
-          {t("No expenses yet")}
-        </div>
-      ) : (
-        <div className="flex-1 flex min-h-[200px]">
-          <Bar data={chartData} options={chartOptions} />
-        </div>
-      )}
+      {/* CHART */}
+      <div className="flex-1 flex min-h-[200px]">
+        <Bar data={chartData} options={chartOptions} />
+      </div>
     </div>
   );
 }

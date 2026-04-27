@@ -74,23 +74,21 @@ export default function ExpenseOverview({ data, className }: Props) {
         </span>
       </div>
 
-      {count > 0 && (
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs opacity-30">{t("expenses")}</span>
-            <span className="text-sm font-medium">
-              {count} {count === 1 ? t("entry") : t("expenses")}
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-0.5 items-end">
-            <span className="text-xs opacity-30">{t("Top expense")}</span>
-            <span className="text-sm font-medium truncate max-w-[120px]">
-              {(topExpense && topExpense.description) || "other"}
-            </span>
-          </div>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs opacity-30">{t("expenses")}</span>
+          <span className="text-sm font-medium">
+            {count} {count === 1 ? t("entry") : t("expenses")}
+          </span>
         </div>
-      )}
+
+        <div className="flex flex-col gap-0.5 items-end">
+          <span className="text-xs opacity-30">{t("Top expense")}</span>
+          <span className="text-sm font-medium truncate max-w-[120px]">
+            {(topExpense && topExpense.description) || "other"}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
