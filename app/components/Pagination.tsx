@@ -24,16 +24,16 @@ export default function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="h-10 rounded-full border border-(--border) group transition-all duration-200 px-1.5 flex items-center gap-1 text-sm bg-(--bg-secondary)">
+    <div className="h-10 rounded-xl border border-(--border) px-1 flex items-center gap-0.5 text-sm bg-(--bg-secondary)">
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className="h-7 w-7 rounded-full flex items-center justify-center opacity-50 group-hover:opacity-100 hover:bg-(--bg-tertiary) transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        aria-label="Página anterior"
+        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        aria-label="Previous page"
       >
         <svg
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 16 16"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -48,19 +48,19 @@ export default function Pagination({
         </svg>
       </button>
 
-      <span className="hidden md:flex items-center justify-center  px-2 opacity-50 group-hover:opacity-100 transition-all duration-200 min-w-[60px] font-medium">
+      <span className="hidden md:flex items-center justify-center px-2 text-(--muted) min-w-[52px] text-xs font-medium tabular">
         {currentPage} / {totalPages}
       </span>
 
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className="h-7 w-7 rounded-full flex items-center justify-center opacity-50 group-hover:opacity-100 hover:bg-(--bg-tertiary) hover:text-(--foreground) transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        aria-label="Próxima página"
+        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        aria-label="Next page"
       >
         <svg
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 16 16"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

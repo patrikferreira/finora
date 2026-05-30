@@ -51,7 +51,7 @@ export default function Controls({
   };
 
   return (
-    <div className="flex items-center justify-between w-full gap-2 ">
+    <div className="flex items-center justify-between w-full gap-2">
       <Search />
       <div className="flex items-center gap-2">
         <Export view={view} />
@@ -64,9 +64,9 @@ export default function Controls({
         <Button
           action={handleAdd}
           text="Add"
-          icon={<IoAddOutline />}
+          icon={<IoAddOutline size={18} />}
           hiddenTextOnMobile={true}
-          className="bg-(--primary) !min-w-0 h-10 rounded-full"
+          className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] !min-w-0 px-4 font-semibold"
         />
       </div>
     </div>

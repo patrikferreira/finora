@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased md:flex h-svh`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased md:flex h-svh bg-(--bg-primary) text-(--foreground)`}
       >
         <AppContextProvider>
           <Sidebar />

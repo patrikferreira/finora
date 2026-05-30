@@ -4,6 +4,8 @@ type Props = {
 
 export default function Spin({ className }: Props) {
   return (
-    <div className={`min-h-4 min-w-4 border-2 border-solid border-white/70 rounded-full border-t-(--primary) animate-spin ${className}`}></div>
+    <div
+      className={`min-h-4 min-w-4 border-2 border-solid border-current/30 rounded-full border-t-current animate-spin ${className}`}
+    ></div>
   );
 }

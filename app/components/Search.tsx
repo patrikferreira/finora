@@ -26,45 +26,40 @@ export default function Search({ placeholder }: Props) {
 
   useEffect(() => {
     setSearchQuery("");
-  }, [router])
+  }, [router]);
 
   const hasQuery = searchQuery.trim().length > 0;
 
   return (
     <div
-      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-3xs py-1 px-3 rounded-full group border ${
-        hasQuery ? "border-2 border-(--primary)" : "border-(--border)"
-      } transition-all duration-200`}
+      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-full max-w-xs px-3 rounded-xl group border transition-all duration-150 ${
+        hasQuery
+          ? "border-(--primary) shadow-[0_0_0_3px_var(--primary-soft)]"
+          : "border-(--border) hover:border-(--border-strong)"
+      }`}
     >
       <LuSearch
-        size={18}
-        className="opacity-50 group-hover:opacity-100 transition-all duration-200"
+        size={16}
+        className={`transition-colors duration-150 ${
+          hasQuery ? "text-(--primary)" : "text-(--muted)"
+        }`}
       />
       <input
         type="text"
         value={searchQuery}
         maxLength={50}
         onChange={handleSearch}
-        className="
-    !border-0
-    !outline-none
-    !ring-0
-    focus:!border-0
-    focus:!ring-0
-    bg-(--bg-secondary)
-    px-2
-    py-1
-    text-sm
-    w-full
-  "
+        className="!border-0 !outline-none !ring-0 focus:!border-0 focus:!ring-0 bg-transparent text-sm w-full placeholder:text-(--muted)"
         placeholder={placeholder || t("search...")}
       />
-      <button onClick={() => setSearchQuery("")}>
-        <IoIosClose
-          size={20}
-          className="opacity-50 hover:opacity-100 transition-all duration-200"
-        />
-      </button>
+      {hasQuery && (
+        <button
+          onClick={() => setSearchQuery("")}
+          className="text-(--muted) hover:text-(--foreground) transition-colors"
+        >
+          <IoIosClose size={20} />
+        </button>
+      )}
     </div>
   );
 }

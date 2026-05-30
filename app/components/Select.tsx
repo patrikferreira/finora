@@ -32,20 +32,24 @@ export default function Select<T extends string | number>({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={`w-full border border-(--border) rounded-2xl px-4 py-2.5 bg-(--bg-secondary) text-(--foreground) text-left flex justify-between items-center focus:border-(--border) outline-none h-11 ${
-          btnClassName ?? ""
-        }`}
+        className={`w-full border border-(--border) rounded-xl px-3.5 bg-(--bg-secondary) text-(--foreground) text-left flex justify-between items-center hover:border-(--border-strong) transition-colors outline-none h-[42px] ${
+          open
+            ? "border-(--primary) shadow-[0_0_0_3px_var(--primary-soft)]"
+            : ""
+        } ${btnClassName ?? ""}`}
       >
-        <span className="text-sm">{selectedLabel}</span>
-        <span className="ml-2">
-          <MdOutlineKeyboardArrowDown size={14} />
+        <span className="text-sm truncate">{selectedLabel}</span>
+        <span
+          className={`ml-2 text-(--muted) transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+        >
+          <MdOutlineKeyboardArrowDown size={16} />
         </span>
       </button>
 
       {open && (
         <Popover
           onClose={() => setOpen(false)}
-          className="mt-1 rounded-2xl p-1 !max-h-42 w-full"
+          className="mt-1.5 rounded-xl p-1 !max-h-56 w-full"
         >
           {options.map((option) => (
             <button
@@ -55,12 +59,16 @@ export default function Select<T extends string | number>({
                 onChange(option.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 min-h-10 rounded-2xl transition-all duration-200 hover:bg-(--bg-tertiary) flex justify-between items-center text-(--foreground)`}
+              className={`w-full text-left px-3 py-2 min-h-9 rounded-lg transition-colors duration-150 hover:bg-(--bg-tertiary) flex justify-between items-center ${
+                value === option.value
+                  ? "text-(--foreground)"
+                  : "text-(--muted) hover:text-(--foreground)"
+              }`}
             >
               <span className="text-sm">{option.label}</span>
               {value === option.value && (
-                <span>
-                  <FaCheck size={12} />
+                <span className="text-(--primary)">
+                  <FaCheck size={11} />
                 </span>
               )}
             </button>

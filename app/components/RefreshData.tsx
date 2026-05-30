@@ -15,7 +15,13 @@ export default function RefreshData({ view }: Props) {
     throw new Error("AppContext is not provided");
   }
 
-  const { user, setLocalIncomes, setLocalExpenses, refreshData, setRefreshData } = context;
+  const {
+    user,
+    setLocalIncomes,
+    setLocalExpenses,
+    refreshData,
+    setRefreshData,
+  } = context;
 
   async function refresh() {
     if (!user?.id) return;
@@ -54,18 +60,15 @@ export default function RefreshData({ view }: Props) {
     <button
       disabled={isLoading}
       onClick={refresh}
-      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border) group text-sm bg-(--bg-secondary) group transition duration-200 ${
+      className={`h-10 w-10 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) hover:border-(--border-strong) text-sm bg-(--bg-secondary) transition duration-150 ${
         isLoading ? "cursor-default" : "cursor-pointer"
       }`}
       aria-label={`Refresh ${view} data`}
     >
       {isLoading ? (
-        <Spin className="border-white/70 border-t-(--primary)" />
+        <Spin className="text-(--primary)" />
       ) : (
-        <LuRefreshCcw
-          className="opacity-50 group-hover:opacity-100 transition-all duration-200"
-          size={16}
-        />
+        <LuRefreshCcw size={15} />
       )}
     </button>
   );

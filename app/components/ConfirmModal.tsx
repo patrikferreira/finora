@@ -25,26 +25,28 @@ export default function ConfirmModal() {
   return (
     <div
       onClick={handleCancel}
-      className="fixed inset-0 bg-[#00000086] bg-opacity-30 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-(--bg-secondary) rounded-2xl shadow-lg w-full max-w-sm p-6"
+        className="bg-(--bg-secondary) border border-(--border) rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] w-full max-w-sm p-6 animate-modalGrow"
       >
-        <h2 className="text-lg font-semibold mb-2 text-[var(--foreground)]">
+        <h2 className="text-base font-semibold tracking-tight mb-2 text-(--foreground)">
           {t(confirmAction.title)}
         </h2>
-        <p className="mb-4">{t(confirmAction.message)}</p>
-        <div className="flex justify-end space-x-2">
+        <p className="mb-6 text-sm text-(--muted) leading-relaxed">
+          {t(confirmAction.message)}
+        </p>
+        <div className="flex justify-end gap-2">
           <Button
             action={handleCancel}
             text="Cancel"
-            className="bg-(--bg-tertiary)"
+            className="bg-(--bg-tertiary) text-(--foreground)"
           />
           <Button
             action={handleConfirm}
             text="Confirm"
-            className="bg-red-500"
+            className="bg-(--danger) text-white font-semibold"
           />
         </div>
       </div>

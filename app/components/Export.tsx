@@ -58,7 +58,7 @@ export default function Export({ view }: Props) {
 
   return (
     <button
-      className={`h-10 min-w-10 flex items-center justify-center rounded-full border border-(--border) group text-sm bg-(--bg-secondary) group transition duration-200 ${
+      className={`h-10 w-10 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) hover:border-(--border-strong) text-sm bg-(--bg-secondary) transition duration-150 disabled:opacity-50 ${
         isLoading ? "cursor-default" : "cursor-pointer"
       }`}
       onClick={exportData}
@@ -66,12 +66,9 @@ export default function Export({ view }: Props) {
       disabled={!currentData || isLoading}
     >
       {isLoading ? (
-        <Spin className="border-white/70 border-t-(--primary)" />
+        <Spin className="text-(--primary)" />
       ) : (
-        <CiExport
-          className="opacity-50 group-hover:opacity-100 transition-all duration-200"
-          size={18}
-        />
+        <CiExport size={18} />
       )}
     </button>
   );

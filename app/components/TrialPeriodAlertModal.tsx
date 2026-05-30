@@ -15,7 +15,7 @@ export default function TrialPeriodAlertModal() {
 
   const close = useCallback(
     () => setTrialPeriodAlert?.(false),
-    [setTrialPeriodAlert]
+    [setTrialPeriodAlert],
   );
 
   useEffect(() => {
@@ -34,37 +34,47 @@ export default function TrialPeriodAlertModal() {
   return (
     <div
       onClick={close}
-      className="fixed inset-0 z-40 flex items-center justify-center bg-[#00000086] backdrop-blur-sm"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       role="presentation"
     >
-      <div>
-        <div
-          onClick={(e) => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="alert-title"
-          aria-describedby="alert-desc"
-          className="bg-(--bg-secondary) rounded-3xl p-6 w-80 sm:w-96 shadow-xl transition-all duration-200 ease-out flex flex-col gap-6"
-        >
-          <div className="flex items-center gap-2">
-            <IoAlertCircleOutline size={30} className="text-orange-400" />
-            <h2 className="text-xl">
-              {t("Trial period")}
-            </h2>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="alert-title"
+        aria-describedby="alert-desc"
+        className="bg-(--bg-secondary) border border-(--border) rounded-2xl p-6 w-full max-w-sm shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow flex flex-col gap-5"
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="h-10 w-10 rounded-xl flex items-center justify-center"
+            style={{
+              background: "var(--warning-soft)",
+              color: "var(--warning)",
+            }}
+          >
+            <IoAlertCircleOutline size={22} />
           </div>
-          <p id="alert-desc" className="">
-            {t(
-              "you are currently using a trial period, and your account will be deleted the following day"
-            )}
-          </p>
-          <div className="flex justify-end">
-            <button
-              onClick={close}
-              className="px-4 py-2 rounded-2xl bg-(--bg-tertiary) hover:brightness-115  cursor-pointer transition-all duration-200 text-sm"
-            >
-              {t("Close")}
-            </button>
-          </div>
+          <h2
+            id="alert-title"
+            className="text-base font-semibold tracking-tight"
+          >
+            {t("Trial period")}
+          </h2>
+        </div>
+        <p id="alert-desc" className="text-sm text-(--muted) leading-relaxed">
+          {t(
+            "you are currently using a trial period, and your account will be deleted the following day",
+          )}
+        </p>
+        <div className="flex justify-end">
+          <button
+            ref={closeBtnRef}
+            onClick={close}
+            className="px-4 h-10 rounded-xl bg-(--bg-tertiary) text-(--foreground) hover:brightness-115 cursor-pointer transition-all duration-150 text-sm font-medium"
+          >
+            {t("Close")}
+          </button>
         </div>
       </div>
     </div>

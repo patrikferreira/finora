@@ -26,19 +26,15 @@ export default function Header() {
 
   return (
     <div
-      className={`flex md:hidden  items-center px-4 pt-4 animate-fadeIn`}
+      className={`flex md:hidden items-center justify-between px-4 pt-4 animate-fadeIn`}
     >
-      <div className={`flex items-center gap-4 animate-fadeIn`}>
-        <button>
-          <Logo logoOnly={true} />
-        </button>
-        <button
-          onClick={() => setIsSidebarOpen?.(true)}
-          className="cursor-pointer p-2 rounded-2xl hover:bg-(--bg-secondary) transition duration-200"
-        >
-          <FiSidebar size={18} />
-        </button>
-      </div>
+      <Logo />
+      <button
+        onClick={() => setIsSidebarOpen?.(true)}
+        className="cursor-pointer p-2 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition duration-150 border border-(--border)"
+      >
+        <FiSidebar size={18} />
+      </button>
     </div>
   );
 }
