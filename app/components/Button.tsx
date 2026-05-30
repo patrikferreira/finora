@@ -27,7 +27,7 @@ export default function Button({
       type={type}
       onClick={action}
       disabled={isLoading}
-      className={`h-9 px-3 min-w-19 flex items-center justify-center gap-2 text-sm rounded-2xl transition duration-200 hover:brightness-115 ${
+      className={`h-10 px-3.5 min-w-[80px] flex items-center justify-center gap-2 text-sm font-medium rounded-xl transition-all duration-150 hover:brightness-110 active:brightness-95 disabled:opacity-60 ${
         isLoading ? "cursor-default" : "cursor-pointer"
       } ${className}`}
     >
