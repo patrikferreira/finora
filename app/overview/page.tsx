@@ -38,16 +38,20 @@ export default function Overview() {
 
   return (
     <div
-      className={`min-h-svh lg:h-screen p-4 flex flex-col gap-4 overflow-auto w-full animate-fadeIn`}
+      className={`min-h-svh lg:h-screen p-4 lg:p-6 flex flex-col gap-5 overflow-auto w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div className="hidden md:flex flex-col">
-          <h1 className="text-2xl font-semibold">{t("overview")}</h1>
-          <span className="opacity-50 text-sm">{t("summary overview")}</span>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("overview")}
+          </h1>
+          <span className="text-(--muted) text-sm">
+            {t("summary overview")}
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <p className="hidden lg:flex opacity-50 text-sm">
+        <div className="flex items-center gap-2 ml-auto">
+          <p className="hidden lg:flex text-(--muted) text-xs uppercase tracking-wider font-medium">
             {t("Select the cycle")}
           </p>
           <Select
@@ -58,20 +62,20 @@ export default function Overview() {
               { value: "yearly", label: t("Yearly") },
               { value: "totaly", label: t("Totaly") },
             ]}
-            btnClassName="!h-10 !w-30"
+            btnClassName="!h-10 !w-32"
           />
         </div>
       </div>
 
       {/* DASHBOARD */}
-      <div className="grid gap-4 w-full flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid gap-5 w-full flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <IncomeOverview data={localIncomes} />
           <ExpenseOverview data={localExpenses} />
           <BalanceOverview incomes={localIncomes} expenses={localExpenses} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="min-h-[300px] lg:col-span-2">
             <ExpenseChart
               data={localExpenses}

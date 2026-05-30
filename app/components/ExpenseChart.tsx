@@ -20,7 +20,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 type Props = {
@@ -53,9 +53,9 @@ export default function ExpenseChart({ data, className }: Props) {
   const filteredData = useMemo(
     () =>
       billingCycle === "totaly"
-        ? data ?? []
-        : data?.filter((expense) => expense.cycle === billingCycle) ?? [],
-    [data, billingCycle]
+        ? (data ?? [])
+        : (data?.filter((expense) => expense.cycle === billingCycle) ?? []),
+    [data, billingCycle],
   );
 
   const totalExpense = useMemo(() => {
@@ -86,18 +86,21 @@ export default function ExpenseChart({ data, className }: Props) {
   ];
 
   const categoryTotals = useMemo(() => {
-    return filteredData.reduce((acc, expense) => {
-      const category = expense.category || "other";
-      const amount = expense.amount ?? 0;
+    return filteredData.reduce(
+      (acc, expense) => {
+        const category = expense.category || "other";
+        const amount = expense.amount ?? 0;
 
-      const adjustedAmount =
-        billingCycle === "totaly" && expense.cycle === "monthly"
-          ? amount * 12
-          : amount;
+        const adjustedAmount =
+          billingCycle === "totaly" && expense.cycle === "monthly"
+            ? amount * 12
+            : amount;
 
-      acc[category] = (acc[category] || 0) + adjustedAmount;
-      return acc;
-    }, {} as Record<ExpenseCategory, number>);
+        acc[category] = (acc[category] || 0) + adjustedAmount;
+        return acc;
+      },
+      {} as Record<ExpenseCategory, number>,
+    );
   }, [filteredData, billingCycle]);
 
   const realValues = allCategories.map((cat) => categoryTotals?.[cat] || 0);
@@ -224,24 +227,28 @@ export default function ExpenseChart({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col justify-between gap-4 p-4 z-0 border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-300 min-h-60 rounded-2xl ${className}`}
+      className={`flex flex-col justify-between gap-5 p-5 z-0 border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 min-h-60 rounded-2xl ${className}`}
     >
       {/* HEADER */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex flex-col">
-          <h2 className="text-md lg:text-lg">{t("Expense overview")}</h2>
-          <p className="text-sm opacity-50">{t("Expenses by category")}</p>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="text-base font-semibold tracking-tight">
+            {t("Expense overview")}
+          </h2>
+          <p className="text-xs text-(--muted)">{t("Expenses by category")}</p>
         </div>
 
         {hasData && (
-          <div className="flex flex-col items-end">
-            <h2 className="text-md lg:text-lg">{formatAmount(totalExpense)}</h2>
-            <p className="text-sm opacity-50">
+          <div className="flex flex-col items-end gap-0.5">
+            <h2 className="text-base font-semibold tracking-tight tabular">
+              {formatAmount(totalExpense)}
+            </h2>
+            <p className="text-[10px] uppercase tracking-wider text-(--muted)">
               {billingCycle === "monthly"
                 ? t("monthly")
                 : billingCycle === "yearly"
-                ? t("yearly")
-                : t("totaly")}
+                  ? t("yearly")
+                  : t("totaly")}
             </p>
           </div>
         )}

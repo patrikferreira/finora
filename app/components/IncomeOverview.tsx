@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Income } from "../AppTypes";
 import { useContext } from "react";
 import AppContext from "../AppContext";
+import { TbMoneybag } from "react-icons/tb";
 
 type Props = {
   data?: Income[];
@@ -27,8 +28,8 @@ export default function IncomeOverview({ data, className }: Props) {
 
   const filteredData =
     billingCycle === "totaly"
-      ? data ?? []
-      : data?.filter((i) => i.cycle === billingCycle) ?? [];
+      ? (data ?? [])
+      : (data?.filter((i) => i.cycle === billingCycle) ?? []);
 
   const total =
     billingCycle === "totaly"
@@ -42,50 +43,62 @@ export default function IncomeOverview({ data, className }: Props) {
 
   const topIncome = filteredData.reduce(
     (top, i) => (!top || (i.amount ?? 0) > (top.amount ?? 0) ? i : top),
-    null as Income | null
+    null as Income | null,
   );
 
   const cycleLabel =
     billingCycle === "monthly"
       ? t("monthly")
       : billingCycle === "yearly"
-      ? t("yearly")
-      : t("totaly");
+        ? t("yearly")
+        : t("totaly");
 
   return (
     <div
-      className={`flex flex-col flex-1 justify-between gap-6 p-6 rounded-2xl border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-200 ${className}`}
+      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 ${className}`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-0.5">
-          <p className="text-xs opacity-30 tracking-widest uppercase">
-            {t("Total incomes")}
-          </p>
-          <p className="text-2xl font-semibold tracking-tight">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <div className="h-7 w-7 rounded-lg bg-(--primary-soft) flex items-center justify-center text-(--primary)">
+              <TbMoneybag size={14} />
+            </div>
+            <p className="text-xs text-(--muted) font-medium tracking-wide">
+              {t("Total incomes")}
+            </p>
+          </div>
+          <p className="text-2xl font-semibold tracking-tight tabular">
             {formatAmount(total)}
           </p>
         </div>
 
         <span
-          className="text-xs font-medium px-2 py-0.5 rounded-full"
-          style={{ color: "#4CCE7A", backgroundColor: "#4CCE7A18" }}
+          className="text-[10px] font-medium px-2 py-1 rounded-md uppercase tracking-wider"
+          style={{
+            color: "#4CCE7A",
+            backgroundColor: "rgba(76, 206, 122, 0.12)",
+          }}
         >
           {cycleLabel}
         </span>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-4 border-t border-(--border)">
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs opacity-30">{t("incomes")}</span>
-          <span className="text-sm font-medium">
+          <span className="text-[11px] text-(--muted) uppercase tracking-wider">
+            {t("incomes")}
+          </span>
+          <span className="text-sm font-medium tabular">
             {count} {count === 1 ? t("entry") : t("incomes")}
           </span>
         </div>
 
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="text-xs opacity-30">{t("Top entrie")}</span>
+          <span className="text-[11px] text-(--muted) uppercase tracking-wider">
+            {t("Top entrie")}
+          </span>
           <span className="text-sm font-medium truncate max-w-[120px]">
-            {(topIncome && topIncome.description) || "other"}
+            {(topIncome && topIncome.description) || "—"}
           </span>
         </div>
       </div>

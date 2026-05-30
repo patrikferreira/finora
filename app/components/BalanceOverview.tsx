@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Expense, Income } from "../AppTypes";
 import { useContext } from "react";
 import AppContext from "../AppContext";
+import { LuWallet } from "react-icons/lu";
 
 type Props = {
   incomes?: Income[];
@@ -32,13 +33,13 @@ export default function BalanceOverview({
 
   const filteredIncomes =
     billingCycle === "totaly"
-      ? incomes ?? []
-      : incomes?.filter((i) => i.cycle === billingCycle) ?? [];
+      ? (incomes ?? [])
+      : (incomes?.filter((i) => i.cycle === billingCycle) ?? []);
 
   const filteredExpenses =
     billingCycle === "totaly"
-      ? expenses ?? []
-      : expenses?.filter((e) => e.cycle === billingCycle) ?? [];
+      ? (expenses ?? [])
+      : (expenses?.filter((e) => e.cycle === billingCycle) ?? []);
 
   const totalIncome =
     billingCycle === "totaly"
@@ -59,27 +60,39 @@ export default function BalanceOverview({
   const balance = totalIncome - totalExpense;
   const percentage = totalIncome === 0 ? 0 : (balance / totalIncome) * 100;
   const isPositive = balance >= 0;
+  const accent = isPositive ? "#4CCE7A" : "#F87171";
 
   return (
     <div
-      className={`flex flex-col flex-1 justify-between gap-6 p-6 rounded-2xl border border-(--border) bg-(--bg-secondary) shadow hover:shadow-xl transition-all duration-200 ${className}`}
+      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 ${className}`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-0.5">
-          <p className="text-xs opacity-30 tracking-widest uppercase">
-            {t("Total balance")}
-          </p>
-          <p className="text-2xl font-semibold tracking-tight">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <div
+              className="h-7 w-7 rounded-lg flex items-center justify-center"
+              style={{
+                background: `${accent}1F`,
+                color: accent,
+              }}
+            >
+              <LuWallet size={14} />
+            </div>
+            <p className="text-xs text-(--muted) font-medium tracking-wide">
+              {t("Total balance")}
+            </p>
+          </div>
+          <p className="text-2xl font-semibold tracking-tight tabular">
             {balance < 0 ? "-" : ""}
             {formatAmount(Math.abs(balance))}
           </p>
         </div>
 
         <span
-          className="text-xs font-medium px-2 py-0.5 rounded-full"
+          className="text-[10px] font-semibold px-2 py-1 rounded-md tabular"
           style={{
-            color: isPositive ? "#4CCE7A" : "#F87171",
-            backgroundColor: isPositive ? "#4CCE7A18" : "#F8717118",
+            color: accent,
+            backgroundColor: `${accent}1F`,
           }}
         >
           {isPositive ? "+" : "-"}
@@ -87,17 +100,27 @@ export default function BalanceOverview({
         </span>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-4 border-t border-(--border)">
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs opacity-30">{t("Incomes")}</span>
-          <span className="text-sm font-medium" style={{ color: "#4CCE7A" }}>
+          <span className="text-[11px] text-(--muted) uppercase tracking-wider">
+            {t("Incomes")}
+          </span>
+          <span
+            className="text-sm font-medium tabular"
+            style={{ color: "#4CCE7A" }}
+          >
             {formatAmount(totalIncome)}
           </span>
         </div>
 
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="text-xs opacity-30">{t("Expenses")}</span>
-          <span className="text-sm font-medium" style={{ color: "#F87171" }}>
+          <span className="text-[11px] text-(--muted) uppercase tracking-wider">
+            {t("Expenses")}
+          </span>
+          <span
+            className="text-sm font-medium tabular"
+            style={{ color: "#F87171" }}
+          >
             {formatAmount(totalExpense)}
           </span>
         </div>
