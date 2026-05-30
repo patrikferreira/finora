@@ -68,44 +68,59 @@ export default function Sidebar() {
   return (
     <div
       ref={sidebarRef}
-      className={`bg-(--bg-secondary) h-full min-w-64 border-r border-(--border)/70 p-2 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
+      className={`bg-(--bg-secondary) h-full min-w-[244px] border-r border-(--border) p-3 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 fixed md:relative top-0 left-0 flex`}
     >
-      <div className="flex flex-col gap-8">
-        <div className="flex items-center justify-between p-2">
+      <div className="flex flex-col gap-7">
+        <div className="flex items-center justify-between px-2 pt-2">
           <Logo />
           <button
             onClick={() => setIsSidebarOpen?.(false)}
-            className="cursor-pointer md:hidden p-2 rounded-2xl hover:bg-(--bg-tertiary) transition duration-200"
+            className="cursor-pointer md:hidden p-2 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition duration-150"
           >
             <FiSidebar size={18} />
           </button>
         </div>
-        <nav className="flex flex-col gap-1">
-          {links.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => {
-                  if (window.innerWidth < 1024) {
-                    closeSidebar();
-                  }
-                }}
-                className={`flex items-center gap-2 rounded-full hover:bg-(--bg-tertiary) transition duration-200 p-2 cursor-pointer ${
-                  active ? "bg-(--bg-tertiary) " : ""
-                }`}
-              >
-                <div className={`p-1 ${active && ""}`}>
-                  {link.icon}
-                </div>
-                <span className="text-sm">{t(link.name)}</span>
-              </Link>
-            );
-          })}
-        </nav>
+
+        <div className="flex flex-col gap-2">
+          <p className="px-3 text-[10px] uppercase tracking-wider text-(--muted) font-medium">
+            {t("Menu")}
+          </p>
+          <nav className="flex flex-col gap-0.5">
+            {links.map((link) => {
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => {
+                    if (window.innerWidth < 1024) {
+                      closeSidebar();
+                    }
+                  }}
+                  className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition duration-150 cursor-pointer group ${
+                    active
+                      ? "bg-(--bg-tertiary) text-(--foreground)"
+                      : "text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary)/60"
+                  }`}
+                >
+                  {active && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-(--primary)" />
+                  )}
+                  <span
+                    className={`flex items-center justify-center ${
+                      active ? "text-(--primary)" : ""
+                    }`}
+                  >
+                    {link.icon}
+                  </span>
+                  <span className="font-medium">{t(link.name)}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       <Profile />
