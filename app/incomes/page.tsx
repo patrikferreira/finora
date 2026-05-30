@@ -146,6 +146,12 @@ export default function Incomes() {
     setCurrentPage(1);
   }, [searchQuery, sortField, sortOrder, setCurrentPage]);
 
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, setCurrentPage, totalPages]);
+
   const visibleIncomes = useMemo(() => {
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = startIndex + PAGE_SIZE;
@@ -163,7 +169,7 @@ export default function Incomes() {
 
   return (
     <div
-      className={`p-4 lg:p-6 flex flex-col overflow-auto gap-5 w-full animate-fadeIn`}
+      className={`p-4 lg:p-6 flex flex-col overflow-hidden gap-5 w-full h-full min-h-0 animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
@@ -183,7 +189,9 @@ export default function Incomes() {
       />
 
       {/* TABLE */}
-      <div className="w-full rounded-2xl border border-(--border) bg-(--bg-secondary) overflow-hidden">
+      <div
+        className="w-full min-h-0 rounded-2xl border border-(--border) bg-(--bg-secondary) overflow-auto"
+      >
         <table className="w-full table-fixed">
           <thead>
             <tr className="bg-(--bg-primary)/40">
@@ -321,12 +329,16 @@ export default function Incomes() {
         </table>
       </div>
       {sortedIncomes.length > 0 ? (
-        <div className="px-1 text-xs text-(--muted) flex items-center gap-2">
+        <div
+          className="px-1 text-xs text-(--muted) flex items-center gap-2"
+        >
           <IoInformationCircleOutline size={14} />
           <span>{`${t("Showing")} ${visibleIncomes.length} / ${sortedIncomes.length}`}</span>
         </div>
       ) : (
-        <div className="px-1 text-xs text-(--muted) flex items-center gap-2">
+        <div
+          className="px-1 text-xs text-(--muted) flex items-center gap-2"
+        >
           <IoInformationCircleOutline size={14} />
           {searchQuery.trim()
             ? t("No incomes found matching your search")
