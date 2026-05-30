@@ -39,7 +39,7 @@ export default function Incomes() {
   } = context;
 
   function handleMenu(id?: string) {
-    setMenuOpen((prev) => (prev === id ? null : id ?? null));
+    setMenuOpen((prev) => (prev === id ? null : (id ?? null)));
   }
 
   const [sortField, setSortField] = useState<SortField | null>("description");
@@ -48,7 +48,7 @@ export default function Incomes() {
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(
-        sortOrder === "asc" ? "desc" : sortOrder === "desc" ? null : "asc"
+        sortOrder === "asc" ? "desc" : sortOrder === "desc" ? null : "asc",
       );
       if (sortOrder === "desc") setSortField(null);
     } else {
@@ -117,7 +117,7 @@ export default function Incomes() {
           income.description?.toLowerCase().includes(query) ||
           income.category?.toLowerCase().includes(query) ||
           income.cycle?.toLowerCase().includes(query) ||
-          income.amount?.toString().includes(query)
+          income.amount?.toString().includes(query),
       );
     }
 
@@ -163,12 +163,14 @@ export default function Incomes() {
 
   return (
     <div
-      className={`p-4 flex flex-col overflow-auto gap-4  w-full animate-fadeIn`}
+      className={`p-4 lg:p-6 flex flex-col overflow-auto gap-5 w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
-        <h1 className="text-2xl font-semibold">{t("Incomes")}</h1>
-        <span className="opacity-50 text-sm">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("Incomes")}
+        </h1>
+        <span className="text-(--muted) text-sm">
           {t("Track & manage your earnings")}
         </span>
       </div>
@@ -181,13 +183,13 @@ export default function Incomes() {
       />
 
       {/* TABLE */}
-      <div className="w-full rounded-2xl border border-(--border) shadow hover:border-(--border) overflow-hidden">
+      <div className="w-full rounded-2xl border border-(--border) bg-(--bg-secondary) overflow-hidden">
         <table className="w-full table-fixed">
           <thead>
-            <tr>
+            <tr className="bg-(--bg-primary)/40">
               <th
                 onClick={() => handleSort("description")}
-                className={`w-1/5 text-left bg-(--bg-secondary) tracking-wider border-(--border) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
+                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase py-3.5 cursor-pointer hover:text-(--foreground) transition-colors ${
                   visibleIncomes.length === 0
                     ? "border-none"
                     : "border-b border-(--border)"
@@ -204,7 +206,7 @@ export default function Incomes() {
               </th>
               <th
                 onClick={() => handleSort("amount")}
-                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border) px-4 text-xs uppercase py-3 cursor-pointer transition-all ${
+                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase py-3.5 cursor-pointer hover:text-(--foreground) transition-colors ${
                   visibleIncomes.length === 0
                     ? "border-none"
                     : "border-b border-(--border)"
@@ -220,7 +222,7 @@ export default function Incomes() {
                 </div>
               </th>
               <th
-                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
+                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase hidden md:table-cell py-3.5 ${
                   visibleIncomes.length === 0
                     ? "border-none"
                     : "border-b border-(--border)"
@@ -229,7 +231,7 @@ export default function Incomes() {
                 <div className="flex items-center gap-2">{t("category")}</div>
               </th>
               <th
-                className={`w-1/5 text-left bg-(--bg-secondary)  tracking-wider font-semibold border-(--border) px-4 text-xs uppercase hidden md:table-cell py-3 cursor-default transition-all ${
+                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase hidden md:table-cell py-3.5 ${
                   visibleIncomes.length === 0
                     ? "border-none"
                     : "border-b border-(--border)"
@@ -238,7 +240,7 @@ export default function Incomes() {
                 <div className="flex items-center gap-2">{t("cycle")}</div>
               </th>
               <th
-                className={`w-1/10 text-left bg-(--bg-secondary) px-4 text-xs border-(--border)  uppercase py-3 ${
+                className={`w-1/10 text-left px-4 text-[11px] uppercase py-3.5 ${
                   visibleIncomes.length === 0
                     ? "border-none"
                     : "border-b border-(--border)"
@@ -252,27 +254,33 @@ export default function Incomes() {
               <tr
                 key={income.id}
                 onDoubleClick={() => handleRowDoubleClick(income)}
-                className={`border-b border-(--border) last:border-0  bg-(--bg-secondary) group hover:bg-(--bg-tertiary)`}
+                className={`border-b border-(--border) last:border-0 group hover:bg-(--bg-tertiary)/50 transition-colors`}
               >
-                <td className="w-1/5 px-4 py-3 text-sm truncate opacity-50 group-hover:opacity-100">
+                <td className="w-1/5 px-4 py-3.5 text-sm truncate font-medium">
                   {income.description.charAt(0).toUpperCase() +
                     income.description.slice(1)}
                 </td>
-                <td className="w-1/5 px-4 py-3 text-sm opacity-50 group-hover:opacity-100">
+                <td className="w-1/5 px-4 py-3.5 text-sm tabular text-(--primary) font-medium">
                   {formatAmount(income.amount)}
                 </td>
-                <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
-                {income?.category ? t(`${income.category}`) : ""}
+                <td className="w-1/5 px-4 py-3.5 text-sm hidden md:table-cell">
+                  {income?.category ? (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-(--bg-tertiary) text-(--muted) border border-(--border)">
+                      {t(`${income.category}`)}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </td>
-                <td className="w-1/5 px-4 py-3 text-sm hidden md:table-cell opacity-50 group-hover:opacity-100">
+                <td className="w-1/5 px-4 py-3.5 text-sm hidden md:table-cell text-(--muted)">
                   {income?.cycle ? t(`${income.cycle}`) : ""}
                 </td>
                 <td className="w-1/10 px-4 text-sm">
                   <button
                     onClick={() => handleMenu(income.id)}
-                    className="opacity-50 group-hover:opacity-100 cursor-pointer p-2 rounded-2xl border border-(--border) hover:border-(--border) transition duration-200 flex items-center justify-center"
+                    className="opacity-0 group-hover:opacity-100 cursor-pointer p-1.5 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 flex items-center justify-center"
                   >
-                    <HiMiniEllipsisVertical />
+                    <HiMiniEllipsisVertical size={18} />
                   </button>
 
                   {menuOpen === income.id && (
@@ -291,7 +299,7 @@ export default function Incomes() {
 
                             setMenuOpen(null);
                           }}
-                          className=" p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
+                          className="p-2 w-full text-(--muted) hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
                         >
                           <FaRegEdit /> {t("Edit")}
                         </button>
@@ -299,7 +307,7 @@ export default function Incomes() {
                           onClick={() => {
                             handleDeleteClick(income.id!);
                           }}
-                          className="p-2 w-full hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-200 rounded-2xl text-left cursor-pointer flex gap-2 items-center"
+                          className="p-2 w-full text-(--muted) hover:bg-(--danger-soft) hover:text-(--danger) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
                         >
                           <FaRegTrashCan /> {t("Delete")}
                         </button>
@@ -313,13 +321,13 @@ export default function Incomes() {
         </table>
       </div>
       {sortedIncomes.length > 0 ? (
-        <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
-          <IoInformationCircleOutline />
+        <div className="px-1 text-xs text-(--muted) flex items-center gap-2">
+          <IoInformationCircleOutline size={14} />
           <span>{`${t("Showing")} ${visibleIncomes.length} / ${sortedIncomes.length}`}</span>
         </div>
       ) : (
-        <div className="px-4 text-sm w-max cursor-default opacity-50 hover:opacity-100 transition duration-200 flex items-center gap-2">
-          <IoInformationCircleOutline />
+        <div className="px-1 text-xs text-(--muted) flex items-center gap-2">
+          <IoInformationCircleOutline size={14} />
           {searchQuery.trim()
             ? t("No incomes found matching your search")
             : t("You haven't added any incomes yet")}

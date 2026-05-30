@@ -3,7 +3,6 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import AppContext from "../AppContext";
 import { IoCloseOutline } from "react-icons/io5";
 import { Cycle, Income, IncomeCategory } from "../AppTypes";
-import Spin from "./Spin";
 import Select from "./Select";
 import { createIncome, deleteIncome, updateIncome } from "../AppServices";
 import { validateIncomeForm } from "../utils/formValidators";
@@ -61,17 +60,17 @@ export default function IncomeDetail() {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
-  
+
     let newValue: string | boolean = value;
-  
+
     if (type === "checkbox") {
       newValue = checked;
     }
-  
+
     if (name === "amount" && typeof newValue === "string") {
       newValue = newValue.slice(0, 13);
     }
-  
+
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
@@ -197,28 +196,31 @@ export default function IncomeDetail() {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-40 flex items-center justify-center bg-[#00000086] backdrop-blur-sm"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-secondary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-(--border)">
-          <h3 className="text-base">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-(--border)">
+          <h3 className="text-base font-semibold tracking-tight">
             {incomeDetail.newIncome ? t("New income") : t("Edit income")}
           </h3>
           <button
             onClick={onClose}
-            className="cursor-pointer opacity-50 hover:opacity-100 transition-all duration-200"
+            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150"
           >
-            <IoCloseOutline size={18} />
+            <IoCloseOutline size={20} />
           </button>
         </div>
 
-        <div className="flex flex-col flex-1 gap-4 px-4 py-3 text-sm overflow-y-auto">
-          <div className="flex items-center gap-2 w-full">
+        <div className="flex flex-col flex-1 gap-4 px-5 py-4 text-sm overflow-y-auto">
+          <div className="flex items-center gap-3 w-full">
             <div className="flex-1">
-              <label className="block text-sm mb-2" htmlFor="category">
+              <label
+                className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
+                htmlFor="category"
+              >
                 {t("Category")} *
               </label>
 
@@ -239,7 +241,10 @@ export default function IncomeDetail() {
             </div>
 
             <div className="flex-1">
-              <label className="block text-sm mb-2" htmlFor="category">
+              <label
+                className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
+                htmlFor="category"
+              >
                 {t("Cycle")} *
               </label>
 
@@ -256,7 +261,10 @@ export default function IncomeDetail() {
             </div>
           </div>
           <div>
-            <label className="block text-sm mb-2" htmlFor="description">
+            <label
+              className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
+              htmlFor="description"
+            >
               {t("Description")} *
             </label>
             <input
@@ -268,11 +276,14 @@ export default function IncomeDetail() {
               onChange={handleChange}
               maxLength={50}
               autoFocus
-              className="w-full bg-(--bg-secondary) border border-(--border) rounded-2xl px-4 py-2.5 outline-none"
+              className="field"
             />
           </div>
           <div>
-            <label className="block text-sm mb-2" htmlFor="amount">
+            <label
+              className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
+              htmlFor="amount"
+            >
               {t("Amount")} *
             </label>
             <input
@@ -282,7 +293,7 @@ export default function IncomeDetail() {
               placeholder={`${currencySymbol} 0.00`}
               value={formData.amount ?? ""}
               onChange={handleChange}
-              className="w-full bg-(--bg-secondary) border border-(--border) rounded-2xl px-4 py-2.5 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="field tabular"
             />
           </div>
         </div>
@@ -290,26 +301,26 @@ export default function IncomeDetail() {
         <div
           className={`flex items-center ${
             incomeDetail.newIncome ? "justify-end" : "justify-between"
-          } gap-2 border-t border-(--border) px-4 py-3`}
+          } gap-2 border-t border-(--border) px-5 py-4`}
         >
           {!incomeDetail.newIncome && (
             <Button
               action={handleDeleteClick}
               text="Delete"
-              className="bg-(--bg-tertiary)"
+              className="bg-transparent border border-(--border) text-(--danger) hover:bg-(--danger-soft) hover:border-(--danger)/40"
             />
           )}
           <div className="flex items-center gap-2">
             <Button
+              action={onClose}
+              text="Cancel"
+              className="bg-(--bg-tertiary) text-(--foreground)"
+            />
+            <Button
               action={submit}
               isLoading={isLoading}
               text="Save"
-              className="bg-(--primary)"
-            />
-            <Button
-              action={onClose}
-              text="Cancel"
-              className="bg-(--bg-tertiary)"
+              className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] font-semibold"
             />
           </div>
         </div>
