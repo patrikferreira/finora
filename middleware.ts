@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const ALLOWED_ROUTES = [
-  "/login",
+  "/signin",
   "/signup",
   "/",
   "/overview",

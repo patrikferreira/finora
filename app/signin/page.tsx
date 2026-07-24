@@ -10,7 +10,7 @@ import { authUser } from "../AppServices";
 import BuiltInfo from "../components/BuiltInfo";
 import Button from "../components/Button";
 
-export default function Login() {
+export default function SignIn() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const [form, setForm] = useState({
@@ -78,13 +78,13 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-bg h-svh w-full p-4 flex flex-col gap-6 items-center justify-between animate-fadeIn">
+    <div className="h-svh w-full p-4 flex flex-col gap-6 items-center justify-between animate-fadeIn">
       <div className="relative z-10 w-full flex justify-center pt-2">
         <Logo />
       </div>
 
-      <div className="relative z-10 w-full max-w-sm">
-        <div className="card-elevated flex flex-col gap-6 p-6 sm:p-8 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
+      <div className="relative z-10 w-full max-w-xs">
+        <div className="flex flex-col gap-6">
           <h1 className="text-xl font-bold">Sign in</h1>
           <form className="flex flex-col gap-4" onSubmit={submit}>
             <label className="block">
@@ -116,7 +116,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute top-[34px] right-3 text-(--muted) hover:text-(--foreground) transition-colors focus:outline-none"
+                className="absolute top-[36px] right-3 text-(--muted) hover:text-(--foreground) transition-colors focus:outline-none"
                 tabIndex={-1}
               >
                 {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
@@ -127,7 +127,7 @@ export default function Login() {
               type="submit"
               isLoading={isLoading}
               text="Sign in"
-              className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] h-11 rounded-xl font-semibold w-full !min-w-0 mt-2"
+              className="bg-(--primary) h-11 rounded-xl font-semibold w-full !min-w-0 mt-2"
             />
           </form>
 

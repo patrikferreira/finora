@@ -44,7 +44,7 @@ export default function Profile() {
           show: true,
         });
       } else {
-        router.push("/login");
+        router.push("/signin");
         setIsSidebarOpen?.(false);
         setUser?.(undefined);
       }

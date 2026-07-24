@@ -5,7 +5,7 @@ export default function BuiltInfo() {
       <a
         href="https://nextjs.org/"
         target="_blank"
-        className="font-medium text-(--foreground)/80 hover:text-(--primary) transition-colors"
+        className="font-medium text-(--foreground) hover:text-(--primary) transition-colors"
       >
         Next.js
       </a>{" "}
@@ -13,7 +13,7 @@ export default function BuiltInfo() {
       <a
         href="https://supabase.com/"
         target="_blank"
-        className="font-medium text-(--foreground)/80 hover:text-(--primary) transition-colors"
+        className="font-medium text-(--foreground) hover:text-(--primary) transition-colors"
       >
         Supabase
       </a>

@@ -165,7 +165,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
           setUser(data.user);
         } else {
           setUser(undefined);
-          router.push("/login");
+          router.push("/signin");
         }
       } catch (error) {
         console.error("Error fetching user:", error);

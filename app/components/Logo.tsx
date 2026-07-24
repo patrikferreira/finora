@@ -4,17 +4,19 @@ type Props = {
 
 export default function Logo({ logoOnly }: Props) {
   return (
-    <div className="flex items-center gap-2.5">
-      <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-[#3FD693] to-[#2EA470] flex items-center justify-center shadow-[0_4px_14px_-2px_rgba(54,189,129,0.45)]">
+    <div className="flex items-center gap-3">
+      <div className="relative h-10 w-10 rounded-xl bg-(--primary) flex items-center justify-center">
         <svg
-          width="18"
-          height="20"
-          viewBox="0 0 22 24"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
           className="flex-shrink-0"
           aria-hidden
         >
-          <rect x="0" y="8" width="9" height="16" rx="3" fill="#0B0B0E" />
-          <rect x="11" y="0" width="9" height="24" rx="3" fill="#0B0B0E" />
+          <rect x="4" y="12" width="4" height="8" rx="2" fill="#fff" />
+          <rect x="10" y="8" width="4" height="12" rx="2" fill="#fff" />
+          <rect x="16" y="4" width="4" height="16" rx="2" fill="#fff" />
         </svg>
       </div>
       {!logoOnly && (

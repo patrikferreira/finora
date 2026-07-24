@@ -17,7 +17,7 @@ export default function Header() {
   if (
     !user ||
     initialFetching ||
-    pathname === "/login" ||
+    pathname === "/signin" ||
     pathname === "/signup" ||
     pathname === "/"
   ) {

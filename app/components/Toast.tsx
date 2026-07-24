@@ -12,22 +12,25 @@ export type ToastStatus = "success" | "error" | "info";
 
 const statusConfig: Record<
   ToastStatus,
-  { icon: React.ReactNode; ring: string; color: string }
+  { icon: React.ReactNode; ring: string; color: string; bg: string }
 > = {
   success: {
     icon: <IoCheckmarkCircle size={18} />,
-    ring: "border-(--primary)/40",
-    color: "text-(--primary)",
+    ring: "border-(--success)/40",
+    color: "text-(--success)",
+    bg: "bg-(--success)/20",
   },
   error: {
     icon: <IoCloseCircle size={18} />,
     ring: "border-(--danger)/40",
     color: "text-(--danger)",
+    bg: "bg-(--danger)/20",
   },
   info: {
     icon: <IoInformationCircle size={18} />,
     ring: "border-(--warning)/40",
     color: "text-(--warning)",
+    bg: "bg-(--warning)/20",
   },
 };
 
@@ -55,7 +58,7 @@ export default function Toast() {
   return (
     <div className="fixed bottom-6 right-6 left-6 sm:left-auto sm:max-w-sm z-50 animate-slideInUp">
       <div
-        className={`flex items-center gap-3 bg-(--bg-secondary) border ${config.ring} px-4 py-3 rounded-xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-sm`}
+        className={`flex items-center gap-3 ${config.bg} border ${config.ring} px-4 py-3 rounded-xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-sm`}
       >
         <span className={config.color}>{config.icon}</span>
         <span className="text-sm text-(--foreground) flex-1">

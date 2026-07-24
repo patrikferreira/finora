@@ -58,7 +58,7 @@ export default function Sidebar() {
   if (
     !user ||
     initialFetching ||
-    pathname === "/login" ||
+    pathname === "/signin" ||
     pathname === "/signup" ||
     pathname === "/"
   ) {

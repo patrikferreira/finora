@@ -1,22 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #0B0B0E;
-  --bg-secondary: #131318;
-  --bg-tertiary: #1C1C24;
-  --bg-elevated: #1A1A21;
-  --foreground: #F5F5F7;
-  --muted: #8B8B95;
-  --border: #24242C;
-  --border-strong: #2E2E38;
   --primary: #36BD81;
-  --primary-soft: rgba(54, 189, 129, 0.12);
-  --primary-hover: #2EA470;
-  --danger: #F87171;
-  --danger-soft: rgba(248, 113, 113, 0.12);
-  --warning: #F4A23A;
-  --warning-soft: rgba(244, 162, 58, 0.12);
-  --info: #60A5FA;
+  --bg-primary: #101310;
+  --bg-secondary: #223131;
+  --bg-tertiary: #3C5350;
+  --border: #2a3f3f;
+  --muted: #b1b1b1;
+  --foreground: #ffffff;
+
+  --success: #36BD81;
+  --danger: #f75c39;
+  --warning: #f5c74f;
+
 }
 
 html {
@@ -28,7 +24,7 @@ html {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border-strong) transparent;
+  scrollbar-color: var(--primary) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -41,7 +37,7 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--border-strong);
+  background-color: var(--primary);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -60,28 +56,6 @@ body {
   z-index: 0;
 }
 
-.tabular {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-}
-
-.text-muted {
-  color: var(--muted);
-}
-
-.auth-bg {
-  position: relative;
-  background: var(--bg-primary);
-}
-
-.card-elevated {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0) 60%),
-    var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-
 .field {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
@@ -97,10 +71,6 @@ body {
 
 .field::placeholder {
   color: var(--muted);
-}
-
-.field:hover {
-  border-color: var(--border-strong);
 }
 
 .field:focus {
