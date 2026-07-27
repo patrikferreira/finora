@@ -33,7 +33,7 @@ export default function Sidebar() {
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target as Node) &&
         isSidebarOpen &&
-        window.innerWidth < 1024
+        window.innerWidth < 768
       ) {
         setIsSidebarOpen?.(false);
       }
@@ -66,18 +66,27 @@ export default function Sidebar() {
   }
 
   return (
-    <div
-      ref={sidebarRef}
-      className={`bg-(--bg-secondary) h-full min-w-[244px] border-r border-(--border) p-3 flex-col justify-between gap-4 z-20 transition-all duration-200 ease-in-out animate-fadeIn ${
-        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 fixed md:relative top-0 left-0 flex`}
-    >
+    <>
+      {isSidebarOpen && (
+        <button
+          type="button"
+          aria-label={t("Close menu")}
+          onClick={closeSidebar}
+          className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm md:hidden"
+        />
+      )}
+      <div
+        ref={sidebarRef}
+        className={`bg-(--bg-primary) h-full min-w-[244px] border-r border-(--border) p-3 flex-col justify-between gap-4 z-30 transition-all duration-200 ease-in-out animate-fadeIn ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 fixed md:relative top-0 left-0 flex`}
+      >
       <div className="flex flex-col gap-7">
         <div className="flex items-center justify-between px-2 pt-2">
           <Logo />
           <button
             onClick={() => setIsSidebarOpen?.(false)}
-            className="cursor-pointer md:hidden p-2 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition duration-150"
+            className="cursor-pointer md:hidden p-2 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition duration-150"
           >
             <FiSidebar size={18} />
           </button>
@@ -99,20 +108,13 @@ export default function Sidebar() {
                       closeSidebar();
                     }
                   }}
-                  className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition duration-150 cursor-pointer group ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition duration-150 cursor-pointer group ${
                     active
-                      ? "bg-(--bg-tertiary) text-(--foreground)"
-                      : "text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary)/60"
+                      ? "bg-(--bg-secondary) text-(--primary)"
+                      : "text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary)/60"
                   }`}
                 >
-                  {active && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-(--primary)" />
-                  )}
-                  <span
-                    className={`flex items-center justify-center ${
-                      active ? "text-(--primary)" : ""
-                    }`}
-                  >
+                  <span className="flex items-center justify-center">
                     {link.icon}
                   </span>
                   <span className="font-medium">{t(link.name)}</span>
@@ -123,7 +125,8 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <Profile />
-    </div>
+        <Profile />
+      </div>
+    </>
   );
 }

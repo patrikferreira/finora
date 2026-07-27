@@ -99,7 +99,7 @@ export default function AccountSettingsDetail() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-secondary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-(--border)">
           <h3 className="text-base font-semibold tracking-tight">
@@ -107,7 +107,7 @@ export default function AccountSettingsDetail() {
           </h3>
           <button
             onClick={onClose}
-            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150"
+            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150"
           >
             <IoCloseOutline size={20} />
           </button>
@@ -171,13 +171,13 @@ export default function AccountSettingsDetail() {
             <Button
               action={onClose}
               text="Cancel"
-              className="bg-(--bg-tertiary) text-(--foreground)"
+              className="bg-(--bg-secondary) text-(--foreground)"
             />
             <Button
               action={submit}
               isLoading={isLoading}
               text="Save"
-              className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] font-semibold"
+              className="bg-(--primary) font-semibold"
             />
           </div>
         </div>

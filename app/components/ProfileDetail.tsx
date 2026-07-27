@@ -27,7 +27,7 @@ export default function ProfileDetail() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-sm sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-secondary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-sm sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-(--border)">
           <h3 className="text-base font-semibold tracking-tight">
@@ -35,7 +35,7 @@ export default function ProfileDetail() {
           </h3>
           <button
             onClick={onClose}
-            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150"
+            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150"
           >
             <IoCloseOutline size={20} />
           </button>
@@ -61,7 +61,7 @@ export default function ProfileDetail() {
           <Button
             action={onClose}
             text="Close"
-            className="bg-(--bg-tertiary) text-(--foreground)"
+            className="bg-(--bg-secondary) text-(--foreground)"
           />
         </div>
       </div>

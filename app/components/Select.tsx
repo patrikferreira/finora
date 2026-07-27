@@ -32,7 +32,7 @@ export default function Select<T extends string | number>({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={`w-full border border-(--border) rounded-xl px-3.5 bg-(--bg-secondary) text-(--foreground) text-left flex justify-between items-center hover:border-(--border-strong) transition-colors outline-none h-[42px] ${
+        className={`w-full border border-(--border) rounded-xl px-3.5 bg-(--bg-primary) text-(--foreground) text-left flex justify-between items-center  transition-colors outline-none h-[42px] ${
           open
             ? "border-(--primary) shadow-[0_0_0_3px_var(--primary-soft)]"
             : ""
@@ -49,7 +49,7 @@ export default function Select<T extends string | number>({
       {open && (
         <Popover
           onClose={() => setOpen(false)}
-          className="mt-1.5 rounded-xl p-1 !max-h-56 w-full"
+          className="mt-1.5 rounded-xl p-1 !max-h-[152px] w-full"
         >
           {options.map((option) => (
             <button
@@ -59,7 +59,7 @@ export default function Select<T extends string | number>({
                 onChange(option.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 min-h-9 rounded-lg transition-colors duration-150 hover:bg-(--bg-tertiary) flex justify-between items-center ${
+              className={`w-full text-left px-3 py-2 min-h-9 rounded-lg transition-colors duration-150 hover:bg-(--bg-secondary) flex justify-between items-center ${
                 value === option.value
                   ? "text-(--foreground)"
                   : "text-(--muted) hover:text-(--foreground)"

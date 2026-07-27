@@ -2,9 +2,8 @@
 
 :root {
   --primary: #36BD81;
-  --bg-primary: #101310;
-  --bg-secondary: #223131;
-  --bg-tertiary: #3C5350;
+  --bg-primary: #1d2828;
+  --bg-secondary: #283a34;
   --border: #2a3f3f;
   --muted: #b1b1b1;
   --foreground: #ffffff;
@@ -12,7 +11,6 @@
   --success: #36BD81;
   --danger: #f75c39;
   --warning: #f5c74f;
-
 }
 
 html {
@@ -57,7 +55,7 @@ body {
 }
 
 .field {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   color: var(--foreground);
   border-radius: 12px;
@@ -125,7 +123,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-primary) inset !important;
   -webkit-text-fill-color: var(--foreground) !important;
   transition: background-color 9999s ease-in-out 0s;
   caret-color: var(--foreground);
