@@ -29,7 +29,7 @@ export default function ConfirmModal() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-(--bg-secondary) border border-(--border) rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] w-full max-w-sm p-6 animate-modalGrow"
+        className="bg-(--bg-primary) border border-(--border) rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] w-full max-w-sm p-6 animate-modalGrow"
       >
         <h2 className="text-base font-semibold tracking-tight mb-2 text-(--foreground)">
           {t(confirmAction.title)}
@@ -41,7 +41,7 @@ export default function ConfirmModal() {
           <Button
             action={handleCancel}
             text="Cancel"
-            className="bg-(--bg-tertiary) text-(--foreground)"
+            className="bg-(--bg-secondary) text-(--foreground)"
           />
           <Button
             action={handleConfirm}

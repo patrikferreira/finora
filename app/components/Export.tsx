@@ -58,7 +58,7 @@ export default function Export({ view }: Props) {
 
   return (
     <button
-      className={`h-10 w-10 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) hover:border-(--border-strong) text-sm bg-(--bg-secondary) transition duration-150 disabled:opacity-50 ${
+      className={`h-10 w-10 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) text-sm bg-(--bg-primary) transition duration-150 disabled:opacity-50 ${
         isLoading ? "cursor-default" : "cursor-pointer"
       }`}
       onClick={exportData}

@@ -24,11 +24,11 @@ export default function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="h-10 rounded-xl border border-(--border) px-1 flex items-center gap-0.5 text-sm bg-(--bg-secondary)">
+    <div className="h-10 rounded-xl border border-(--border) px-1 flex items-center gap-0.5 text-sm bg-(--bg-primary)">
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         aria-label="Previous page"
       >
         <svg
@@ -55,7 +55,7 @@ export default function Pagination({
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        className="h-8 w-8 rounded-lg flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         aria-label="Next page"
       >
         <svg

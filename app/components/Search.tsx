@@ -32,10 +32,10 @@ export default function Search({ placeholder }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-2 bg-(--bg-secondary) h-10 w-full max-w-xs px-3 rounded-xl group border transition-all duration-150 ${
+      className={`flex items-center gap-2 bg-(--bg-primary) h-[42px] w-full max-w-xs px-3.5 rounded-xl group border transition-all duration-150 focus-within:border-(--primary) focus-within:shadow-[0_0_0_4px_var(--primary-soft)] ${
         hasQuery
-          ? "border-(--primary) shadow-[0_0_0_3px_var(--primary-soft)]"
-          : "border-(--border) hover:border-(--border-strong)"
+          ? "border-(--primary)"
+          : "border-(--border)"
       }`}
     >
       <LuSearch

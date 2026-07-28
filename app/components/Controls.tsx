@@ -66,7 +66,7 @@ export default function Controls({
           text="Add"
           icon={<IoAddOutline size={18} />}
           hiddenTextOnMobile={true}
-          className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] !min-w-0 px-4 font-semibold"
+          className="bg-(--primary) h-11 rounded-xl !min-w-0 px-4 font-semibold"
         />
       </div>
     </div>

@@ -110,7 +110,7 @@ export default function Profile() {
             <hr className="border-(--border)" />
             <div className="p-1.5">
               <button
-                className="flex items-center gap-2 p-2 w-full text-(--muted) hover:bg-(--bg-secondary) hover:text-(--foreground) cursor-pointer rounded-lg transition duration-150"
+                className="p-2 w-full text-(--muted) hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
                 onClick={handleLogout}
                 disabled={isLoading}
               >

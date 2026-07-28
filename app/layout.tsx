@@ -8,7 +8,7 @@ import Header from "./components/Header";
 import IncomeDetail from "./components/IncomeDetail";
 import ConfirmModal from "./components/ConfirmModal";
 import ExpenseDetail from "./components/ExpenseDetail";
-import TrialPeriodAlertModal from "./components/TrialPeriodAlertModal";
+import TrialPeriodAlertModal from "./components/DemoPeriodAlertModal";
 import ProfileDetail from "./components/ProfileDetail";
 import AccountSettingsDetail from "./components/AccountSettingsDetail";
 
