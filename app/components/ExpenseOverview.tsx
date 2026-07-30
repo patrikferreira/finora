@@ -55,17 +55,13 @@ export default function ExpenseOverview({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 ${className}`}
+      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 ${className}`}
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div
-              className="h-7 w-7 rounded-lg flex items-center justify-center"
-              style={{
-                background: "rgba(248, 113, 113, 0.12)",
-                color: "#F87171",
-              }}
+              className="h-7 w-7 rounded-lg flex items-center justify-center bg-(--danger)/20 text-(--danger)"
             >
               <HiOutlineDownload size={14} />
             </div>
@@ -79,17 +75,13 @@ export default function ExpenseOverview({ data, className }: Props) {
         </div>
 
         <span
-          className="text-[10px] font-medium px-2 py-1 rounded-md uppercase tracking-wider"
-          style={{
-            color: "#F87171",
-            backgroundColor: "rgba(248, 113, 113, 0.12)",
-          }}
+          className="text-[10px] font-medium px-2 py-1 rounded-md uppercase tracking-wider bg-(--danger)/20 text-(--danger)"
         >
           {cycleLabel}
         </span>
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-(--border)">
+      <div className="flex items-center justify-between">
         <div className="flex flex-col gap-0.5">
           <span className="text-[11px] text-(--muted) uppercase tracking-wider">
             {t("expenses")}

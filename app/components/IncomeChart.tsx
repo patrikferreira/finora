@@ -55,12 +55,12 @@ export default function IncomeChart({ data, className }: Props) {
   ];
 
   const categoryColors: Record<string, string> = {
-    salary: "#4CCE7A",
-    freelancer: "#F4923A",
-    investment: "#F5C842",
-    business: "#F87171",
-    benefit: "#42C8E0",
-    other: "#94A3B8",
+    salary: "#36BD81",
+    freelancer: "#4CCE7A",
+    investment: "#66D98F",
+    business: "#82E3A5",
+    benefit: "#A2EBBA",
+    other: "#C3F2D2",
   };
 
   const categoryTotals = filteredData.reduce(
@@ -127,7 +127,7 @@ export default function IncomeChart({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col gap-5 p-5 z-0 border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 min-h-90 rounded-2xl ${className}`}
+      className={`flex flex-col gap-5 p-5 z-0 bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
     >
       {/* HEADER */}
       <div className="flex items-start justify-between gap-2">
@@ -177,7 +177,7 @@ export default function IncomeChart({ data, className }: Props) {
                 />
                 <span className="text-(--muted) truncate">{label}</span>
               </div>
-              <span className="font-medium tabular">
+              <span className="font-medium tabular text-(--muted)">
                 {formatAmount(realValues[i])}
               </span>
             </div>

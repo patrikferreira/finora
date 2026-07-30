@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Expense, Income } from "../AppTypes";
 import { useContext } from "react";
 import AppContext from "../AppContext";
-import { LuWallet } from "react-icons/lu";
+import { LuTrendingDown, LuTrendingUp, LuWallet } from "react-icons/lu";
 
 type Props = {
   incomes?: Income[];
@@ -59,12 +59,23 @@ export default function BalanceOverview({
 
   const balance = totalIncome - totalExpense;
   const percentage = totalIncome === 0 ? 0 : (balance / totalIncome) * 100;
-  const isPositive = balance >= 0;
-  const accent = isPositive ? "#4CCE7A" : "#F87171";
+  const isNeutral = balance === 0;
+  const isPositive = balance > 0;
+  const accent = isNeutral
+    ? "var(--muted)"
+    : isPositive
+      ? "var(--primary)"
+      : "var(--danger)";
+  const accentBackground = `color-mix(in srgb, ${accent} 20%, transparent)`;
+  const TrendIcon = isNeutral
+    ? null
+    : isPositive
+      ? LuTrendingUp
+      : LuTrendingDown;
 
   return (
     <div
-      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 ${className}`}
+      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 ${className}`}
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
@@ -72,7 +83,7 @@ export default function BalanceOverview({
             <div
               className="h-7 w-7 rounded-lg flex items-center justify-center"
               style={{
-                background: `${accent}1F`,
+                background: accentBackground,
                 color: accent,
               }}
             >
@@ -82,9 +93,15 @@ export default function BalanceOverview({
               {t("Total balance")}
             </p>
           </div>
-          <p className="text-2xl font-semibold tracking-tight tabular">
-            {balance < 0 ? "-" : ""}
-            {formatAmount(Math.abs(balance))}
+          <p
+            className="flex items-center gap-2 text-2xl font-semibold tracking-tight tabular"
+            style={{ color: accent }}
+          >
+            {TrendIcon && <TrendIcon size={22} strokeWidth={2.3} />}
+            <span>
+              {balance < 0 ? "-" : ""}
+              {formatAmount(Math.abs(balance))}
+            </span>
           </p>
         </div>
 
@@ -92,22 +109,22 @@ export default function BalanceOverview({
           className="text-[10px] font-semibold px-2 py-1 rounded-md tabular"
           style={{
             color: accent,
-            backgroundColor: `${accent}1F`,
+            backgroundColor: accentBackground,
           }}
         >
-          {isPositive ? "+" : "-"}
+          {isNeutral ? "" : isPositive ? "+" : "-"}
           {Math.abs(percentage).toFixed(1)}%
         </span>
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-(--border)">
+      <div className="flex items-center justify-between">
         <div className="flex flex-col gap-0.5">
           <span className="text-[11px] text-(--muted) uppercase tracking-wider">
             {t("Incomes")}
           </span>
           <span
             className="text-sm font-medium tabular"
-            style={{ color: "#4CCE7A" }}
+            style={{ color: "var(--primary)" }}
           >
             {formatAmount(totalIncome)}
           </span>
@@ -119,7 +136,7 @@ export default function BalanceOverview({
           </span>
           <span
             className="text-sm font-medium tabular"
-            style={{ color: "#F87171" }}
+            style={{ color: "var(--danger)" }}
           >
             {formatAmount(totalExpense)}
           </span>

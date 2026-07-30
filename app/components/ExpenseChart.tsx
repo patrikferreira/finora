@@ -196,6 +196,7 @@ export default function ExpenseChart({ data, className }: Props) {
           color: "rgba(203, 213, 225, 0.08)",
         },
         ticks: {
+          color: "#b1b1b1",
           stepSize: Math.ceil(safeMax / 5),
           callback: (value) => {
             const numValue =
@@ -210,6 +211,7 @@ export default function ExpenseChart({ data, className }: Props) {
           display: false,
         },
         ticks: {
+          color: "#b1b1b1",
           maxRotation: 45,
           minRotation: 45,
         },
@@ -227,7 +229,7 @@ export default function ExpenseChart({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col justify-between gap-5 p-5 z-0 border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 min-h-60 rounded-2xl ${className}`}
+      className={`flex flex-col justify-between gap-5 p-5 z-0 bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
     >
       {/* HEADER */}
       <div className="flex items-start justify-between gap-2">

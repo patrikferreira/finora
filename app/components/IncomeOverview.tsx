@@ -55,12 +55,12 @@ export default function IncomeOverview({ data, className }: Props) {
 
   return (
     <div
-      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl border border-(--border) bg-(--bg-secondary) hover:border-(--border-strong) transition-all duration-200 ${className}`}
+      className={`flex flex-col flex-1 justify-between gap-6 p-5 rounded-2xl bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 ${className}`}
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-(--primary-soft) flex items-center justify-center text-(--primary)">
+            <div className="h-7 w-7 rounded-lg flex items-center justify-center text-(--primary) bg-(--primary)/20">
               <TbMoneybag size={14} />
             </div>
             <p className="text-xs text-(--muted) font-medium tracking-wide">
@@ -73,17 +73,13 @@ export default function IncomeOverview({ data, className }: Props) {
         </div>
 
         <span
-          className="text-[10px] font-medium px-2 py-1 rounded-md uppercase tracking-wider"
-          style={{
-            color: "#4CCE7A",
-            backgroundColor: "rgba(76, 206, 122, 0.12)",
-          }}
+          className="text-[10px] font-medium px-2 py-1 rounded-md uppercase tracking-wider text-(--primary) bg-(--primary)/20"
         >
           {cycleLabel}
         </span>
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-(--border)">
+      <div className="flex items-center justify-between">
         <div className="flex flex-col gap-0.5">
           <span className="text-[11px] text-(--muted) uppercase tracking-wider">
             {t("incomes")}

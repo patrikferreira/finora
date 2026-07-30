@@ -38,7 +38,7 @@ export default function Overview() {
 
   return (
     <div
-      className={`min-h-svh lg:h-screen p-4 lg:p-6 flex flex-col gap-5 overflow-auto w-full animate-fadeIn`}
+      className={`min-h-svh lg:h-screen min-w-0 p-4 bg-(--bg-primary) flex flex-col gap-4 overflow-auto w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="flex items-center justify-between gap-3">
@@ -68,21 +68,21 @@ export default function Overview() {
       </div>
 
       {/* DASHBOARD */}
-      <div className="grid gap-5 w-full flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid gap-4 w-full min-w-0 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-w-0">
+          <BalanceOverview incomes={localIncomes} expenses={localExpenses} />
           <IncomeOverview data={localIncomes} />
           <ExpenseOverview data={localExpenses} />
-          <BalanceOverview incomes={localIncomes} expenses={localExpenses} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div className="min-h-[300px] lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-w-0">
+          <div className="min-h-[300px] min-w-0 lg:col-span-2">
             <ExpenseChart
               data={localExpenses}
               className="h-full w-full max-h-[500px]"
             />
           </div>
-          <div className="min-h-[300px] lg:col-span-1">
+          <div className="min-h-[300px] min-w-0 lg:col-span-1">
             <IncomeChart
               data={localIncomes}
               className="h-full w-full max-h-[500px]"
