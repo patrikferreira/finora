@@ -87,8 +87,8 @@
   "user updated successfully": "User updated successfully",
   "no data to display": "No data to display",
   "no expenses yet": "No expenses yet",
-  "trial period": "Trial period",
-  "you are currently using a trial period, and your account will be deleted the following day": "You are currently using a trial period, and your account will be deleted the following day",
+  "demo period": "Demo period",
+  "you are currently using a demo period, and your account will be deleted the following day": "You are currently using a demo period, and your account will be deleted the following day",
   "top entrie": "Top entry",
   "top expense": "Top expense"
 }

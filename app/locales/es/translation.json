@@ -87,8 +87,8 @@
   "user updated successfully": "Usuario actualizado con éxito",
   "no data to display": "No hay datos para mostrar",
   "no expenses yet": "Aún no hay gastos",
-  "trial period": "Período de prueba",
-  "you are currently using a trial period, and your account will be deleted the following day": "Actualmente estás utilizando un período de prueba, y tu cuenta será eliminada al día siguiente",
+  "demo period": "Demo de prueba",
+  "you are currently using a demo period, and your account will be deleted the following day": "Actualmente estás utilizando una demo de prueba, y tu cuenta será eliminada al día siguiente",
   "top entrie": "Principal entrada",
   "top expense": "Principal gasto"
 }
