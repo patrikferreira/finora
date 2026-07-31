@@ -42,8 +42,8 @@ export default function Expenses() {
     setMenuOpen((prev) => (prev === id ? null : (id ?? null)));
   }
 
-  const [sortField, setSortField] = useState<SortField | null>("description");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(null);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -121,21 +121,20 @@ export default function Expenses() {
       );
     }
 
-    const activeSortField = sortField || "description";
-    const activeSortOrder = sortOrder || "asc";
+    if (!sortField || !sortOrder) return filtered;
 
     return [...filtered].sort((a, b) => {
-      let aValue = a[activeSortField];
-      let bValue = b[activeSortField];
+      let aValue = a[sortField];
+      let bValue = b[sortField];
 
-      if (aValue == null) aValue = activeSortField === "amount" ? 0 : "";
-      if (bValue == null) bValue = activeSortField === "amount" ? 0 : "";
+      if (aValue == null) aValue = sortField === "amount" ? 0 : "";
+      if (bValue == null) bValue = sortField === "amount" ? 0 : "";
 
       if (typeof aValue === "string") aValue = aValue.toLowerCase();
       if (typeof bValue === "string") bValue = bValue.toLowerCase();
 
-      if (aValue < bValue) return activeSortOrder === "asc" ? -1 : 1;
-      if (aValue > bValue) return activeSortOrder === "asc" ? 1 : -1;
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
       return 0;
     });
   }, [localExpenses, sortField, sortOrder, searchQuery]);
@@ -169,7 +168,7 @@ export default function Expenses() {
 
   return (
     <div
-      className={`p-4 lg:p-6 flex flex-col overflow-hidden gap-5 w-full h-full min-h-0 animate-fadeIn`}
+      className={`min-h-svh lg:h-screen min-w-0 p-4 bg-(--bg-primary) flex flex-col overflow-auto gap-4 w-full animate-fadeIn`}
     >
       {/* TITLE VIEW */}
       <div className="hidden md:flex flex-col">
@@ -190,11 +189,11 @@ export default function Expenses() {
 
       {/* TABLE */}
       <div
-        className="w-full min-h-0 rounded-2xl border border-(--border) bg-(--bg-secondary) overflow-auto"
+        className="w-full min-h-0 rounded-2xl bg-(--bg-secondary) shadow-xl overflow-auto"
       >
         <table className="w-full table-fixed">
           <thead>
-            <tr className="bg-(--bg-primary)/40">
+            <tr className="bg-(--bg-primary)/30">
               <th
                 onClick={() => handleSort("description")}
                 className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase py-3.5 cursor-pointer hover:text-(--foreground) transition-colors ${
@@ -262,7 +261,7 @@ export default function Expenses() {
               <tr
                 key={expense.id}
                 onDoubleClick={() => handleRowDoubleClick(expense)}
-                className={`border-b border-(--border) last:border-0 group hover:bg-(--bg-tertiary)/50 transition-colors`}
+                className={`border-b border-(--border) last:border-0 group hover:bg-(--bg-secondary)/50 transition-colors`}
               >
                 <td className="w-1/5 px-4 py-3.5 text-sm truncate font-medium">
                   {expense.description.charAt(0).toUpperCase() +
@@ -273,7 +272,7 @@ export default function Expenses() {
                 </td>
                 <td className="w-1/5 px-4 py-3.5 text-sm hidden md:table-cell">
                   {expense?.category ? (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-(--bg-tertiary) text-(--muted) border border-(--border)">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-(--bg-primary) text-(--muted) border border-(--border)">
                       {t(`${expense.category}`)}
                     </span>
                   ) : (
@@ -286,7 +285,7 @@ export default function Expenses() {
                 <td className="w-1/10 px-4 text-sm">
                   <button
                     onClick={() => handleMenu(expense.id)}
-                    className="opacity-0 group-hover:opacity-100 cursor-pointer p-1.5 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150 flex items-center justify-center"
+                    className="opacity-0 group-hover:opacity-100 cursor-pointer p-1.5 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-primary) transition-all duration-150 flex items-center justify-center"
                   >
                     <HiMiniEllipsisVertical size={18} />
                   </button>
@@ -307,7 +306,7 @@ export default function Expenses() {
 
                             setMenuOpen(null);
                           }}
-                          className="p-2 w-full text-(--muted) hover:bg-(--bg-tertiary) hover:text-(--foreground) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
+                          className="p-2 w-full text-(--muted) hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
                         >
                           <FaRegEdit /> {t("Edit")}
                         </button>
@@ -315,7 +314,7 @@ export default function Expenses() {
                           onClick={() => {
                             handleDeleteClick(expense.id!);
                           }}
-                          className="p-2 w-full text-(--muted) hover:bg-(--danger-soft) hover:text-(--danger) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
+                          className="p-2 w-full text-(--muted) hover:bg-(--danger)/20 hover:text-(--danger) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
                         >
                           <FaRegTrashCan /> {t("Delete")}
                         </button>

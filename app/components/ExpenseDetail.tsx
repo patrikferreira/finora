@@ -9,6 +9,12 @@ import { validateExpenseForm } from "../utils/formValidators";
 import { useTranslation } from "react-i18next";
 import Button from "./Button";
 
+const currencySymbols: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  BRL: "R$",
+};
+
 export default function ExpenseDetail() {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,12 +39,6 @@ export default function ExpenseDetail() {
     user,
     setRefreshData,
   } = context;
-
-  const currencySymbols: Record<string, string> = {
-    USD: "$",
-    EUR: "€",
-    BRL: "R$",
-  };
 
   const currencySymbol = useMemo(() => {
     return user?.currency ? currencySymbols[user.currency] || "$" : "$";
@@ -203,7 +203,7 @@ export default function ExpenseDetail() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-secondary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-(--border)">
           <h3 className="text-base font-semibold tracking-tight">
@@ -211,7 +211,7 @@ export default function ExpenseDetail() {
           </h3>
           <button
             onClick={onClose}
-            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-tertiary) transition-all duration-150"
+            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150"
           >
             <IoCloseOutline size={20} />
           </button>
@@ -314,20 +314,20 @@ export default function ExpenseDetail() {
             <Button
               action={handleDeleteClick}
               text="Delete"
-              className="bg-transparent border border-(--border) text-(--danger) hover:bg-(--danger-soft) hover:border-(--danger)/40"
+              className="bg-transparent border border-(--border) text-(--danger) hover:border-(--danger)"
             />
           )}
           <div className="flex items-center gap-2">
             <Button
               action={onClose}
               text="Cancel"
-              className="bg-(--bg-tertiary) text-(--foreground)"
+              className="bg-(--bg-secondary) text-(--foreground)"
             />
             <Button
               action={submit}
               isLoading={isLoading}
               text="Save"
-              className="bg-(--primary) hover:bg-(--primary-hover) text-[#0B0B0E] font-semibold"
+              className="bg-(--primary) font-semibold"
             />
           </div>
         </div>
