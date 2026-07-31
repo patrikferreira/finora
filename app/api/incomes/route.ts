@@ -1,20 +1,20 @@
 import { NextRequest } from "next/server";
 import { supabaseAdmin } from "../users/route";
+import { getAuthenticatedSession } from "../auth/session";
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
-    if (!userId) {
-      return new Response(JSON.stringify({ error: "userId is required" }), {
-        status: 400,
+    const session = getAuthenticatedSession(req);
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
       });
     }
 
     const { data: incomes, error } = await supabaseAdmin
       .from("incomes")
       .select("*")
-      .eq("userId", userId);
+      .eq("userId", session.userId);
 
     if (error) {
       console.error("Supabase select error:", error);
@@ -68,9 +68,16 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { description, amount, category, cycle, userId } = await req.json();
+    const session = getAuthenticatedSession(req);
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
 
-    if (!description || !amount || !category || !cycle || !userId) {
+    const { description, amount, category, cycle } = await req.json();
+
+    if (!description || !amount || !category || !cycle) {
       return new Response(
         JSON.stringify({ error: "All fields are required" }),
         { status: 400 }
@@ -80,7 +87,7 @@ export async function POST(req: NextRequest) {
     const { data: existingIncome, error: checkError } = await supabaseAdmin
       .from("incomes")
       .select("id, userId")
-      .eq("userId", userId)
+      .eq("userId", session.userId)
       .ilike("description", description)
       .maybeSingle();
 
@@ -136,7 +143,7 @@ export async function POST(req: NextRequest) {
           amount,
           category: categoryData.id,
           cycle: cycleData.id,
-          userId,
+          userId: session.userId,
         },
       ])
       .select("*")

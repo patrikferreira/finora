@@ -1,10 +1,19 @@
+import { NextRequest } from "next/server";
 import { supabaseAdmin } from "../../users/route";
+import { getAuthenticatedSession } from "../../auth/session";
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = getAuthenticatedSession(req);
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
+
     const { id } = await context.params;
 
     if (!id) {
@@ -17,6 +26,7 @@ export async function DELETE(
       .from("expenses")
       .delete()
       .eq("id", id)
+      .eq("userId", session.userId)
       .select();
 
     if (error) {
@@ -27,7 +37,7 @@ export async function DELETE(
       );
     }
 
-    if (!data) {
+    if (!data || data.length === 0) {
       return new Response(JSON.stringify({ error: "Expense not found" }), {
         status: 404,
       });
@@ -43,12 +53,19 @@ export async function DELETE(
 }
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = getAuthenticatedSession(req);
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
+
     const { id } = await context.params;
-    const { description, amount, category, cycle, userId } = await req.json();
+    const { description, amount, category, cycle } = await req.json();
 
     if (!id) {
       return new Response(JSON.stringify({ error: "id is required" }), {
@@ -56,11 +73,11 @@ export async function PUT(
       });
     }
 
-    if (description && userId) {
+    if (description) {
       const { data: existingExpense } = await supabaseAdmin
         .from("expenses")
         .select("id")
-        .eq("userId", userId)
+        .eq("userId", session.userId)
         .eq("description", description)
         .neq("id", id)
         .maybeSingle();
@@ -98,6 +115,7 @@ export async function PUT(
       .from("expenses")
       .update({ description, amount, category: categoryId, cycle: cycleId })
       .eq("id", id)
+      .eq("userId", session.userId)
       .select();
 
     if (error) {
@@ -108,7 +126,7 @@ export async function PUT(
       );
     }
 
-    if (!data) {
+    if (!data || data.length === 0) {
       return new Response(JSON.stringify({ error: "Expense not found" }), {
         status: 404,
       });

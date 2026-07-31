@@ -184,8 +184,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
       setInitialFetching(true);
       try {
         const [incomesData, expensesData] = await Promise.all([
-          getIncomes(user.id),
-          getExpenses(user.id),
+          getIncomes(),
+          getExpenses(),
         ]);
         setLocalIncomes(incomesData.incomes ?? []);
         setLocalExpenses(expensesData.expenses ?? []);
@@ -209,8 +209,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     const fetchData = async () => {
       try {
         const [incomesData, expensesData] = await Promise.all([
-          getIncomes(user.id),
-          getExpenses(user.id),
+          getIncomes(),
+          getExpenses(),
         ]);
         setLocalIncomes(incomesData.incomes ?? []);
         setLocalExpenses(expensesData.expenses ?? []);

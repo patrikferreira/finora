@@ -29,15 +29,15 @@ export default function RefreshData({ view }: Props) {
       setIsLoading(true);
 
       if (view === "incomes") {
-        const data = await getIncomes(user.id);
+        const data = await getIncomes();
         setLocalIncomes(data.incomes ?? []);
       } else if (view === "expenses") {
-        const data = await getExpenses(user.id);
+        const data = await getExpenses();
         setLocalExpenses(data.expenses ?? []);
       } else if (view === "overview") {
         const [incomesData, expensesData] = await Promise.all([
-          getIncomes(user.id),
-          getExpenses(user.id),
+          getIncomes(),
+          getExpenses(),
         ]);
         setLocalIncomes(incomesData.incomes ?? []);
         setLocalExpenses(expensesData.expenses ?? []);

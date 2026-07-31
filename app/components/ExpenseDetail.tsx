@@ -96,7 +96,6 @@ export default function ExpenseDetail() {
         amount: formData.amount,
         category: formData.category,
         cycle: formData.cycle,
-        userId: user?.id || "",
       };
 
       let res;

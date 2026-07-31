@@ -96,7 +96,6 @@ export default function IncomeDetail() {
         amount: formData.amount,
         category: formData.category,
         cycle: formData.cycle,
-        userId: user?.id || "",
       };
 
       let res;

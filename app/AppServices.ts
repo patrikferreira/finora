@@ -126,9 +126,9 @@ export async function logoutUser(): Promise<ApiResponse> {
 }
 
 /* INCOMES */
-export async function getIncomes(userId: string): Promise<ApiResponse> {
+export async function getIncomes(): Promise<ApiResponse> {
   try {
-    const res = await fetch(`/api/incomes?userId=${userId}`, {
+    const res = await fetch("/api/incomes", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -227,9 +227,9 @@ export async function updateIncome(
 }
 
 /* EXPENSES */
-export async function getExpenses(userId: string): Promise<ApiResponse> {
+export async function getExpenses(): Promise<ApiResponse> {
   try {
-    const res = await fetch(`/api/expenses?userId=${userId}`, {
+    const res = await fetch("/api/expenses", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

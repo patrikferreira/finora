@@ -1,13 +1,19 @@
 import { supabaseAdmin } from "../route";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuthenticatedSession } from "../../auth/session";
 
 const ALLOWED_FIELDS = ["name", "email", "currency", "language"] as const;
 
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = getAuthenticatedSession(request);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
 
     if (!id) {
@@ -15,6 +21,10 @@ export async function PATCH(
         { error: "User ID is required." },
         { status: 400 }
       );
+    }
+
+    if (session.userId !== id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const body = await request.json();

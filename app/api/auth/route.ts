@@ -3,28 +3,23 @@ import { supabaseAdmin } from "../users/route";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User, UserAuthenticated } from "@/app/AppTypes";
+import { getAuthenticatedSession } from "@/app/api/auth/session";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("authToken")?.value;
+    const session = getAuthenticatedSession(req);
 
-    if (!token) {
+    if (!session) {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as {
-        sub: string;
-        email: string;
-        name: string;
-      };
-
       const { data: user, error } = await supabaseAdmin
         .from("users")
         .select("id, email, name, currency, language")
-        .eq("id", decoded.sub)
+        .eq("id", session.userId)
         .maybeSingle();
 
       if (error || !user) {
@@ -40,7 +35,7 @@ export async function GET(req: NextRequest) {
       };
 
       return NextResponse.json({ user: safeUser }, { status: 200 });
-    } catch (err) {
+    } catch {
       return NextResponse.json({ user: null }, { status: 200 });
     }
   } catch (err) {
@@ -127,7 +122,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const res = NextResponse.json(
       { message: "Logged out successfully" },
