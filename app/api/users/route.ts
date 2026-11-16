@@ -40,8 +40,16 @@ export async function POST(request: NextRequest) {
 
     const { data: insertedData, error: insertError } = await supabaseAdmin
       .from("users")
-      .insert([{ name, email, password: storedPassword }])
-      .select("id, name, email")
+      .insert([
+        {
+          name,
+          email,
+          password: storedPassword,
+          currency: "USD",
+          language: "en",
+        },
+      ])
+      .select("id, name, email, currency, language")
       .maybeSingle();
 
     if (insertError) {

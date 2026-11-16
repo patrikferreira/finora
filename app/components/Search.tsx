@@ -32,9 +32,9 @@ export default function Search({ placeholder }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-2 bg-(--bg-primary) h-[42px] w-full max-w-xs px-3.5 rounded-xl group border transition-all duration-150 focus-within:border-(--primary) focus-within:shadow-[0_0_0_4px_var(--primary-soft)] ${
+      className={`flex items-center gap-2 bg-(--bg-muted) h-9 w-full max-w-xs px-3 rounded-xl group border shadow-sm transition-all duration-150 focus-within:border-(--primary) focus-within:bg-(--bg-secondary) focus-within:shadow-[0_0_0_4px_var(--primary-soft)] ${
         hasQuery
-          ? "border-(--primary)"
+          ? "border-(--primary) bg-(--bg-secondary)"
           : "border-(--border)"
       }`}
     >
@@ -49,13 +49,15 @@ export default function Search({ placeholder }: Props) {
         value={searchQuery}
         maxLength={50}
         onChange={handleSearch}
-        className="!border-0 !outline-none !ring-0 focus:!border-0 focus:!ring-0 bg-transparent text-sm w-full placeholder:text-(--muted)"
+        className="!border-0 !outline-none !ring-0 focus:!border-0 focus:!ring-0 bg-transparent text-sm w-full placeholder:text-(--placeholder)"
         placeholder={placeholder || t("search...")}
       />
       {hasQuery && (
         <button
+          type="button"
           onClick={() => setSearchQuery("")}
-          className="text-(--muted) hover:text-(--foreground) transition-colors"
+          aria-label={t("Clear search")}
+          className="text-(--muted) hover:text-(--foreground) transition-colors cursor-pointer"
         >
           <IoIosClose size={20} />
         </button>

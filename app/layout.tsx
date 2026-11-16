@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppContextProvider } from "./AppContext";
 import Toast from "./components/Toast";
@@ -12,14 +12,16 @@ import TrialPeriodAlertModal from "./components/DemoPeriodAlertModal";
 import ProfileDetail from "./components/ProfileDetail";
 import AccountSettingsDetail from "./components/AccountSettingsDetail";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sans = Plus_Jakarta_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased md:flex h-svh bg-(--bg-primary) text-(--foreground)`}
+        className={`${sans.variable} ${mono.variable} antialiased md:flex h-svh text-(--foreground)`}
       >
         <AppContextProvider>
           <Sidebar />

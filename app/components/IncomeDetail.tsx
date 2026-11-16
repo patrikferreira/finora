@@ -192,34 +192,39 @@ export default function IncomeDetail() {
 
   if (!incomeDetail.show) return null;
 
+  const title = incomeDetail.newIncome ? t("New income") : t("Edit income");
+  const labelClass = "block text-xs font-semibold text-(--foreground) mb-1.5";
+  const inputClass =
+    "h-9 w-full rounded-lg border border-(--border) bg-(--bg-secondary) px-3 text-sm text-(--foreground) placeholder:text-(--placeholder) outline-none transition focus:border-(--primary) focus:shadow-[0_0_0_4px_var(--primary-soft)]";
+
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-(--overlay) backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-2xl bg-(--bg-primary) shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="flex flex-col justify-between w-full h-full sm:h-auto sm:w-md sm:border sm:border-(--border) sm:rounded-xl bg-(--bg-secondary) shadow-(--shadow-modal) animate-modalGrow"
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-(--border)">
-          <h3 className="text-base font-semibold tracking-tight">
-            {incomeDetail.newIncome ? t("New income") : t("Edit income")}
-          </h3>
+          <h3 className="text-base font-semibold tracking-tight">{title}</h3>
           <button
+            type="button"
             onClick={onClose}
-            className="cursor-pointer p-1 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-secondary) transition-all duration-150"
+            aria-label={t("Close")}
+            className="cursor-pointer h-8 w-8 flex items-center justify-center rounded-md text-(--muted) hover:text-(--foreground) hover:bg-(--border)/60 transition-colors duration-150"
           >
             <IoCloseOutline size={20} />
           </button>
         </div>
 
-        <div className="flex flex-col flex-1 gap-4 px-5 py-4 text-sm overflow-y-auto">
-          <div className="flex items-center gap-3 w-full">
-            <div className="flex-1">
-              <label
-                className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
-                htmlFor="category"
-              >
+        <div className="flex flex-col flex-1 gap-4 px-5 py-5 text-sm overflow-y-auto">
+          <div className="flex items-start gap-3 w-full">
+            <div className="flex-1 min-w-0">
+              <label className={labelClass} htmlFor="category">
                 {t("Category")} *
               </label>
 
@@ -239,11 +244,8 @@ export default function IncomeDetail() {
               />
             </div>
 
-            <div className="flex-1">
-              <label
-                className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
-                htmlFor="category"
-              >
+            <div className="flex-1 min-w-0">
+              <label className={labelClass} htmlFor="cycle">
                 {t("Cycle")} *
               </label>
 
@@ -260,10 +262,7 @@ export default function IncomeDetail() {
             </div>
           </div>
           <div>
-            <label
-              className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
-              htmlFor="description"
-            >
+            <label className={labelClass} htmlFor="description">
               {t("Description")} *
             </label>
             <input
@@ -275,24 +274,22 @@ export default function IncomeDetail() {
               onChange={handleChange}
               maxLength={50}
               autoFocus
-              className="field"
+              className={inputClass}
             />
           </div>
           <div>
-            <label
-              className="block text-xs text-(--muted) uppercase tracking-wider font-medium mb-2"
-              htmlFor="amount"
-            >
+            <label className={labelClass} htmlFor="amount">
               {t("Amount")} *
             </label>
             <input
               type="number"
               id="amount"
               name="amount"
+              inputMode="decimal"
               placeholder={`${currencySymbol} 0.00`}
               value={formData.amount ?? ""}
               onChange={handleChange}
-              className="field tabular"
+              className={`${inputClass} tabular-nums`}
             />
           </div>
         </div>
@@ -306,21 +303,12 @@ export default function IncomeDetail() {
             <Button
               action={handleDeleteClick}
               text="Delete"
-              className="bg-transparent border border-(--border) text-(--danger) hover:border-(--danger)"
+              variant="dangerOutline"
             />
           )}
           <div className="flex items-center gap-2">
-            <Button
-              action={onClose}
-              text="Cancel"
-              className="bg-(--bg-secondary) text-(--foreground)"
-            />
-            <Button
-              action={submit}
-              isLoading={isLoading}
-              text="Save"
-              className="bg-(--primary) font-semibold"
-            />
+            <Button action={onClose} text="Cancel" variant="secondary" />
+            <Button action={submit} isLoading={isLoading} text="Save" />
           </div>
         </div>
       </div>

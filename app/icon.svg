@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none">
+  <!-- Matches Logo.tsx: 28px mark, rounded-[9px], 14px bars centered -->
+  <rect width="28" height="28" rx="9" fill="#0c5c4d"/>
+  <g transform="translate(7 7)">
+    <rect x="1.5" y="6" width="4.5" height="7" rx="1.25" fill="#ffffff"/>
+    <rect x="8" y="1.5" width="4.5" height="11.5" rx="1.25" fill="#ffffff"/>
+  </g>
+</svg>

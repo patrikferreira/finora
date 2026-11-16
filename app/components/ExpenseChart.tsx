@@ -1,265 +1,125 @@
-import { Expense, ExpenseCategory } from "../AppTypes";
+import { ReactNode, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
+  BarElement,
   CategoryScale,
   LinearScale,
-  BarElement,
-  Title,
   Tooltip,
-  Legend,
 } from "chart.js";
-import type { TooltipItem, ChartOptions } from "chart.js";
-import { useContext, useMemo } from "react";
-import AppContext from "../AppContext";
+import type { ChartOptions, TooltipItem } from "chart.js";
 import { useTranslation } from "react-i18next";
+import { CategoryTotal } from "../utils/finance";
+import { readChartTheme, tooltipStyle, withAlpha } from "../utils/chartTheme";
+import DashboardCard, { DashboardCardEmpty } from "./DashboardCard";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
 type Props = {
-  data?: Expense[];
+  items: CategoryTotal[];
+  total: number;
+  formatAmount: (amount: number) => string;
+  formatCompact: (amount: number) => string;
+  emptyText: string;
+  emptyAction?: ReactNode;
   className?: string;
 };
 
-export default function ExpenseChart({ data, className }: Props) {
+export default function ExpenseChart({
+  items,
+  total,
+  formatAmount,
+  formatCompact,
+  emptyText,
+  emptyAction,
+  className,
+}: Props) {
   const { t } = useTranslation();
-  const context = useContext(AppContext);
+  const theme = useMemo(() => readChartTheme(), []);
 
-  if (!context) {
-    throw new Error("AppContext is not provided");
-  }
-
-  const { user, billingCycle } = context;
-
-  const hasData = data && data.length > 0;
-
-  function formatAmount(amount: number | null | undefined) {
-    const value = amount ?? 0;
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: user?.currency || "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  }
-
-  const filteredData = useMemo(
-    () =>
-      billingCycle === "totaly"
-        ? (data ?? [])
-        : (data?.filter((expense) => expense.cycle === billingCycle) ?? []),
-    [data, billingCycle],
+  const data = useMemo(
+    () => ({
+      labels: items.map((item) => t(item.category)),
+      datasets: [
+        {
+          data: items.map((item) => item.amount),
+          backgroundColor: theme.primary,
+          hoverBackgroundColor: withAlpha(theme.primary, 0.85),
+          borderRadius: 6,
+          maxBarThickness: 48,
+        },
+      ],
+    }),
+    [items, theme, t],
   );
 
-  const totalExpense = useMemo(() => {
-    if (billingCycle === "totaly") {
-      return (
-        filteredData.reduce((sum, expense) => {
-          const amount = expense.amount ?? 0;
-          return sum + (expense.cycle === "monthly" ? amount * 12 : amount);
-        }, 0) || 0
-      );
-    }
-    return (
-      filteredData.reduce((sum, expense) => sum + (expense.amount ?? 0), 0) || 0
-    );
-  }, [filteredData, billingCycle]);
-
-  const allCategories: ExpenseCategory[] = [
-    "education",
-    "entertainment",
-    "food",
-    "health",
-    "house",
-    "investment",
-    "other",
-    "saving",
-    "subscription",
-    "transport",
-  ];
-
-  const categoryTotals = useMemo(() => {
-    return filteredData.reduce(
-      (acc, expense) => {
-        const category = expense.category || "other";
-        const amount = expense.amount ?? 0;
-
-        const adjustedAmount =
-          billingCycle === "totaly" && expense.cycle === "monthly"
-            ? amount * 12
-            : amount;
-
-        acc[category] = (acc[category] || 0) + adjustedAmount;
-        return acc;
-      },
-      {} as Record<ExpenseCategory, number>,
-    );
-  }, [filteredData, billingCycle]);
-
-  const realValues = allCategories.map((cat) => categoryTotals?.[cat] || 0);
-
-  const chartValues = realValues.map((val) => (val === 0 ? 0.0001 : val));
-
-  const maxAmount = Math.max(...realValues);
-  const safeMax = maxAmount || 100;
-
-  const primaryColor = "#36bd81";
-
-  const getBarColor = (amount: number) => {
-    if (!hasData) return "rgba(203, 213, 225, 0.15)";
-
-    if (amount === 0) return "rgba(203, 213, 225, 0.08)";
-
-    const intensity = amount / maxAmount;
-    const opacity = 0.3 + intensity * 0.5;
-
-    if (amount === maxAmount) {
-      return primaryColor;
-    }
-
-    const r = parseInt(primaryColor.slice(1, 3), 16);
-    const g = parseInt(primaryColor.slice(3, 5), 16);
-    const b = parseInt(primaryColor.slice(5, 7), 16);
-
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  };
-
-  const chartData = {
-    labels: allCategories.map((cat) => t(cat)),
-    datasets: [
-      {
-        label: t("Expenses"),
-        data: chartValues,
-        backgroundColor: realValues.map((amt) => getBarColor(amt)),
-        borderRadius: 8,
-        borderSkipped: false,
-        barPercentage: 0.7,
-        categoryPercentage: 0.8,
-      },
-    ],
-  };
-
-  const chartOptions: ChartOptions<"bar"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        top: 20,
-        bottom: 10,
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: hasData,
-        backgroundColor: "rgba(0, 0, 0, 0.85)",
-        padding: 12,
-        titleColor: "#f3f4f6",
-        bodyColor: "#d1d5db",
-        borderColor: `rgba(54, 189, 129, 0.3)`,
-        borderWidth: 1,
-        cornerRadius: 8,
-        titleFont: {
-          size: 13,
-        },
-        bodyFont: {
-          size: 12,
-        },
-        callbacks: {
-          label: (context: TooltipItem<"bar">) => {
-            const value = context.parsed.y;
-            return `${formatAmount(value)}`;
-          },
-          title: (items: TooltipItem<"bar">[]) => {
-            return items[0].label;
+  const options = useMemo<ChartOptions<"bar">>(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      font: { family: theme.fontFamily },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tooltipStyle(theme),
+          displayColors: false,
+          callbacks: {
+            label: (context: TooltipItem<"bar">) => {
+              const value = context.parsed.y ?? 0;
+              const share = total > 0 ? (value / total) * 100 : 0;
+              return `${formatAmount(value)} · ${share.toFixed(1)}%`;
+            },
           },
         },
       },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        suggestedMax: Math.ceil(safeMax / 100) * 100,
-        border: {
-          display: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          border: { display: false },
+          grid: { color: theme.border },
+          ticks: {
+            color: theme.muted,
+            font: { size: 11 },
+            maxTicksLimit: 5,
+            padding: 8,
+            callback: (value) => formatCompact(Number(value)),
+          },
         },
-        grid: {
-          color: "rgba(203, 213, 225, 0.08)",
-        },
-        ticks: {
-          color: "#b1b1b1",
-          stepSize: Math.ceil(safeMax / 5),
-          callback: (value) => {
-            const numValue =
-              typeof value === "number" ? value : parseFloat(value);
-            if (numValue === 0) return "";
-            return formatAmount(numValue);
+        x: {
+          border: { display: false },
+          grid: { display: false },
+          ticks: {
+            color: theme.muted,
+            font: { size: 12 },
+            maxRotation: 40,
           },
         },
       },
-      x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          color: "#b1b1b1",
-          maxRotation: 45,
-          minRotation: 45,
-        },
-      },
-    },
-    hover: {
-      mode: "nearest",
-      intersect: true,
-    },
-    animation: {
-      duration: hasData ? 800 : 0,
-      easing: "easeOutQuart",
-    },
-  };
+    }),
+    [theme, total, formatAmount, formatCompact],
+  );
 
   return (
-    <div
-      className={`flex flex-col justify-between gap-5 p-5 z-0 bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
+    <DashboardCard
+      title={t("Expenses by category")}
+      aside={
+        items.length > 0 && (
+          <span className="text-sm font-semibold tabular-nums whitespace-nowrap">
+            {formatAmount(total)}
+          </span>
+        )
+      }
+      className={className}
     >
-      {/* HEADER */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="text-base font-semibold tracking-tight">
-            {t("Expense overview")}
-          </h2>
-          <p className="text-xs text-(--muted)">{t("Expenses by category")}</p>
-        </div>
-
-        {hasData && (
-          <div className="flex flex-col items-end gap-0.5">
-            <h2 className="text-base font-semibold tracking-tight tabular">
-              {formatAmount(totalExpense)}
-            </h2>
-            <p className="text-[10px] uppercase tracking-wider text-(--muted)">
-              {billingCycle === "monthly"
-                ? t("monthly")
-                : billingCycle === "yearly"
-                  ? t("yearly")
-                  : t("totaly")}
-            </p>
+      {items.length > 0 ? (
+        <div className="relative flex-1 min-h-64">
+          <div className="absolute inset-0">
+            <Bar data={data} options={options} />
           </div>
-        )}
-      </div>
-
-      {/* CHART */}
-      <div className="flex-1 flex min-h-[200px]">
-        <Bar data={chartData} options={chartOptions} />
-      </div>
-    </div>
+        </div>
+      ) : (
+        <DashboardCardEmpty text={emptyText} action={emptyAction} />
+      )}
+    </DashboardCard>
   );
 }

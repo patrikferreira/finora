@@ -30,8 +30,8 @@ export async function GET(req: NextRequest) {
         id: user.id,
         name: user.name,
         email: user.email,
-        currency: user.currency,
-        language: user.language,
+        currency: user.currency || "USD",
+        language: user.language || "en",
       };
 
       return NextResponse.json({ user: safeUser }, { status: 200 });
@@ -101,8 +101,8 @@ export async function POST(request: NextRequest) {
       id: user.id,
       name: user.name,
       email: user.email,
-      currency: user.currency,
-      language: user.language,
+      currency: user.currency || "USD",
+      language: user.language || "en",
     };
 
     const res = NextResponse.json({ user: safeUser }, { status: 200 });

@@ -1,15 +1,34 @@
 "use client";
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import AppContext from "../AppContext";
 import LoadingSpin from "../components/LoadingSpin";
+import StatCard from "../components/StatCard";
 import ExpenseChart from "../components/ExpenseChart";
-import Select from "../components/Select";
-import { billingCycle } from "../AppTypes";
-import { useTranslation } from "react-i18next";
-import IncomeOverview from "../components/IncomeOverview";
-import ExpenseOverview from "../components/ExpenseOverview";
-import BalanceOverview from "../components/BalanceOverview";
 import IncomeChart from "../components/IncomeChart";
+import Button from "../components/Button";
+import { billingCycle as BillingCycle } from "../AppTypes";
+import {
+  filterByView,
+  formatCurrency,
+  formatCurrencyCompact,
+  sumAmounts,
+  totalsByCategory,
+} from "../utils/finance";
+import { useTranslation } from "react-i18next";
+import { FiPlus } from "react-icons/fi";
+import {
+  LuArrowDown,
+  LuArrowUp,
+  LuTrendingDown,
+  LuTrendingUp,
+  LuWallet,
+} from "react-icons/lu";
+
+const VIEWS: { value: BillingCycle; label: string; caption: string }[] = [
+  { value: "monthly", label: "Monthly", caption: "Monthly entries, per month" },
+  { value: "yearly", label: "Yearly", caption: "Yearly entries, per year" },
+  { value: "totaly", label: "Total", caption: "All entries, per year" },
+];
 
 export default function Overview() {
   const { t } = useTranslation();
@@ -25,7 +44,36 @@ export default function Overview() {
     localIncomes,
     billingCycle,
     setBillingCycle,
+    setIncomeDetail,
+    setExpenseDetail,
   } = context;
+
+  const currency = user?.currency || "USD";
+  const formatAmount = useCallback(
+    (amount: number) => formatCurrency(amount, currency),
+    [currency],
+  );
+  const formatCompact = useCallback(
+    (amount: number) => formatCurrencyCompact(amount, currency),
+    [currency],
+  );
+
+  const summary = useMemo(() => {
+    const incomes = filterByView(localIncomes, billingCycle);
+    const expenses = filterByView(localExpenses, billingCycle);
+    const totalIncome = sumAmounts(incomes, billingCycle);
+    const totalExpense = sumAmounts(expenses, billingCycle);
+
+    return {
+      incomeCount: incomes.length,
+      expenseCount: expenses.length,
+      totalIncome,
+      totalExpense,
+      balance: totalIncome - totalExpense,
+      incomeCategories: totalsByCategory(incomes, billingCycle),
+      expenseCategories: totalsByCategory(expenses, billingCycle),
+    };
+  }, [localIncomes, localExpenses, billingCycle]);
 
   if (initialFetching)
     return (
@@ -36,59 +84,157 @@ export default function Overview() {
 
   if (!user) return;
 
+  const {
+    incomeCount,
+    expenseCount,
+    totalIncome,
+    totalExpense,
+    balance,
+    incomeCategories,
+    expenseCategories,
+  } = summary;
+
+  const countLabel = (count: number) =>
+    `${count} ${t(count === 1 ? "entry" : "entries").toLowerCase()}`;
+
+  const view = VIEWS.find((v) => v.value === billingCycle) ?? VIEWS[0];
+
+  const incomeEmptyText =
+    localIncomes.length === 0 ? t("No incomes yet") : t("No data to display");
+  const expenseEmptyText =
+    localExpenses.length === 0 ? t("No expenses yet") : t("No data to display");
+
   return (
-    <div
-      className={`min-h-svh lg:h-screen min-w-0 p-4 bg-(--bg-primary) flex flex-col gap-4 overflow-auto w-full animate-fadeIn`}
-    >
-      {/* TITLE VIEW */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="hidden md:flex flex-col">
-          <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="min-h-svh lg:h-screen min-w-0 w-full p-4 md:p-6 flex flex-col gap-5 overflow-auto animate-fadeIn">
+      {/* HEADER */}
+      <header className="flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-extrabold tracking-tight">
             {t("overview")}
           </h1>
-          <span className="text-(--muted) text-sm">
-            {t("summary overview")}
-          </span>
+          <p className="text-sm text-(--muted)">{t(view.caption)}</p>
         </div>
-        <div className="flex items-center gap-2 ml-auto">
-          <p className="hidden lg:flex text-(--muted) text-xs uppercase tracking-wider font-medium">
-            {t("Select the cycle")}
-          </p>
-          <Select
-            value={billingCycle}
-            onChange={(value) => setBillingCycle(value as billingCycle)}
-            options={[
-              { value: "monthly", label: t("Monthly") },
-              { value: "yearly", label: t("Yearly") },
-              { value: "totaly", label: t("Totaly") },
-            ]}
-            btnClassName="!h-10 !w-32"
-          />
+
+        <div
+          role="group"
+          aria-label={t("Select the cycle")}
+          className="inline-flex h-9 p-0.5 gap-0.5 rounded-xl border border-(--border) bg-(--bg-secondary)/90 shadow-sm backdrop-blur-sm"
+        >
+          {VIEWS.map((option) => {
+            const active = option.value === billingCycle;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setBillingCycle(option.value)}
+                className={`h-full px-3 rounded-lg text-sm font-semibold cursor-pointer transition-colors duration-150 ${
+                  active
+                    ? "bg-(--primary) text-(--on-primary) shadow-(--shadow-button)"
+                    : "text-(--muted) hover:text-(--foreground) hover:bg-(--bg-muted)"
+                }`}
+              >
+                {t(option.label)}
+              </button>
+            );
+          })}
         </div>
+      </header>
+
+      {/* KEY FIGURES */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
+        <StatCard
+          label={t("Total balance")}
+          value={formatAmount(balance)}
+          icon={<LuWallet size={16} />}
+          highlight
+          className="col-span-2 lg:col-span-1"
+        >
+          {incomeCount === 0 && expenseCount === 0 ? (
+            t("No data to display")
+          ) : balance === 0 ? (
+            t("Balanced")
+          ) : (
+            <span
+              className={`inline-flex items-center gap-1 h-6 px-2 rounded-full font-semibold ${
+                balance > 0
+                  ? "bg-(--on-primary)/15 text-(--on-primary)"
+                  : "bg-(--on-primary) text-(--danger-ink)"
+              }`}
+            >
+              {balance > 0 ? (
+                <LuTrendingUp size={14} aria-hidden />
+              ) : (
+                <LuTrendingDown size={14} aria-hidden />
+              )}
+              {balance > 0 ? t("Surplus") : t("Deficit")}
+            </span>
+          )}
+        </StatCard>
+
+        <StatCard
+          label={t("Total incomes")}
+          value={formatAmount(totalIncome)}
+          icon={<LuArrowUp size={16} />}
+          iconClassName="bg-(--primary-soft) text-(--primary)"
+        >
+          {countLabel(incomeCount)}
+        </StatCard>
+
+        <StatCard
+          label={t("Total expenses")}
+          value={formatAmount(totalExpense)}
+          icon={<LuArrowDown size={16} />}
+          iconClassName="bg-(--danger-soft) text-(--danger-ink)"
+        >
+          {countLabel(expenseCount)}
+        </StatCard>
       </div>
 
-      {/* DASHBOARD */}
-      <div className="grid gap-4 w-full min-w-0 flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-w-0">
-          <BalanceOverview incomes={localIncomes} expenses={localExpenses} />
-          <IncomeOverview data={localIncomes} />
-          <ExpenseOverview data={localExpenses} />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-w-0">
-          <div className="min-h-[300px] min-w-0 lg:col-span-2">
-            <ExpenseChart
-              data={localExpenses}
-              className="h-full w-full max-h-[500px]"
+      {/* CHARTS */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 shrink-0">
+        <ExpenseChart
+          items={expenseCategories}
+          total={totalExpense}
+          formatAmount={formatAmount}
+          formatCompact={formatCompact}
+          emptyText={expenseEmptyText}
+          emptyAction={
+            <Button
+              action={() =>
+                setExpenseDetail({
+                  show: true,
+                  newExpense: true,
+                  currentExpense: null,
+                })
+              }
+              text="Add expense"
+              icon={<FiPlus size={16} />}
+              variant="secondary"
             />
-          </div>
-          <div className="min-h-[300px] min-w-0 lg:col-span-1">
-            <IncomeChart
-              data={localIncomes}
-              className="h-full w-full max-h-[500px]"
+          }
+          className="lg:col-span-2"
+        />
+        <IncomeChart
+          items={incomeCategories}
+          total={totalIncome}
+          formatAmount={formatAmount}
+          emptyText={incomeEmptyText}
+          emptyAction={
+            <Button
+              action={() =>
+                setIncomeDetail({
+                  show: true,
+                  newIncome: true,
+                  currentIncome: null,
+                })
+              }
+              text="Add income"
+              icon={<FiPlus size={16} />}
+              variant="secondary"
             />
-          </div>
-        </div>
+          }
+        />
       </div>
     </div>
   );

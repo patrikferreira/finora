@@ -1,6 +1,6 @@
 export default function BuiltInfo() {
   return (
-    <p className="text-xs text-(--muted) text-center">
+    <p className="text-sm text-(--muted) text-center">
       Built with{" "}
       <a
         href="https://nextjs.org/"

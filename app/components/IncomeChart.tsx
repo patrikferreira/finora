@@ -1,189 +1,142 @@
-import { Income } from "../AppTypes";
+import { ReactNode, useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import type { TooltipItem } from "chart.js";
-import { useContext } from "react";
-import AppContext from "../AppContext";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
+import type { ChartOptions, TooltipItem } from "chart.js";
 import { useTranslation } from "react-i18next";
+import { CategoryTotal } from "../utils/finance";
+import { readChartTheme, tooltipStyle } from "../utils/chartTheme";
+import DashboardCard, { DashboardCardEmpty } from "./DashboardCard";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip);
+
+const CATEGORY_ORDER = [
+  "salary",
+  "freelancer",
+  "investment",
+  "business",
+  "benefit",
+  "other",
+];
+
+function colorIndex(category: string) {
+  const index = CATEGORY_ORDER.indexOf(category);
+  return index === -1 ? CATEGORY_ORDER.length - 1 : index;
+}
 
 type Props = {
-  data?: Income[];
+  items: CategoryTotal[];
+  total: number;
+  formatAmount: (amount: number) => string;
+  emptyText: string;
+  emptyAction?: ReactNode;
   className?: string;
 };
 
-export default function IncomeChart({ data, className }: Props) {
+export default function IncomeChart({
+  items,
+  total,
+  formatAmount,
+  emptyText,
+  emptyAction,
+  className,
+}: Props) {
   const { t } = useTranslation();
-  const context = useContext(AppContext);
+  const theme = useMemo(() => readChartTheme(), []);
 
-  if (!context) {
-    throw new Error("AppContext is not provided");
-  }
-
-  const { user, billingCycle } = context;
-
-  function formatAmount(amount: number | null | undefined) {
-    const value = amount ?? 0;
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: user?.currency || "USD",
-      minimumFractionDigits: 0,
-    }).format(value);
-  }
-
-  const filteredData =
-    billingCycle === "totaly"
-      ? (data ?? [])
-      : (data?.filter((income) => income.cycle === billingCycle) ?? []);
-
-  const totalIncome =
-    billingCycle === "totaly"
-      ? filteredData.reduce((sum, income) => {
-          const amount = income.amount ?? 0;
-          return sum + (income.cycle === "monthly" ? amount * 12 : amount);
-        }, 0)
-      : filteredData.reduce((sum, income) => sum + (income.amount ?? 0), 0);
-
-  const allCategories = [
-    "salary",
-    "freelancer",
-    "investment",
-    "business",
-    "benefit",
-    "other",
-  ];
-
-  const categoryColors: Record<string, string> = {
-    salary: "#36BD81",
-    freelancer: "#4CCE7A",
-    investment: "#66D98F",
-    business: "#82E3A5",
-    benefit: "#A2EBBA",
-    other: "#C3F2D2",
-  };
-
-  const categoryTotals = filteredData.reduce(
-    (acc, income) => {
-      const category = income.category || "other";
-      const amount = income.amount ?? 0;
-
-      const adjustedAmount =
-        billingCycle === "totaly" && income.cycle === "monthly"
-          ? amount * 12
-          : amount;
-
-      acc[category] = (acc[category] || 0) + adjustedAmount;
-      return acc;
-    },
-    {} as Record<string, number>,
+  const data = useMemo(
+    () => ({
+      labels: items.map((item) => t(item.category)),
+      datasets: [
+        {
+          data: items.map((item) => item.amount),
+          backgroundColor: items.map(
+            (item) => theme.palette[colorIndex(item.category)],
+          ),
+          borderColor: theme.surface,
+          borderWidth: 3,
+          borderRadius: 4,
+          hoverOffset: 4,
+        },
+      ],
+    }),
+    [items, theme, t],
   );
 
-  const realValues = allCategories.map((cat) => categoryTotals?.[cat] || 0);
-
-  const chartValues = realValues.map((val) => (val === 0 ? 0.0001 : val));
-
-  const labels = allCategories.map((cat) => t(cat));
-
-  const backgroundColors = allCategories.map((cat, i) => {
-    const color = categoryColors[cat] || "#cecece";
-    return realValues[i] === 0 ? color + "1A" : color;
-  });
-
-  const doughnutData = {
-    labels,
-    datasets: [
-      {
-        data: chartValues,
-        backgroundColor: backgroundColors,
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const doughnutOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: "65%",
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: "#212121",
-        padding: 12,
-        titleColor: "#ffffff",
-        bodyColor: "#ffffff",
-        callbacks: {
-          label: (context: TooltipItem<"doughnut">) => {
-            const index = context.dataIndex;
-            const realValue = realValues[index];
-            return `${context.label}: ${formatAmount(realValue)}`;
+  const options = useMemo<ChartOptions<"doughnut">>(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "72%",
+      layout: { padding: 4 },
+      font: { family: theme.fontFamily },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tooltipStyle(theme),
+          callbacks: {
+            label: (context: TooltipItem<"doughnut">) => {
+              const value = context.parsed;
+              const share = total > 0 ? (value / total) * 100 : 0;
+              return `${formatAmount(value)} · ${share.toFixed(1)}%`;
+            },
           },
         },
       },
-    },
-  };
+    }),
+    [theme, total, formatAmount],
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-5 p-5 z-0 bg-(--bg-secondary) shadow-xl hover:shadow-2xl transition-all duration-200 min-h-60 rounded-2xl ${className}`}
-    >
-      {/* HEADER */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="text-base font-semibold tracking-tight">
-            {t("Income overview")}
-          </h2>
-          <p className="text-xs text-(--muted)">{t("Incomes by category")}</p>
-        </div>
-
-        {!data || data.length === 0 ? null : (
-          <div className="flex flex-col items-end gap-0.5">
-            <h2 className="text-base font-semibold tracking-tight tabular">
-              {formatAmount(totalIncome)}
-            </h2>
-            <p className="text-[10px] uppercase tracking-wider text-(--muted)">
-              {billingCycle === "monthly"
-                ? t("monthly")
-                : billingCycle === "yearly"
-                  ? t("yearly")
-                  : t("totaly")}
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-4 justify-between flex-1 min-h-[260px]">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-full flex justify-center items-center h-full">
-            <Doughnut data={doughnutData} options={doughnutOptions} />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-1.5 mt-2">
-          {labels.map((label, i) => (
-            <div
-              key={label}
-              className="flex items-center justify-between gap-2 text-sm"
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <span
-                  className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
-                  style={{
-                    backgroundColor:
-                      categoryColors[allCategories[i]] || "#cecece",
-                  }}
-                />
-                <span className="text-(--muted) truncate">{label}</span>
-              </div>
-              <span className="font-medium tabular text-(--muted)">
-                {formatAmount(realValues[i])}
+    <DashboardCard title={t("Incomes by category")} className={className}>
+      {items.length > 0 ? (
+        <div className="flex flex-col gap-5 flex-1">
+          <div className="relative h-52 shrink-0">
+            <div className="absolute inset-0">
+              <Doughnut data={data} options={options} />
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-xs text-(--muted)">{t("Total")}</span>
+              <span className="text-lg font-bold tracking-tight tabular-nums">
+                {formatAmount(total)}
               </span>
             </div>
-          ))}
+          </div>
+
+          <ul className="flex flex-col gap-2.5">
+            {items.map((item) => {
+              const share = total > 0 ? (item.amount / total) * 100 : 0;
+
+              return (
+                <li
+                  key={item.category}
+                  className="flex items-center justify-between gap-3 text-sm"
+                >
+                  <span className="flex items-center gap-2 min-w-0">
+                    <span
+                      aria-hidden
+                      className="h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{
+                        background: `var(--chart-${colorIndex(item.category) + 1})`,
+                      }}
+                    />
+                    <span className="truncate">{t(item.category)}</span>
+                  </span>
+                  <span className="flex items-baseline gap-2 tabular-nums whitespace-nowrap">
+                    <span className="font-medium">
+                      {formatAmount(item.amount)}
+                    </span>
+                    <span className="w-11 text-right text-xs text-(--muted)">
+                      {share.toFixed(1)}%
+                    </span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </div>
-    </div>
+      ) : (
+        <DashboardCardEmpty text={emptyText} action={emptyAction} />
+      )}
+    </DashboardCard>
   );
 }

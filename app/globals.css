@@ -1,28 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #36BD81;
-  --bg-primary: #1d2828;
-  --bg-secondary: #283a34;
-  --border: #2a3f3f;
-  --muted: #b1b1b1;
-  --foreground: #ffffff;
+  --primary: #0c5c4d;
+  --primary-soft: rgba(12, 92, 77, 0.11);
+  --primary-glow: rgba(12, 92, 77, 0.22);
+  --on-primary: #ffffff;
 
-  --success: #36BD81;
-  --danger: #f75c39;
-  --warning: #f5c74f;
+  --bg-primary: #e9efec;
+  --bg-secondary: #ffffff;
+  --bg-muted: #f4f7f5;
+  --border: #d3dcd7;
+  --border-strong: #c2cdc7;
+
+  --foreground: #0b1f19;
+  --muted: #5a6c64;
+  --placeholder: #87948e;
+
+  --scrollbar: #c5d0cb;
+  --overlay: rgba(11, 31, 25, 0.42);
+  --shadow-float: 0 1px 2px rgba(11, 31, 25, 0.04),
+    0 10px 28px -12px rgba(11, 31, 25, 0.16);
+  --shadow-card: 0 1px 2px rgba(11, 31, 25, 0.03),
+    0 8px 24px -10px rgba(11, 31, 25, 0.1);
+  --shadow-modal: 0 28px 72px -24px rgba(11, 31, 25, 0.32);
+  --shadow-button: 0 1px 2px rgba(12, 92, 77, 0.18),
+    0 6px 16px -6px rgba(12, 92, 77, 0.35);
+
+  --success: #0c5c4d;
+  --danger: #c0392b;
+  --danger-ink: color-mix(in srgb, var(--danger) 72%, var(--foreground));
+  --danger-soft: rgba(192, 57, 43, 0.1);
+  --warning: #b07a10;
+  --warning-soft: rgba(176, 122, 16, 0.14);
+  --info: #1a6b8a;
+  --info-soft: rgba(26, 107, 138, 0.12);
+
+  --chart-1: #0c5c4d;
+  --chart-2: #1a6b8a;
+  --chart-3: #c9a227;
+  --chart-4: #4d7f72;
+  --chart-5: #2d8f9c;
+  --chart-6: #84948d;
 }
 
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--primary) transparent;
+  scrollbar-color: var(--scrollbar) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -35,30 +65,54 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--primary);
+  background-color: var(--scrollbar);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #3A3A46;
+  background-color: var(--placeholder);
   background-clip: content-box;
 }
 
 body {
-  background: var(--bg-primary);
+  background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(
+      ellipse 90% 55% at 8% -15%,
+      rgba(12, 92, 77, 0.11),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 100% 0%,
+      rgba(26, 107, 138, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 70% 100%,
+      rgba(12, 92, 77, 0.05),
+      transparent 55%
+    );
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   z-index: 0;
 }
 
+.surface {
+  background: var(--bg-secondary);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+
 .field {
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
   color: var(--foreground);
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 0 14px;
   height: 42px;
   font-size: 14px;
@@ -68,7 +122,7 @@ body {
 }
 
 .field::placeholder {
-  color: var(--muted);
+  color: var(--placeholder);
 }
 
 .field:focus {
@@ -123,7 +177,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px var(--bg-primary) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
   -webkit-text-fill-color: var(--foreground) !important;
   transition: background-color 9999s ease-in-out 0s;
   caret-color: var(--foreground);

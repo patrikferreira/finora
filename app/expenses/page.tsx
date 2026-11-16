@@ -1,15 +1,18 @@
 "use client";
 import { useContext, useState, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import AppContext from "../AppContext";
 import LoadingSpin from "../components/LoadingSpin";
-import { IoInformationCircleOutline } from "react-icons/io5";
-import { HiMiniEllipsisVertical } from "react-icons/hi2";
-import Controls from "../components/Controls";
+import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
+import { LuReceipt, LuSearchX } from "react-icons/lu";
+import Search from "../components/Search";
+import Export from "../components/Export";
+import RefreshData from "../components/RefreshData";
+import Pagination from "../components/Pagination";
+import Button from "../components/Button";
 import SortIcon from "../components/SortIcon";
-import Popover from "../components/Popover";
-import { FaRegEdit } from "react-icons/fa";
-import { FaRegTrashCan } from "react-icons/fa6";
 import { deleteExpense } from "../AppServices";
+import { Expense } from "../AppTypes";
 import { useTranslation } from "react-i18next";
 
 type SortField = "description" | "amount" | "category" | "cycle";
@@ -17,9 +20,53 @@ type SortOrder = "asc" | "desc" | null;
 
 const PAGE_SIZE = 10;
 
+const thClass =
+  "sticky top-0 z-10 bg-(--bg-muted) shadow-[inset_0_-1px_0_var(--border)] px-3 md:px-4 py-2.5 text-xs font-semibold text-(--muted)";
+
+type SortHeaderProps = {
+  field: SortField;
+  label: string;
+  sortField: SortField | null;
+  sortOrder: SortOrder;
+  onSort: (field: SortField) => void;
+  className?: string;
+};
+
+function SortHeader({
+  field,
+  label,
+  sortField,
+  sortOrder,
+  onSort,
+  className,
+}: SortHeaderProps) {
+  const active = sortField === field && sortOrder !== null;
+
+  return (
+    <th
+      scope="col"
+      aria-sort={
+        active ? (sortOrder === "asc" ? "ascending" : "descending") : "none"
+      }
+      className={`${thClass} ${className ?? ""}`}
+    >
+      <button
+        type="button"
+        onClick={() => onSort(field)}
+        className={`inline-flex items-center gap-1.5 cursor-pointer hover:text-(--foreground) transition-colors ${
+          active ? "text-(--foreground)" : ""
+        }`}
+      >
+        {label}
+        <SortIcon field={field} sortField={sortField} sortOrder={sortOrder} />
+      </button>
+    </th>
+  );
+}
+
 export default function Expenses() {
   const { t } = useTranslation();
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const pathname = usePathname();
   const context = useContext(AppContext);
   if (!context) {
     throw new Error("AppContext is not provided");
@@ -30,6 +77,7 @@ export default function Expenses() {
     initialFetching,
     localExpenses,
     searchQuery,
+    setSearchQuery,
     currentPage,
     setCurrentPage,
     setExpenseDetail,
@@ -37,10 +85,6 @@ export default function Expenses() {
     setToast,
     setRefreshData,
   } = context;
-
-  function handleMenu(id?: string) {
-    setMenuOpen((prev) => (prev === id ? null : (id ?? null)));
-  }
 
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>(null);
@@ -66,6 +110,26 @@ export default function Expenses() {
     }).format(value);
   }
 
+  function formatDescription(description: string) {
+    return description.charAt(0).toUpperCase() + description.slice(1);
+  }
+
+  function handleAdd() {
+    setExpenseDetail({
+      show: true,
+      newExpense: true,
+      currentExpense: null,
+    });
+  }
+
+  function handleEdit(expense: Expense) {
+    setExpenseDetail({
+      show: true,
+      newExpense: false,
+      currentExpense: expense,
+    });
+  }
+
   async function handleDelete(id: string) {
     const res = await deleteExpense(id);
 
@@ -87,23 +151,13 @@ export default function Expenses() {
     setRefreshData(true);
   }
 
-  async function handleDeleteClick(id: string) {
+  function handleDeleteClick(id: string) {
     setConfirmAction({
       show: true,
       title: "Delete Expense",
       message:
         "Are you sure you want to delete this expense? This action cannot be undone.",
       onConfirm: () => handleDelete(id),
-    });
-
-    setMenuOpen(null);
-  }
-
-  function handleRowDoubleClick(expense: (typeof localExpenses)[0]) {
-    setExpenseDetail({
-      show: true,
-      newExpense: false,
-      currentExpense: expense,
     });
   }
 
@@ -139,23 +193,24 @@ export default function Expenses() {
     });
   }, [localExpenses, sortField, sortOrder, searchQuery]);
 
-  const totalPages = Math.ceil(sortedExpenses.length / PAGE_SIZE);
+  const totalCount = sortedExpenses.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const safePage = Math.min(Math.max(currentPage, 1), totalPages);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, sortField, sortOrder, setCurrentPage]);
+  }, [pathname, searchQuery, sortField, sortOrder, setCurrentPage]);
 
   useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages);
+    if (currentPage !== safePage) {
+      setCurrentPage(safePage);
     }
-  }, [currentPage, setCurrentPage, totalPages]);
+  }, [currentPage, safePage, setCurrentPage]);
 
   const visibleExpenses = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const endIndex = startIndex + PAGE_SIZE;
-    return sortedExpenses.slice(startIndex, endIndex);
-  }, [sortedExpenses, currentPage]);
+    const startIndex = (safePage - 1) * PAGE_SIZE;
+    return sortedExpenses.slice(startIndex, startIndex + PAGE_SIZE);
+  }, [sortedExpenses, safePage]);
 
   if (initialFetching)
     return (
@@ -166,186 +221,216 @@ export default function Expenses() {
 
   if (!user) return;
 
+  const isSearching = searchQuery.trim().length > 0;
+  const rangeStart = totalCount === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = Math.min(safePage * PAGE_SIZE, totalCount);
+
   return (
-    <div
-      className={`min-h-svh lg:h-screen min-w-0 p-4 bg-(--bg-primary) flex flex-col overflow-auto gap-4 w-full animate-fadeIn`}
-    >
-      {/* TITLE VIEW */}
-      <div className="hidden md:flex flex-col">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("Expenses")}
-        </h1>
-        <span className="text-(--muted) text-sm">
-          {t("Track & manage your spending")}
-        </span>
-      </div>
-
-      {/* CONTROLS */}
-      <Controls
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
-
-      {/* TABLE */}
-      <div
-        className="w-full min-h-0 rounded-2xl bg-(--bg-secondary) shadow-xl overflow-auto"
-      >
-        <table className="w-full table-fixed">
-          <thead>
-            <tr className="bg-(--bg-primary)/30">
-              <th
-                onClick={() => handleSort("description")}
-                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase py-3.5 cursor-pointer hover:text-(--foreground) transition-colors ${
-                  visibleExpenses.length === 0
-                    ? "border-none"
-                    : "border-b border-(--border)"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  {t("description")}
-                  <SortIcon
-                    field="description"
-                    sortField={sortField}
-                    sortOrder={sortOrder}
-                  />
-                </div>
-              </th>
-              <th
-                onClick={() => handleSort("amount")}
-                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase py-3.5 cursor-pointer hover:text-(--foreground) transition-colors ${
-                  visibleExpenses.length === 0
-                    ? "border-none"
-                    : "border-b border-(--border)"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  {t("amount")}
-                  <SortIcon
-                    field="amount"
-                    sortField={sortField}
-                    sortOrder={sortOrder}
-                  />
-                </div>
-              </th>
-              <th
-                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase hidden md:table-cell py-3.5 ${
-                  visibleExpenses.length === 0
-                    ? "border-none"
-                    : "border-b border-(--border)"
-                }`}
-              >
-                <div className="flex items-center gap-2">{t("category")}</div>
-              </th>
-              <th
-                className={`w-1/5 text-left tracking-wider px-4 text-[11px] text-(--muted) font-medium uppercase hidden md:table-cell py-3.5 ${
-                  visibleExpenses.length === 0
-                    ? "border-none"
-                    : "border-b border-(--border)"
-                }`}
-              >
-                <div className="flex items-center gap-2">{t("cycle")}</div>
-              </th>
-              <th
-                className={`w-1/10 text-left px-4 text-[11px] uppercase py-3.5 ${
-                  visibleExpenses.length === 0
-                    ? "border-none"
-                    : "border-b border-(--border)"
-                }`}
-              ></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {visibleExpenses.map((expense) => (
-              <tr
-                key={expense.id}
-                onDoubleClick={() => handleRowDoubleClick(expense)}
-                className={`border-b border-(--border) last:border-0 group hover:bg-(--bg-secondary)/50 transition-colors`}
-              >
-                <td className="w-1/5 px-4 py-3.5 text-sm truncate font-medium">
-                  {expense.description.charAt(0).toUpperCase() +
-                    expense.description.slice(1)}
-                </td>
-                <td className="w-1/5 px-4 py-3.5 text-sm tabular text-(--danger) font-medium">
-                  {formatAmount(expense.amount)}
-                </td>
-                <td className="w-1/5 px-4 py-3.5 text-sm hidden md:table-cell">
-                  {expense?.category ? (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-(--bg-primary) text-(--muted) border border-(--border)">
-                      {t(`${expense.category}`)}
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </td>
-                <td className="w-1/5 px-4 py-3.5 text-sm hidden md:table-cell text-(--muted)">
-                  {expense?.cycle ? t(`${expense.cycle}`) : ""}
-                </td>
-                <td className="w-1/10 px-4 text-sm">
-                  <button
-                    onClick={() => handleMenu(expense.id)}
-                    className="opacity-0 group-hover:opacity-100 cursor-pointer p-1.5 rounded-lg text-(--muted) hover:text-(--foreground) hover:bg-(--bg-primary) transition-all duration-150 flex items-center justify-center"
-                  >
-                    <HiMiniEllipsisVertical size={18} />
-                  </button>
-
-                  {menuOpen === expense.id && (
-                    <Popover
-                      onClose={() => setMenuOpen(null)}
-                      className="right-17 lg:right-29 !w-40"
-                    >
-                      <div className="flex flex-col p-1.5 text-sm">
-                        <button
-                          onClick={() => {
-                            setExpenseDetail({
-                              show: true,
-                              newExpense: false,
-                              currentExpense: expense,
-                            });
-
-                            setMenuOpen(null);
-                          }}
-                          className="p-2 w-full text-(--muted) hover:bg-(--bg-secondary) hover:text-(--foreground) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
-                        >
-                          <FaRegEdit /> {t("Edit")}
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleDeleteClick(expense.id!);
-                          }}
-                          className="p-2 w-full text-(--muted) hover:bg-(--danger)/20 hover:text-(--danger) transition duration-150 rounded-lg text-left cursor-pointer flex gap-2 items-center"
-                        >
-                          <FaRegTrashCan /> {t("Delete")}
-                        </button>
-                      </div>
-                    </Popover>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {sortedExpenses.length > 0 ? (
-        <div
-          className="px-1 text-xs text-(--muted) flex items-center gap-2"
-        >
-          <IoInformationCircleOutline size={14} />
-          <span>{`${t("Showing")} ${visibleExpenses.length} / ${
-            sortedExpenses.length
-          }`}</span>
+    <div className="min-h-svh lg:h-screen min-w-0 w-full p-4 md:p-6 flex flex-col gap-5 overflow-auto animate-fadeIn">
+      {/* HEADER */}
+      <header className="flex items-center justify-between gap-4 shrink-0">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-extrabold tracking-tight">
+              {t("Expenses")}
+            </h1>
+            {localExpenses.length > 0 && (
+              <span className="inline-flex items-center h-5 px-2 rounded-full border border-(--border) bg-(--bg-secondary)/90 text-xs font-semibold text-(--muted) tabular-nums shadow-sm">
+                {localExpenses.length}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-(--muted)">
+            {t("Track & manage your spending")}
+          </p>
         </div>
-      ) : (
-        <div
-          className="px-1 text-xs text-(--muted) flex items-center gap-2"
-        >
-          <IoInformationCircleOutline size={14} />
-          {searchQuery.trim()
-            ? t("No expenses found matching your search")
-            : t("You haven't added any expenses yet")}
+        <Button
+          action={handleAdd}
+          text="Add"
+          icon={<FiPlus size={16} />}
+          className="shrink-0"
+        />
+      </header>
+
+      {/* LIST */}
+      <section className="surface flex flex-col min-h-0 overflow-hidden">
+        {/* TOOLBAR */}
+        <div className="flex items-center justify-between gap-3 px-3 md:px-4 py-3 border-b border-(--border) shrink-0">
+          <Search />
+          <div className="flex items-center gap-2">
+            <Export view="expenses" />
+            <RefreshData view="expenses" />
+          </div>
         </div>
-      )}
+
+        {totalCount > 0 ? (
+          <>
+            {/* TABLE */}
+            <div className="min-h-0 overflow-auto">
+              <table className="w-full table-fixed text-sm">
+                <thead>
+                  <tr>
+                    <SortHeader
+                      field="description"
+                      label={t("description")}
+                      sortField={sortField}
+                      sortOrder={sortOrder}
+                      onSort={handleSort}
+                      className="text-left"
+                    />
+                    <SortHeader
+                      field="category"
+                      label={t("category")}
+                      sortField={sortField}
+                      sortOrder={sortOrder}
+                      onSort={handleSort}
+                      className="w-44 text-left hidden md:table-cell"
+                    />
+                    <SortHeader
+                      field="cycle"
+                      label={t("cycle")}
+                      sortField={sortField}
+                      sortOrder={sortOrder}
+                      onSort={handleSort}
+                      className="w-32 text-left hidden md:table-cell"
+                    />
+                    <SortHeader
+                      field="amount"
+                      label={t("amount")}
+                      sortField={sortField}
+                      sortOrder={sortOrder}
+                      onSort={handleSort}
+                      className="w-28 md:w-40 text-right"
+                    />
+                    <th scope="col" className={`${thClass} w-20 md:w-24`}>
+                      <span className="sr-only">{t("Actions")}</span>
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {visibleExpenses.map((expense) => {
+                    const details = [expense.category, expense.cycle]
+                      .filter((value): value is NonNullable<typeof value> =>
+                        Boolean(value),
+                      )
+                      .map((value) => t(value))
+                      .join(" · ");
+
+                    return (
+                      <tr
+                        key={expense.id}
+                        onDoubleClick={() => handleEdit(expense)}
+                        className="border-b border-(--border) last:border-0 hover:bg-(--bg-muted) transition-colors"
+                      >
+                        <td className="px-3 md:px-4 py-3">
+                          <p className="font-medium truncate">
+                            {formatDescription(expense.description)}
+                          </p>
+                          {details && (
+                            <p className="md:hidden text-xs text-(--muted) truncate mt-0.5">
+                              {details}
+                            </p>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 hidden md:table-cell">
+                          {expense.category && (
+                            <span className="inline-flex items-center h-6 px-2 rounded-lg border border-(--border) bg-(--bg-muted) text-xs font-medium text-(--muted)">
+                              {t(expense.category)}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 hidden md:table-cell text-(--muted)">
+                          {expense.cycle ? t(expense.cycle) : ""}
+                        </td>
+                        <td className="px-3 md:px-4 py-3 text-right font-medium tabular-nums whitespace-nowrap">
+                          {formatAmount(expense.amount)}
+                        </td>
+                        <td
+                          className="pr-2 md:pr-3 py-2"
+                          onDoubleClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex items-center justify-end gap-0.5">
+                            <button
+                              type="button"
+                              onClick={() => handleEdit(expense)}
+                              title={t("Edit")}
+                              aria-label={`${t("Edit")}: ${expense.description}`}
+                              className="h-8 w-8 rounded-md flex items-center justify-center text-(--muted) hover:text-(--foreground) hover:bg-(--border)/60 transition-colors cursor-pointer"
+                            >
+                              <FiEdit2 size={15} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteClick(expense.id!)}
+                              title={t("Delete")}
+                              aria-label={`${t("Delete")}: ${expense.description}`}
+                              className="h-8 w-8 rounded-md flex items-center justify-center text-(--muted) hover:text-(--danger) hover:bg-(--danger)/10 transition-colors cursor-pointer"
+                            >
+                              <FiTrash2 size={15} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* FOOTER */}
+            <div className="flex items-center justify-between gap-3 min-h-[60px] px-3 md:px-4 py-3 border-t border-(--border) shrink-0">
+              <p className="text-xs text-(--muted) tabular-nums">
+                {t("showing {{from}}-{{to}} of {{total}}", {
+                  from: rangeStart,
+                  to: rangeEnd,
+                  total: totalCount,
+                })}
+              </p>
+              <Pagination
+                currentPage={safePage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          </>
+        ) : (
+          /* EMPTY STATE */
+          <div className="flex flex-col items-center justify-center text-center gap-4 px-6 py-16">
+            <div className="h-11 w-11 rounded-full border border-(--border) bg-(--bg-muted) flex items-center justify-center text-(--muted)">
+              {isSearching ? <LuSearchX size={20} /> : <LuReceipt size={20} />}
+            </div>
+            {isSearching ? (
+              <>
+                <p className="text-sm font-semibold">
+                  {t("No expenses found matching your search")}
+                </p>
+                <Button
+                  action={() => setSearchQuery("")}
+                  text="Clear search"
+                  variant="secondary"
+                />
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-semibold">
+                    {t("No expenses yet")}
+                  </p>
+                  <p className="text-sm text-(--muted)">
+                    {t("You haven't added any expenses yet")}
+                  </p>
+                </div>
+                <Button
+                  action={handleAdd}
+                  text="Add"
+                  icon={<FiPlus size={16} />}
+                />
+              </>
+            )}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

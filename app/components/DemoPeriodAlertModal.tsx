@@ -34,7 +34,7 @@ export default function DemoPeriodAlertModal() {
   return (
     <div
       onClick={close}
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-(--overlay) backdrop-blur-sm p-4"
       role="presentation"
     >
       <div
@@ -43,7 +43,7 @@ export default function DemoPeriodAlertModal() {
         aria-modal="true"
         aria-labelledby="alert-title"
         aria-describedby="alert-desc"
-        className="bg-(--bg-primary) border border-(--border) rounded-2xl p-6 w-full max-w-sm shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-modalGrow flex flex-col gap-5"
+        className="bg-(--bg-secondary) border border-(--border) rounded-xl p-6 w-full max-w-sm shadow-(--shadow-modal) animate-modalGrow flex flex-col gap-5"
       >
         <div className="flex items-center gap-3">
           <div
@@ -71,7 +71,7 @@ export default function DemoPeriodAlertModal() {
           <button
             ref={closeBtnRef}
             onClick={close}
-            className="px-4 h-10 rounded-xl bg-(--bg-secondary) text-(--foreground) hover:brightness-115 cursor-pointer transition-all duration-150 text-sm font-medium"
+            className="px-4 h-9 rounded-lg bg-(--bg-secondary) text-(--foreground) hover:brightness-115 cursor-pointer transition-all duration-150 text-sm font-medium"
           >
             {t("Close")}
           </button>

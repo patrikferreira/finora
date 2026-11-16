@@ -31,10 +31,12 @@ export default function Select<T extends string | number>({
     <div className={`relative ${className ?? ""}`}>
       <button
         type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
-        className={`w-full border border-(--border) rounded-xl px-3.5 bg-(--bg-primary) text-(--foreground) text-left flex justify-between items-center  transition-colors outline-none h-[42px] ${
+        className={`w-full h-9 border border-(--border) rounded-xl px-3 bg-(--bg-secondary) text-(--foreground) text-left flex justify-between items-center transition outline-none cursor-pointer shadow-sm ${
           open
-            ? "border-(--primary) shadow-[0_0_0_3px_var(--primary-soft)]"
+            ? "border-(--primary) shadow-[0_0_0_4px_var(--primary-soft)]"
             : ""
         } ${btnClassName ?? ""}`}
       >
@@ -59,7 +61,7 @@ export default function Select<T extends string | number>({
                 onChange(option.value);
                 setOpen(false);
               }}
-              className={`w-full text-left px-3 py-2 min-h-9 rounded-lg transition-colors duration-150 hover:bg-(--bg-secondary) flex justify-between items-center ${
+              className={`w-full text-left px-3 py-2 min-h-9 rounded-lg transition-colors duration-150 cursor-pointer hover:bg-(--bg-muted) flex justify-between items-center ${
                 value === option.value
                   ? "text-(--foreground)"
                   : "text-(--muted) hover:text-(--foreground)"

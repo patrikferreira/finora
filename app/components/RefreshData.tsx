@@ -60,7 +60,7 @@ export default function RefreshData({ view }: Props) {
     <button
       disabled={isLoading}
       onClick={refresh}
-      className={`h-10 w-10 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) text-sm bg-(--bg-primary) transition duration-150 ${
+      className={`h-9 w-9 shrink-0 flex items-center justify-center rounded-xl border border-(--border) text-(--muted) hover:text-(--foreground) hover:bg-(--bg-muted) text-sm bg-(--bg-secondary) shadow-sm transition duration-150 ${
         isLoading ? "cursor-default" : "cursor-pointer"
       }`}
       aria-label={`Refresh ${view} data`}

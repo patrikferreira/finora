@@ -1,14 +1,14 @@
 "use client";
 import React, { useContext, useState } from "react";
 import AppContext from "../AppContext";
-import Logo from "../components/Logo";
 import { useRouter } from "next/navigation";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import Logo from "../components/Logo";
+import BuiltInfo from "../components/BuiltInfo";
+import Button from "../components/Button";
 import { validateAuth } from "../utils/formValidators";
 import { UserAuthenticated } from "../AppTypes";
 import { authUser } from "../AppServices";
-import BuiltInfo from "../components/BuiltInfo";
-import Button from "../components/Button";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,73 +77,92 @@ export default function SignIn() {
     }
   }
 
-  return (
-    <div className="h-svh w-full p-4 flex flex-col gap-6 items-center justify-between animate-fadeIn">
-      <div className="relative z-10 w-full flex justify-center pt-2">
-        <Logo />
-      </div>
+  const inputClass =
+    "h-[42px] w-full rounded-lg border border-(--border) bg-(--bg-secondary) px-3 text-sm text-(--foreground) placeholder:text-(--placeholder) outline-none transition focus:border-(--primary) focus:shadow-[0_0_0_4px_var(--primary-soft)]";
+  const labelClass = "text-xs font-semibold text-(--foreground)";
 
-      <div className="relative z-10 w-full max-w-xs">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-xl font-bold">Sign in</h1>
+  return (
+    <div className="h-svh w-full flex flex-col text-(--foreground) animate-fadeIn">
+      <header className="px-8 pt-6">
+        <Logo />
+      </header>
+
+      <main className="flex-1 flex items-center justify-center px-4 pb-16">
+        <div className="w-full max-w-[380px] surface p-6 md:p-7 flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[28px] leading-8 font-extrabold tracking-tight">
+              Welcome back
+            </h1>
+            <p className="text-sm leading-5 text-(--muted)">
+              Sign in to your account to track income and expenses.
+            </p>
+          </div>
+
           <form className="flex flex-col gap-4" onSubmit={submit}>
-            <label className="block">
-              <span className="block font-medium text-xs text-(--muted) mb-2 uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className={labelClass}>
                 Email
-              </span>
+              </label>
               <input
+                id="email"
                 type="email"
                 name="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="johndoe@mail.com"
-                className="field"
+                placeholder="you@example.com"
+                className={inputClass}
               />
-            </label>
+            </div>
 
-            <label className="block relative">
-              <span className="block font-medium text-xs text-(--muted) mb-2 uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className={labelClass}>
                 Password
-              </span>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="field pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute top-[36px] right-3 text-(--muted) hover:text-(--foreground) transition-colors focus:outline-none"
-                tabIndex={-1}
-              >
-                {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-              </button>
-            </label>
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  autoComplete="current-password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className={`${inputClass} pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute inset-y-0 right-3 flex items-center text-(--muted) hover:text-(--foreground) transition-colors cursor-pointer"
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
+              </div>
+            </div>
 
             <Button
               type="submit"
               isLoading={isLoading}
               text="Sign in"
-              className="bg-(--primary) h-11 rounded-xl font-semibold w-full !min-w-0 mt-2"
+              className="w-full !min-w-0"
             />
           </form>
 
           <p className="text-center text-sm text-(--muted)">
             Don&apos;t have an account?{" "}
             <button
+              type="button"
               onClick={() => router.push("/signup")}
-              className="font-medium text-(--primary) hover:underline cursor-pointer"
+              className="font-semibold text-(--primary) hover:underline cursor-pointer"
             >
               Sign up
             </button>
           </p>
         </div>
-      </div>
+      </main>
 
-      <div className="relative z-10 w-full flex justify-center pb-2">
+      <div className="w-full flex justify-center px-8 pb-6">
         <BuiltInfo />
       </div>
     </div>
